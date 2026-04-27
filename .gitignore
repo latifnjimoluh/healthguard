@@ -21,12 +21,12 @@ wheels/
 .installed.cfg
 *.egg
 
-# Données et Modèles (Volumineux ou locaux)
-data/ml/*.pkl
-data/ml/*.csv
-data/ml/feature_names.json
-data/db/*.sqlite
-data/db/*.db
+# Données et Modèles (Retiré temporairement pour tout inclure)
+# data/ml/*.pkl
+# data/ml/*.csv
+# data/ml/feature_names.json
+# data/db/*.sqlite
+# data/db/*.db
 
 # Environnement et Secrets
 .env

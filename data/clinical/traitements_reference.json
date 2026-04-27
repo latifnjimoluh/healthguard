@@ -1,0 +1,109 @@
+{
+  "version": "1.0",
+  "source": "OMS AFRO 2023 + Protocoles Nationaux MINSANTE Cameroun",
+  "traitements": {
+    "paludisme_simple": {
+      "premiere_ligne": {
+        "medicament": "Artéméther-Luméfantrine (AL / Coartem)",
+        "dose_adulte": "4 comprimés × 2/jour × 3 jours (J0: 0h et 8h, J1 et J2: matin et soir)",
+        "dose_enfant": "5-14kg: 1cp × 2/j; 15-24kg: 2cp × 2/j; 25-34kg: 3cp × 2/j; >34kg: 4cp × 2/j",
+        "voie": "orale",
+        "duree_jours": 3,
+        "notes": "Prendre avec nourriture ou lait. Ne pas écraser le comprimé.",
+        "contre_indications": ["grossesse_1er_trimestre", "poids_moins_5kg"]
+      },
+      "alternatives": {
+        "grossesse_t1": "Quinine orale 10mg/kg × 3/jour × 7 jours",
+        "echec_AL": "Quinine orale + Doxycycline"
+      },
+      "criteres_transfert": ["vomissements_incoercibles", "aggravation_J3", "enfant_moins_5kg"]
+    },
+    "paludisme_grave": {
+      "traitement_principal": "TRANSFERT IMMÉDIAT — Quinine IV en établissement",
+      "pre_transfert": {
+        "medicament": "Quinine en perfusion IV si disponible",
+        "dose": "20mg/kg dans 500ml G5% en 4h (dose de charge)",
+        "voie": "intraveineuse",
+        "contre_indications_absolues": ["artemether_lumefantrine_oral_si_vomissements"]
+      },
+      "criteres_gravite": [
+        "convulsions", "trouble_conscience", "vomissements_incoercibles",
+        "ictere", "hemoglobinurie_urine_noire", "detresse_respiratoire",
+        "hypoglycemie", "anemia_severe_hb_moins_5g"
+      ]
+    },
+    "ira_pneumonie": {
+      "pneumonie_legere_moderee": {
+        "medicament": "Amoxicilline",
+        "dose_enfant": "40-45mg/kg/jour en 2 prises × 5 jours",
+        "dose_adulte": "1g × 3/jour × 7 jours",
+        "voie": "orale",
+        "alternative_allergie": "Cotrimoxazole 25mg TMP/kg/jour en 2 prises × 5j"
+      },
+      "pneumonie_severe": {
+        "pre_transfert": "Amoxicilline IM 50mg/kg dose unique avant transfert",
+        "mesures_adjuvantes": ["position_semi_assise", "oxygene_si_disponible", "hydratation_orale"]
+      },
+      "criteres_transfert": ["spo2_moins_95", "fr_superieure_seuil_age", "tirage_sous_costal", "cyanose"]
+    },
+    "malnutrition_mas": {
+      "ambulatoire_sans_complication": {
+        "medicament_principal": "ATPE — Plumpy'Nut",
+        "dose": "92g/kg/semaine (diviser en prises journalières)",
+        "exemple_10kg": "3 sachets/jour pour enfant 10kg",
+        "duree_semaines": 8,
+        "prophylaxie": "Amoxicilline 50mg/kg/jour × 7 jours + Vitamine A"
+      },
+      "hospitalise_complications": {
+        "phase_1": "Lait F75 — 100ml/kg/jour en 8 prises (phase stabilisation)",
+        "phase_2": "Lait F100 puis ATPE (phase réhabilitation)",
+        "criteres_hospitalisation": ["oedemes_grade_3", "echec_test_appetit", "complications_medicales"]
+      },
+      "test_appetit_procedure": "Donner 1/4 sachet Plumpy'Nut, observer 15-30 min. Succès = mange > 1/4 sachet",
+      "suivi": ["J3", "J7", "J14", "J21", "J28"],
+      "criteres_guerison": "MUAC >= 125mm × 2 consultations consécutives"
+    },
+    "diarrhee_cholera": {
+      "plan_A_sans_deshydratation": {
+        "traitement": "SRO à domicile",
+        "dose_moins_2_ans": "50-100ml SRO après chaque selle",
+        "dose_2_10_ans": "100-200ml SRO après chaque selle",
+        "dose_adulte": "verre 200-400ml après chaque selle",
+        "zinc": "20mg/jour × 10-14 jours (enfant < 5 ans), 10mg < 6 mois"
+      },
+      "plan_B_deshydratation_moderee": {
+        "traitement": "SRO supervisée en centre de santé",
+        "dose": "75ml/kg sur 4 heures",
+        "reevaluation": "après 4h — reclasser plan A ou C"
+      },
+      "plan_C_deshydratation_severe": {
+        "traitement": "Ringer Lactate IV URGENT",
+        "dose_adulte": "100ml/kg en 3 heures",
+        "dose_enfant": "100ml/kg en 3h (ou 30ml/kg en 30min si choc)",
+        "transfert": "OBLIGATOIRE"
+      },
+      "cholera_antibiotiques": {
+        "adulte": "Doxycycline 300mg dose unique (après réhydratation)",
+        "grossesse": "Azithromycine 1g dose unique (CI : Doxycycline)",
+        "enfant_moins_8_ans": "Azithromycine 20mg/kg dose unique",
+        "notification": "CAS SUSPECT CHOLÉRA = NOTIFICATION OBLIGATOIRE DISTRICT"
+      }
+    },
+    "tuberculose": {
+      "protocole": "DOTS (Directly Observed Treatment Short-course)",
+      "reference_obligatoire": "CDTB le plus proche — PAS de traitement empirique",
+      "schema_standard": {
+        "phase_intensive_2mois": "Rifampicine + Isoniazide + Pyrazinamide + Ethambutol",
+        "phase_continuation_4mois": "Rifampicine + Isoniazide",
+        "note": "Traitement initié UNIQUEMENT par le CDTB après confirmation diagnostique"
+      },
+      "interdictions_absolues": [
+        "NE PAS donner antibiotiques empiriques (masque TB, risque résistance)",
+        "NE PAS donner corticoïdes sans avis spécialiste",
+        "NE PAS traiter sans confirmation diagnostique"
+      ],
+      "mesures_immediates": ["isolement_respiratoire_conseille", "reference_CDTB", "notification_district"],
+      "depistage_entourage": "Obligatoire — contact étroits dans les 2 années précédentes"
+    }
+  }
+}

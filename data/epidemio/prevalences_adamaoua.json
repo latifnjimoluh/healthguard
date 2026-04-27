@@ -1,0 +1,136 @@
+{
+  "region": "Adamaoua",
+  "pays": "Cameroun",
+  "source": "MINSANTE Cameroun 2023 + OMS AFRO + MSF Adamaoua",
+  "annee_reference": 2023,
+  "population_totale": 1200000,
+  "densite_infirmiers": "1 pour 4800 habitants (moyenne rurale)",
+  "prevalences": {
+    "paludisme": {
+      "description": "Paludisme à Plasmodium falciparum — endémie stable",
+      "incidence_annuelle_pour_1000": 285,
+      "par_saison": {
+        "saison_pluies_avril_octobre": {
+          "prevalence_pct": 45,
+          "note": "Pic de transmission — saison des moustiques"
+        },
+        "saison_seche_novembre_mars": {
+          "prevalence_pct": 20,
+          "note": "Transmission réduite mais persistante"
+        }
+      },
+      "par_groupe_age": {
+        "moins_5_ans": {
+          "prevalence_pct": 52,
+          "mortalite_pour_100000": 48,
+          "note": "Groupe le plus vulnérable — paludisme grave fréquent"
+        },
+        "5_15_ans": {
+          "prevalence_pct": 35,
+          "mortalite_pour_100000": 8
+        },
+        "adulte_15_60": {
+          "prevalence_pct": 22,
+          "mortalite_pour_100000": 5
+        },
+        "plus_60_ans": {
+          "prevalence_pct": 18,
+          "mortalite_pour_100000": 15
+        }
+      },
+      "par_zone": {
+        "urbain_ngaoundere": { "prevalence_pct": 18 },
+        "rural_adamaoua": { "prevalence_pct": 38 },
+        "zone_pastorale": { "prevalence_pct": 42 }
+      },
+      "taux_paludisme_grave": 0.12,
+      "medicaments_disponibilite": {
+        "artemether_lumefantrine": "disponible_frequemment",
+        "quinine_iv": "disponible_partiellement"
+      }
+    },
+    "ira_pneumonie": {
+      "description": "Infections Respiratoires Aiguës — 2ème cause consultation pédiatrique",
+      "incidence_annuelle_pour_1000": 145,
+      "par_saison": {
+        "saison_seche_harmattan": {
+          "prevalence_pct": 28,
+          "note": "Harmattan aggrave les IRA — poussières et froid nocturne"
+        },
+        "saison_pluies": {
+          "prevalence_pct": 18
+        }
+      },
+      "par_groupe_age": {
+        "moins_5_ans": {
+          "prevalence_pct": 38,
+          "mortalite_pour_100000": 32,
+          "note": "Pneumonie = 2ème cause mortalité infantile"
+        },
+        "5_15_ans": { "prevalence_pct": 12 },
+        "adulte": { "prevalence_pct": 8 }
+      },
+      "disponibilite_oxymetre": false,
+      "frequence_pneumonie_severe": 0.25
+    },
+    "malnutrition_mas": {
+      "description": "Malnutrition Aiguë Sévère — prévalence critique en zone rurale",
+      "prevalence_enfants_moins_5_ans_pct": 10.2,
+      "prevalence_mam_pct": 18.5,
+      "par_saison": {
+        "soudure_juin_septembre": {
+          "prevalence_pct": 14,
+          "note": "Période de soudure = pic de malnutrition (stocks alimentaires épuisés)"
+        },
+        "post_recolte": {
+          "prevalence_pct": 7
+        }
+      },
+      "par_zone": {
+        "rural_elevage": {
+          "prevalence_pct": 12,
+          "note": "Populations Mbororo — malnutrition chronique fréquente"
+        },
+        "rural_agricole": { "prevalence_pct": 9 }
+      },
+      "couverture_crenas_pct": 42,
+      "stocks_atpe_disponibilite": "irregulier"
+    },
+    "diarrhee_cholera": {
+      "description": "Diarrhées aiguës et choléra — épidémies saisonnières",
+      "incidence_diarrhee_pour_1000": 186,
+      "alertes_cholera_5_ans": 2,
+      "dernier_foyer_cholera": "2022 — fleuve Vina",
+      "par_saison": {
+        "debut_pluies_mars_mai": {
+          "prevalence_pct": 32,
+          "note": "Contamination eau de surface — risque choléra accru"
+        },
+        "saison_seche": { "prevalence_pct": 12 }
+      },
+      "acces_eau_potable_pct": 38,
+      "latrinisation_pct": 24
+    },
+    "tuberculose": {
+      "description": "Tuberculose — incidence modérée Adamaoua",
+      "incidence_pour_100000": 142,
+      "taux_detection_pct": 58,
+      "par_zone": {
+        "urbain": { "incidence_pour_100000": 185 },
+        "rural": { "incidence_pour_100000": 118 }
+      },
+      "co_infection_vih_pct": 8,
+      "centres_cdtb": [
+        "CDTB Ngaoundéré (chef-lieu)",
+        "Antenne TB Meiganga"
+      ]
+    }
+  },
+  "structures_sanitaires": {
+    "hopitaux_district": 8,
+    "cma": 24,
+    "postes_sante": 186,
+    "crenas": 12,
+    "cdtb": 2
+  }
+}

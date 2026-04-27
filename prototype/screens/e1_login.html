@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>HealthGuard IA — Connexion</title>
+  <link rel="stylesheet" href="../css/healthguard.css">
+  <style>
+    .agent-list { padding: 0 16px; }
+    .agent-card {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 12px; padding: 14px 16px;
+      margin-bottom: 10px; cursor: pointer;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .agent-card:hover, .agent-card:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 2px rgba(0,150,136,0.18);
+      outline: none;
+    }
+    .agent-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--color-primary); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 700; flex-shrink: 0;
+    }
+    .agent-info { flex: 1; }
+    .agent-nom { font-weight: 600; font-size: 15px; }
+    .agent-role { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
+    .agent-chevron { color: var(--color-text-secondary); font-size: 18px; }
+    .back-btn {
+      background: none; border: none; cursor: pointer;
+      color: var(--color-primary); font-size: 14px; font-weight: 600;
+      padding: 8px 16px; display: flex; align-items: center; gap: 6px;
+    }
+    .step { display: none; }
+    .step.active { display: block; }
+    .add-agent-btn {
+      display: flex; align-items: center; gap: 10px;
+      background: none; border: 2px dashed var(--color-border);
+      border-radius: 12px; padding: 12px 16px;
+      width: 100%; cursor: pointer; color: var(--color-text-secondary);
+      font-size: 14px; margin-top: 4px; transition: border-color 0.15s;
+    }
+    .add-agent-btn:hover { border-color: var(--color-primary); color: var(--color-primary); }
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.45); z-index: 100;
+      align-items: flex-end; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-sheet {
+      background: var(--color-surface); border-radius: 20px 20px 0 0;
+      padding: 24px 20px 32px; width: 100%; max-width: 420px;
+    }
+    .modal-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+    .form-group { margin-bottom: 14px; }
+    .form-label { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 4px; display: block; }
+    .form-input {
+      width: 100%; padding: 12px; border-radius: 8px;
+      border: 1px solid var(--color-border); font-size: 15px;
+      background: var(--color-bg); color: var(--color-text); box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+<div class="app-container">
+  <!-- Barre de statut -->
+  <div class="status-bar">
+    <span class="time" id="current-time">08:24</span>
+    <span class="offline-badge" id="network-badge">● HORS LIGNE</span>
+  </div>
+
+  <!-- Logo -->
+  <div class="logo-container">
+    <div class="logo-icon">🏥</div>
+    <div class="logo-title">HealthGuard IA</div>
+    <div class="logo-subtitle" id="etablissement-name">Centre de Santé de Ngaoundéré Rural</div>
+  </div>
+
+  <!-- Étape 1 : Sélection de l'agent -->
+  <div class="step active" id="step-select">
+    <p style="text-align:center;color:var(--color-text-secondary);font-size:14px;padding:4px 16px 12px;">
+      Sélectionnez votre compte
+    </p>
+    <div class="agent-list" id="agent-list">
+      <!-- Rempli dynamiquement -->
+    </div>
+    <div style="padding:0 16px;">
+      <button class="add-agent-btn" onclick="openAddAgent()">
+        <span style="font-size:20px;">＋</span> Ajouter un compte
+      </button>
+    </div>
+    <div style="padding:16px;">
+      <button class="btn btn-danger btn-full" onclick="urgenceAccess()" style="opacity:0.85;">
+        🚨 Accès Urgence (sans identification)
+      </button>
+    </div>
+  </div>
+
+  <!-- Étape 2 : Saisie du PIN -->
+  <div class="step" id="step-pin">
+    <button class="back-btn" onclick="goBack()">← Changer de compte</button>
+    <p style="text-align:center;color:var(--color-text-secondary);font-size:14px;padding:4px 16px 12px;">
+      PIN pour <strong id="selected-agent-name">—</strong>
+    </p>
+
+    <div class="pin-display" id="pin-display">
+      <div class="pin-dot" id="dot-0"></div>
+      <div class="pin-dot" id="dot-1"></div>
+      <div class="pin-dot" id="dot-2"></div>
+      <div class="pin-dot" id="dot-3"></div>
+      <div class="pin-dot" id="dot-4"></div>
+      <div class="pin-dot" id="dot-5"></div>
+    </div>
+
+    <div id="error-msg" style="display:none;text-align:center;color:var(--color-rouge);
+         font-weight:600;padding:8px 16px;font-size:14px;"></div>
+
+    <div class="pin-keyboard">
+      <button class="pin-key" onclick="pressKey('1')">1</button>
+      <button class="pin-key" onclick="pressKey('2')">2</button>
+      <button class="pin-key" onclick="pressKey('3')">3</button>
+      <button class="pin-key" onclick="pressKey('4')">4</button>
+      <button class="pin-key" onclick="pressKey('5')">5</button>
+      <button class="pin-key" onclick="pressKey('6')">6</button>
+      <button class="pin-key" onclick="pressKey('7')">7</button>
+      <button class="pin-key" onclick="pressKey('8')">8</button>
+      <button class="pin-key" onclick="pressKey('9')">9</button>
+      <button class="pin-key" style="font-size:12px;color:var(--color-text-secondary);">BIO</button>
+      <button class="pin-key" onclick="pressKey('0')">0</button>
+      <button class="pin-key delete" onclick="deleteKey()">⌫</button>
+    </div>
+  </div>
+
+  <div class="legal-mention">Version 1.0 — Usage réservé au personnel de santé habilité</div>
+</div>
+
+<!-- Modal ajout agent -->
+<div class="modal-overlay" id="add-agent-modal">
+  <div class="modal-sheet">
+    <div class="modal-title">Nouveau compte agent</div>
+    <div class="form-group">
+      <label class="form-label">Nom complet</label>
+      <input class="form-input" id="new-agent-nom" type="text" placeholder="ex: Fatima Oumarou" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Rôle</label>
+      <select class="form-input" id="new-agent-role">
+        <option>Infirmière</option>
+        <option>Agent de santé</option>
+        <option>Médecin</option>
+        <option>Sage-femme</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">PIN (6 chiffres)</label>
+      <input class="form-input" id="new-agent-pin" type="password" inputmode="numeric"
+             maxlength="6" placeholder="••••••" />
+    </div>
+    <div id="new-agent-error" style="color:var(--color-rouge);font-size:13px;margin-bottom:8px;display:none;"></div>
+    <button class="btn btn-primary btn-full" onclick="saveNewAgent()" style="margin-bottom:10px;">
+      Créer le compte
+    </button>
+    <button class="btn btn-full" onclick="closeAddAgent()"
+            style="background:transparent;border:1px solid var(--color-border);color:var(--color-text);">
+      Annuler
+    </button>
+  </div>
+</div>
+
+<script>
+  const API = 'http://localhost:8000';
+  let pin = '';
+  let selectedAgent = null;
+
+  // Agents par défaut
+  const DEFAULT_AGENTS = [
+    { id: 'agent_aminatou', nom: 'Aminatou Wali', role: 'Infirmière', pin: '246810' },
+    { id: 'agent_ibrahim', nom: 'Ibrahim Hamadou', role: 'Agent de santé', pin: '135791' }
+  ];
+
+  // Initialiser localStorage si vide
+  function getAgents() {
+    let agents = JSON.parse(localStorage.getItem('hg_agents') || 'null');
+    if (!agents) {
+      agents = DEFAULT_AGENTS;
+      localStorage.setItem('hg_agents', JSON.stringify(agents));
+    }
+    return agents;
+  }
+
+  // Initiale de l'avatar
+  function initiale(nom) {
+    return nom ? nom.trim()[0].toUpperCase() : '?';
+  }
+
+  // Agents démo (leurs IDs) — on affiche un indice PIN pour eux
+  const DEMO_IDS = new Set(DEFAULT_AGENTS.map(a => a.id));
+
+  // Rendu liste des agents
+  function renderAgents(list) {
+    const el = document.getElementById('agent-list');
+    el.innerHTML = list.map(a => {
+      const pinHint = DEMO_IDS.has(a.id) && a.pin
+        ? `<span style="
+              display:inline-block;margin-top:4px;
+              font-size:11px;font-weight:600;letter-spacing:1px;
+              background:var(--color-primary-light);color:var(--color-primary-dark);
+              border-radius:6px;padding:2px 7px;">
+              PIN : ${a.pin}
+           </span>`
+        : '';
+      return `
+        <div class="agent-card" tabindex="0"
+             onclick="selectAgent('${a.id}')"
+             onkeydown="if(event.key==='Enter')selectAgent('${a.id}')">
+          <div class="agent-avatar">${initiale(a.nom)}</div>
+          <div class="agent-info">
+            <div class="agent-nom">${a.nom}</div>
+            <div class="agent-role">${a.role}</div>
+            ${pinHint}
+          </div>
+          <span class="agent-chevron">›</span>
+        </div>`;
+    }).join('');
+  }
+
+  // Charger agents (localStorage + API si dispo)
+  async function loadAgents() {
+    const local = getAgents();
+    renderAgents(local);
+    try {
+      const ctrl = new AbortController();
+      setTimeout(() => ctrl.abort(), 2000);
+      const r = await fetch(`${API}/api/v1/agents`, { signal: ctrl.signal });
+      if (r.ok) {
+        const data = await r.json();
+        if (data.agents && data.agents.length > 0) {
+          // Fusionner : conserver PINs locaux, enrichir avec données serveur
+          const merged = data.agents.map(srv => {
+            const loc = local.find(l => l.id === srv.id);
+            return { ...srv, pin: loc ? loc.pin : '246810' };
+          });
+          // Ajouter agents locaux absents du serveur (créés hors ligne)
+          local.forEach(l => {
+            if (!merged.find(m => m.id === l.id)) merged.push(l);
+          });
+          localStorage.setItem('hg_agents', JSON.stringify(merged));
+          renderAgents(merged);
+        }
+      }
+    } catch (e) { /* API indisponible */ }
+  }
+
+  function selectAgent(agentId) {
+    const agents = getAgents();
+    selectedAgent = agents.find(a => a.id === agentId);
+    if (!selectedAgent) return;
+    document.getElementById('selected-agent-name').textContent = selectedAgent.nom;
+    pin = '';
+    updateDots();
+    document.getElementById('error-msg').style.display = 'none';
+    document.getElementById('step-select').classList.remove('active');
+    document.getElementById('step-pin').classList.add('active');
+  }
+
+  function goBack() {
+    pin = '';
+    updateDots();
+    document.getElementById('step-pin').classList.remove('active');
+    document.getElementById('step-select').classList.add('active');
+  }
+
+  function pressKey(digit) {
+    if (pin.length >= 6) return;
+    pin += digit;
+    updateDots();
+    if (pin.length === 6) setTimeout(validatePin, 100);
+  }
+
+  function deleteKey() {
+    pin = pin.slice(0, -1);
+    updateDots();
+    document.getElementById('error-msg').style.display = 'none';
+  }
+
+  function updateDots() {
+    for (let i = 0; i < 6; i++) {
+      document.getElementById('dot-' + i).classList.toggle('filled', i < pin.length);
+    }
+  }
+
+  function validatePin() {
+    if (!selectedAgent) return;
+    const storedPin = selectedAgent.pin || '246810';
+    if (pin === storedPin) {
+      localStorage.setItem('hg_agent_id', selectedAgent.id);
+      localStorage.setItem('hg_agent_nom', selectedAgent.nom);
+      localStorage.setItem('hg_session_start', Date.now());
+      window.location.href = 'e2_dashboard.html';
+    } else {
+      const errMsg = document.getElementById('error-msg');
+      errMsg.textContent = 'PIN incorrect — Veuillez réessayer';
+      errMsg.style.display = 'block';
+      pin = '';
+      updateDots();
+      if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+    }
+  }
+
+  function urgenceAccess() {
+    hgConfirm(
+      'Les consultations enregistrées dans ce mode ne seront pas associées à un agent identifié.',
+      'Accès Urgence',
+      function () {
+        localStorage.setItem('hg_agent_id', 'urgence_anonyme');
+        localStorage.setItem('hg_agent_nom', 'Urgence (anonyme)');
+        window.location.href = 'e2_dashboard.html';
+      },
+      null,
+      '🚨',
+      'Continuer',
+      'btn-danger'
+    );
+  }
+
+  // Modal ajout agent
+  function openAddAgent() {
+    document.getElementById('add-agent-modal').classList.add('open');
+    setTimeout(() => document.getElementById('new-agent-nom').focus(), 100);
+  }
+  function closeAddAgent() {
+    document.getElementById('add-agent-modal').classList.remove('open');
+    document.getElementById('new-agent-nom').value = '';
+    document.getElementById('new-agent-pin').value = '';
+    document.getElementById('new-agent-error').style.display = 'none';
+  }
+
+  async function saveNewAgent() {
+    const nom = document.getElementById('new-agent-nom').value.trim();
+    const role = document.getElementById('new-agent-role').value;
+    const newPin = document.getElementById('new-agent-pin').value.trim();
+    const errEl = document.getElementById('new-agent-error');
+
+    if (!nom) { errEl.textContent = 'Le nom est obligatoire'; errEl.style.display = 'block'; return; }
+    if (!/^\d{6}$/.test(newPin)) { errEl.textContent = 'Le PIN doit comporter exactement 6 chiffres'; errEl.style.display = 'block'; return; }
+
+    const agentId = 'agent_' + nom.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'_');
+    const agents = getAgents();
+
+    if (agents.find(a => a.id === agentId)) {
+      errEl.textContent = 'Un compte avec ce nom existe déjà'; errEl.style.display = 'block'; return;
+    }
+
+    agents.push({ id: agentId, nom, role, pin: newPin });
+    localStorage.setItem('hg_agents', JSON.stringify(agents));
+
+    // Enregistrer aussi dans PostgreSQL si disponible
+    try {
+      await fetch(`${API}/api/v1/agents/new`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nom, role }),
+        signal: AbortSignal.timeout(3000)
+      });
+    } catch (e) { /* Sera synchro plus tard */ }
+
+    renderAgents(agents);
+    closeAddAgent();
+  }
+
+  // Horloge
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('current-time').textContent =
+      String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+  }
+  updateClock();
+  setInterval(updateClock, 10000);
+
+  // Statut réseau
+  function updateNetworkStatus() {
+    const badge = document.getElementById('network-badge');
+    if (navigator.onLine) {
+      badge.textContent = '● EN LIGNE';
+      badge.style.backgroundColor = 'var(--color-vert)';
+    } else {
+      badge.textContent = '● HORS LIGNE';
+      badge.style.backgroundColor = 'var(--color-orange)';
+    }
+  }
+  updateNetworkStatus();
+  window.addEventListener('online', updateNetworkStatus);
+  window.addEventListener('offline', updateNetworkStatus);
+
+  // Clavier physique (step PIN uniquement)
+  document.addEventListener('keydown', (e) => {
+    if (document.getElementById('step-pin').classList.contains('active')) {
+      if (/^[0-9]$/.test(e.key)) pressKey(e.key);
+      if (e.key === 'Backspace') deleteKey();
+    }
+  });
+
+  // Démarrage
+  loadAgents();
+</script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

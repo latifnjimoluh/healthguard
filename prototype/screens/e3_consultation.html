@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>HealthGuard IA — Nouvelle Consultation</title>
+  <link rel="stylesheet" href="../css/healthguard.css">
+  <style>
+    .form-section { background: white; margin: 8px 12px; border-radius: var(--border-radius); padding: 16px; box-shadow: var(--shadow-card); }
+    .form-section-title { font-size: 13px; font-weight: 700; color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--color-primary-light); }
+    .form-row { margin-bottom: 14px; }
+    .form-label { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 4px; display: block; font-weight: 500; }
+    .form-input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--color-border); border-radius: var(--border-radius); font-size: 15px; color: var(--color-text-primary); background: white; transition: border-color 0.2s; }
+    .form-input:focus { outline: none; border-color: var(--color-primary); }
+    .form-select { width: 100%; padding: 10px 12px; border: 1.5px solid var(--color-border); border-radius: var(--border-radius); font-size: 15px; color: var(--color-text-primary); background: white; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M6 8L0 0h12z' fill='%23757575'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
+    .symptom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .symptom-toggle { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1.5px solid var(--color-border); border-radius: var(--border-radius); cursor: pointer; transition: all 0.2s; user-select: none; background: white; }
+    .symptom-toggle.active { border-color: var(--color-primary); background: var(--color-primary-light); }
+    .symptom-toggle input { display: none; }
+    .symptom-icon { font-size: 20px; min-width: 24px; text-align: center; }
+    .symptom-text { font-size: 13px; font-weight: 500; }
+    .symptom-toggle.active .symptom-text { color: var(--color-primary); }
+    .mesure-row { display: flex; align-items: center; gap: 8px; }
+    .mesure-row .form-input { flex: 1; }
+    .mesure-unit { font-size: 13px; color: var(--color-text-secondary); white-space: nowrap; min-width: 40px; }
+    .age-group-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+    .age-btn { padding: 8px 14px; border: 1.5px solid var(--color-border); border-radius: 20px; font-size: 13px; cursor: pointer; background: white; transition: all 0.2s; }
+    .age-btn.selected { border-color: var(--color-primary); background: var(--color-primary); color: white; }
+    .btn-submit { margin: 16px 12px; }
+    .pb-gauge { height: 8px; border-radius: 4px; background: var(--color-border); margin-top: 6px; overflow: hidden; }
+    .pb-fill { height: 100%; border-radius: 4px; transition: width 0.3s, background 0.3s; width: 0%; }
+    .vital-alert { display: none; font-size: 12px; color: var(--color-rouge); font-weight: 600; margin-top: 4px; }
+  </style>
+</head>
+<body>
+<div class="app-container">
+  <div class="status-bar">
+    <span class="time" id="current-time">08:24</span>
+    <span class="offline-badge" id="network-badge">● HORS LIGNE</span>
+  </div>
+
+  <div class="screen-header">
+    <a href="e2_dashboard.html" style="color:white;text-decoration:none;font-size:22px;padding:8px 12px 8px 4px;">‹</a>
+    <div style="flex:1">
+      <div style="font-size:16px;font-weight:700;">Nouvelle Consultation</div>
+      <div style="font-size:12px;opacity:0.8;" id="patient-name-header">Nouveau patient</div>
+    </div>
+    <span style="font-size:12px;opacity:0.7;padding:8px;">#<span id="consult-id">--</span></span>
+  </div>
+
+  <!-- Section Patient -->
+  <div class="form-section">
+    <div class="form-section-title">Identification Patient</div>
+    <div class="form-row">
+      <label class="form-label">Nom / Identifiant</label>
+      <input type="text" class="form-input" id="patient-nom" placeholder="Nom ou code patient" autocomplete="off">
+    </div>
+    <div class="form-row">
+      <label class="form-label">Âge</label>
+      <div class="age-group-btns" id="age-group-btns">
+        <button class="age-btn" data-val="0.5" onclick="selectAge(this)">< 1 an</button>
+        <button class="age-btn" data-val="2" onclick="selectAge(this)">1–4 ans</button>
+        <button class="age-btn" data-val="8" onclick="selectAge(this)">5–14 ans</button>
+        <button class="age-btn" data-val="30" onclick="selectAge(this)">Adulte</button>
+        <button class="age-btn" data-val="60" onclick="selectAge(this)">Âgé</button>
+      </div>
+      <input type="number" class="form-input" id="age-exact" placeholder="ou âge exact (ans)" min="0" max="120" style="margin-top:8px;">
+    </div>
+    <div class="form-row">
+      <label class="form-label">Sexe</label>
+      <select class="form-select" id="sexe">
+        <option value="">— Sélectionner —</option>
+        <option value="M">Masculin</option>
+        <option value="F">Féminin</option>
+      </select>
+    </div>
+    <div class="form-row" id="grossesse-row" style="display:none;">
+      <label class="symptom-toggle" id="grossesse-toggle" onclick="toggleGrossesse()">
+        <span class="symptom-icon">🤰</span>
+        <span class="symptom-text">Grossesse en cours</span>
+        <input type="checkbox" id="grossesse" name="grossesse">
+      </label>
+    </div>
+  </div>
+
+  <!-- Section Signes Vitaux -->
+  <div class="form-section">
+    <div class="form-section-title">Signes Vitaux</div>
+    <div class="form-row">
+      <label class="form-label">Température</label>
+      <div class="mesure-row">
+        <input type="number" class="form-input" id="temperature" placeholder="37.0" min="35" max="43" step="0.1" oninput="checkTemperature(this)">
+        <span class="mesure-unit">°C</span>
+      </div>
+      <div class="vital-alert" id="temp-alert">⚠️ Température critique — hyperthermie sévère</div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Fréquence respiratoire</label>
+      <div class="mesure-row">
+        <input type="number" class="form-input" id="frequence-resp" placeholder="18" min="5" max="80">
+        <span class="mesure-unit">resp/min</span>
+      </div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">SpO₂ (si disponible)</label>
+      <div class="mesure-row">
+        <input type="number" class="form-input" id="spo2" placeholder="98" min="70" max="100" oninput="checkSpo2(this)">
+        <span class="mesure-unit">%</span>
+      </div>
+      <div class="vital-alert" id="spo2-alert">⚠️ SpO₂ critique — oxygène immédiat requis</div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Poids</label>
+      <div class="mesure-row">
+        <input type="number" class="form-input" id="poids" placeholder="65" min="1" max="200" step="0.1">
+        <span class="mesure-unit">kg</span>
+      </div>
+    </div>
+    <div class="form-row" id="pb-row">
+      <label class="form-label">Périmètre brachial (PB)</label>
+      <div class="mesure-row">
+        <input type="number" class="form-input" id="pb-mm" placeholder="125" min="80" max="180" oninput="updatePBGauge(this)">
+        <span class="mesure-unit">mm</span>
+      </div>
+      <div class="pb-gauge"><div class="pb-fill" id="pb-fill"></div></div>
+      <div class="vital-alert" id="pb-alert">⚠️ PB critique — malnutrition aiguë sévère suspectée</div>
+    </div>
+  </div>
+
+  <!-- Section Symptômes -->
+  <div class="form-section">
+    <div class="form-section-title">Symptômes Principaux</div>
+    <div class="symptom-grid">
+      <label class="symptom-toggle" onclick="toggleSymptom(this, 'fievre')">
+        <input type="checkbox" name="fievre">
+        <span class="symptom-icon">🌡️</span>
+        <span class="symptom-text">Fièvre</span>
+      </label>
+      <label class="symptom-toggle" onclick="toggleSymptom(this, 'toux')">
+        <input type="checkbox" name="toux">
+        <span class="symptom-icon">😮‍💨</span>
+        <span class="symptom-text">Toux</span>
+      </label>
+      <label class="symptom-toggle" onclick="toggleSymptom(this, 'diarrhee')">
+        <input type="checkbox" name="diarrhee">
+        <span class="symptom-icon">🚽</span>
+        <span class="symptom-text">Diarrhée</span>
+      </label>
+      <label class="symptom-toggle" onclick="toggleSymptom(this, 'vomissements')">
+        <input type="checkbox" name="vomissements">
+        <span class="symptom-icon">🤢</span>
+        <span class="symptom-text">Vomissements</span>
+      </label>
+      <label class="symptom-toggle" onclick="toggleSymptom(this, 'cephalee')">
+        <input type="checkbox" name="cephalee">
+        <span class="symptom-icon">🤕</span>
+        <span class="symptom-text">Céphalées</span>
+      </label>
+      <label class="symptom-toggle" onclick="toggleSymptom(this, 'frissons')">
+        <input type="checkbox" name="frissons">
+        <span class="symptom-icon">🥶</span>
+        <span class="symptom-text">Frissons</span>
+      </label>
+      <label class="symptom-toggle" onclick="toggleSymptom(this, 'dyspnee')">
+        <input type="checkbox" name="dyspnee">
+        <span class="symptom-icon">💨</span>
+        <span class="symptom-text">Dyspnée</span>
+      </label>
+      <label class="symptom-toggle" onclick="toggleSymptom(this, 'convulsions')">
+        <input type="checkbox" name="convulsions">
+        <span class="symptom-icon" style="color:var(--color-rouge);">⚡</span>
+        <span class="symptom-text" style="color:var(--color-rouge);">Convulsions</span>
+      </label>
+      <label class="symptom-toggle" onclick="toggleSymptom(this, 'oedemes')">
+        <input type="checkbox" name="oedemes">
+        <span class="symptom-icon">💧</span>
+        <span class="symptom-text">Oedèmes</span>
+      </label>
+      <label class="symptom-toggle" onclick="toggleSymptom(this, 'hemoptysie')">
+        <input type="checkbox" name="hemoptysie">
+        <span class="symptom-icon">🩸</span>
+        <span class="symptom-text">Hémoptysie</span>
+      </label>
+      <label class="symptom-toggle" onclick="toggleSymptom(this, 'amaigrissement')">
+        <input type="checkbox" name="amaigrissement">
+        <span class="symptom-icon">📉</span>
+        <span class="symptom-text">Amaigrissement</span>
+      </label>
+      <label class="symptom-toggle" onclick="toggleSymptom(this, 'trouble_conscience')">
+        <input type="checkbox" name="trouble_conscience">
+        <span class="symptom-icon" style="color:var(--color-rouge);">🧠</span>
+        <span class="symptom-text" style="color:var(--color-rouge);">Trouble conscience</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Section Contexte épidémique -->
+  <div class="form-section">
+    <div class="form-section-title">Contexte & Antécédents</div>
+    <div class="form-row">
+      <label class="form-label">Durée des symptômes</label>
+      <div class="mesure-row">
+        <input type="number" class="form-input" id="duree-jours" placeholder="3" min="1" max="365">
+        <span class="mesure-unit">jours</span>
+      </div>
+    </div>
+    <label class="symptom-toggle" id="cholera-toggle" onclick="toggleSymptom(this, 'epidemie_cholera_active')">
+      <input type="checkbox" name="epidemie_cholera_active">
+      <span class="symptom-icon">⚠️</span>
+      <span class="symptom-text">Épidémie choléra active dans la zone</span>
+    </label>
+    <div style="height:8px;"></div>
+    <label class="symptom-toggle" id="tb-contact-toggle" onclick="toggleSymptom(this, 'contact_tuberculose')">
+      <input type="checkbox" name="contact_tuberculose">
+      <span class="symptom-icon">🧬</span>
+      <span class="symptom-text">Contact connu avec un patient TB</span>
+    </label>
+    <div style="height:8px;"></div>
+    <label class="symptom-toggle" id="saison-toggle" onclick="toggleSymptom(this, 'saison_pluie')">
+      <input type="checkbox" name="saison_pluie">
+      <span class="symptom-icon">🌧️</span>
+      <span class="symptom-text">Saison des pluies (risque paludisme)</span>
+    </label>
+  </div>
+
+  <!-- Bouton soumettre -->
+  <div class="btn-submit">
+    <button class="btn btn-primary btn-full" onclick="submitConsultation()" style="font-size:16px;padding:16px;">
+      🔍 Analyser — Obtenir Diagnostic IA
+    </button>
+  </div>
+
+  <div style="height:16px;"></div>
+</div>
+
+<script>
+  let selectedAge = null;
+  const symptoms = {};
+
+  // Horloge
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('current-time').textContent =
+      String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+  }
+  updateClock(); setInterval(updateClock, 10000);
+
+  // Statut réseau
+  const badge = document.getElementById('network-badge');
+  function updateNet() {
+    badge.textContent = navigator.onLine ? '● EN LIGNE' : '● HORS LIGNE';
+    badge.style.backgroundColor = navigator.onLine ? 'var(--color-vert)' : 'var(--color-orange)';
+  }
+  updateNet();
+  window.addEventListener('online', updateNet);
+  window.addEventListener('offline', updateNet);
+
+  // ID consultation
+  document.getElementById('consult-id').textContent = Date.now().toString().slice(-6);
+
+  function selectAge(btn) {
+    document.querySelectorAll('.age-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedAge = parseFloat(btn.dataset.val);
+    document.getElementById('age-exact').value = '';
+    // Afficher grossesse si femme adulte
+    updateGrossesseVisibility();
+    // Afficher PB si enfant < 5 ans
+    const pbRow = document.getElementById('pb-row');
+    pbRow.style.display = selectedAge < 5 ? 'block' : 'block'; // toujours visible
+  }
+
+  document.getElementById('age-exact').addEventListener('input', function() {
+    document.querySelectorAll('.age-btn').forEach(b => b.classList.remove('selected'));
+    selectedAge = parseFloat(this.value) || null;
+    updateGrossesseVisibility();
+  });
+
+  document.getElementById('sexe').addEventListener('change', updateGrossesseVisibility);
+
+  function updateGrossesseVisibility() {
+    const sexe = document.getElementById('sexe').value;
+    const age = selectedAge || parseFloat(document.getElementById('age-exact').value) || 0;
+    const grossesseRow = document.getElementById('grossesse-row');
+    grossesseRow.style.display = (sexe === 'F' && age >= 10 && age <= 55) ? 'block' : 'none';
+  }
+
+  function toggleGrossesse() {
+    const toggle = document.getElementById('grossesse-toggle');
+    const cb = document.getElementById('grossesse');
+    cb.checked = !cb.checked;
+    toggle.classList.toggle('active', cb.checked);
+  }
+
+  function toggleSymptom(label, name) {
+    const cb = label.querySelector('input[type="checkbox"]');
+    cb.checked = !cb.checked;
+    label.classList.toggle('active', cb.checked);
+    symptoms[name] = cb.checked ? 1 : 0;
+  }
+
+  function checkTemperature(input) {
+    const val = parseFloat(input.value);
+    const alert = document.getElementById('temp-alert');
+    alert.style.display = (!isNaN(val) && val >= 40.5) ? 'block' : 'none';
+    if (!isNaN(val)) input.style.borderColor = val >= 39 ? 'var(--color-rouge)' : val >= 38 ? 'var(--color-orange)' : 'var(--color-border)';
+  }
+
+  function checkSpo2(input) {
+    const val = parseFloat(input.value);
+    const alert = document.getElementById('spo2-alert');
+    alert.style.display = (!isNaN(val) && val < 90) ? 'block' : 'none';
+    if (!isNaN(val)) input.style.borderColor = val < 90 ? 'var(--color-rouge)' : val < 95 ? 'var(--color-orange)' : 'var(--color-border)';
+  }
+
+  function updatePBGauge(input) {
+    const val = parseFloat(input.value);
+    const fill = document.getElementById('pb-fill');
+    const alert = document.getElementById('pb-alert');
+    if (!isNaN(val) && val > 0) {
+      const pct = Math.min(100, (val / 180) * 100);
+      fill.style.width = pct + '%';
+      if (val < 115) { fill.style.background = 'var(--color-rouge)'; alert.style.display = 'block'; }
+      else if (val < 125) { fill.style.background = 'var(--color-orange)'; alert.style.display = 'none'; }
+      else { fill.style.background = 'var(--color-vert)'; alert.style.display = 'none'; }
+    }
+  }
+
+  function submitConsultation() {
+    const nom = document.getElementById('patient-nom').value.trim();
+    const ageExact = parseFloat(document.getElementById('age-exact').value);
+    const age = isNaN(ageExact) ? selectedAge : ageExact;
+    const sexe = document.getElementById('sexe').value;
+
+    if (!nom) { hgAlert('Veuillez entrer un identifiant patient avant de continuer.', 'Champ manquant', '⚠️'); return; }
+    if (!age) { hgAlert('Veuillez indiquer l\'âge du patient avant de continuer.', 'Champ manquant', '⚠️'); return; }
+
+    // Collecte de tous les symptômes
+    const data = {
+      patient_nom: nom,
+      age_ans: age,
+      sexe: sexe,
+      grossesse: document.getElementById('grossesse')?.checked ? 1 : 0,
+      temperature_celsius: parseFloat(document.getElementById('temperature').value) || null,
+      frequence_respiratoire: parseFloat(document.getElementById('frequence-resp').value) || null,
+      spo2: parseFloat(document.getElementById('spo2').value) || null,
+      poids_kg: parseFloat(document.getElementById('poids').value) || null,
+      pb_mm: parseFloat(document.getElementById('pb-mm').value) || null,
+      duree_symptomes_jours: parseFloat(document.getElementById('duree-jours').value) || null,
+      fievre: symptoms['fievre'] || (parseFloat(document.getElementById('temperature').value) >= 38 ? 1 : 0),
+      ...symptoms
+    };
+
+    // Stocker et passer à l'arbre décisionnel
+    localStorage.setItem('hg_current_consultation', JSON.stringify(data));
+    window.location.href = 'e4_decision_tree.html';
+  }
+</script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

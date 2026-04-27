@@ -1,0 +1,13 @@
+[run]
+omit =
+    src/ml/convert_tflite.py
+    src/ml/train_model.py
+    src/security/tls_sync.py
+    */tests/*
+
+[report]
+exclude_lines =
+    pragma: no cover
+    if __name__ == .__main__.:
+    raise NotImplementedError
+    pass

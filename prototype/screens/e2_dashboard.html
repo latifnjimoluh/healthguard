@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>HealthGuard IA — Tableau de Bord</title>
+  <link rel="stylesheet" href="../css/healthguard.css">
+</head>
+<body>
+<div class="app-container">
+  <div class="status-bar">
+    <span class="time" id="current-time">08:24</span>
+    <span class="offline-badge" id="network-badge">● HORS LIGNE</span>
+  </div>
+
+  <div class="screen-header">
+    <div style="flex:1">
+      <div style="font-size:18px;font-weight:700;">HealthGuard IA</div>
+      <div style="font-size:12px;opacity:0.8;" id="agent-name">Aminatou Wali</div>
+    </div>
+    <a href="e7_settings.html" style="color:white;text-decoration:none;font-size:22px;padding:8px;">⚙️</a>
+  </div>
+
+  <!-- Alerte sync si retard -->
+  <div class="sync-alert" id="sync-alert" style="display:none;">
+    ⚠️ Synchronisation en retard de plus de 48h — <strong>12 consultations</strong> en attente
+  </div>
+
+  <!-- Statistiques du jour -->
+  <div class="section-title">Aujourd'hui</div>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-number" id="stat-consultations">0</div>
+      <div class="stat-label">Consultations</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" style="color:var(--color-rouge);" id="stat-urgences">0</div>
+      <div class="stat-label">Urgences</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" style="color:var(--color-orange);" id="stat-attente">0</div>
+      <div class="stat-label">En attente sync</div>
+    </div>
+  </div>
+
+  <!-- Actions principales -->
+  <div class="section-title">Actions</div>
+  <div class="actions-grid">
+    <a href="e3_consultation.html" class="action-card primary">
+      <div class="action-icon">🩺</div>
+      <div class="action-label">Nouvelle Consultation</div>
+    </a>
+    <a href="e6_patient_record.html" class="action-card">
+      <div class="action-icon">👤</div>
+      <div class="action-label">Rechercher Patient</div>
+    </a>
+    <a href="e7_settings.html?tab=sync" class="action-card">
+      <div class="action-icon" id="sync-icon">🔄</div>
+      <div class="action-label">Synchroniser</div>
+    </a>
+    <a href="e7_settings.html" class="action-card">
+      <div class="action-icon">⚙️</div>
+      <div class="action-label">Paramètres</div>
+    </a>
+  </div>
+
+  <!-- Dernières consultations -->
+  <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
+    <span>Dernières consultations</span>
+    <span id="consult-source" style="font-size:11px;opacity:0.6;font-weight:400;"></span>
+  </div>
+  <div id="recent-consultations">
+    <div style="text-align:center;padding:24px;color:var(--color-text-secondary);font-size:13px;">
+      Chargement…
+    </div>
+  </div>
+</div>
+
+<script>
+  const API = 'http://localhost:8000';
+
+  // Horloge
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('current-time').textContent =
+      String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+  }
+  updateClock(); setInterval(updateClock, 10000);
+
+  // Statut réseau
+  function updateNetworkStatus() {
+    const badge = document.getElementById('network-badge');
+    if (navigator.onLine) {
+      badge.textContent = '● EN LIGNE';
+      badge.style.backgroundColor = 'var(--color-vert)';
+    } else {
+      badge.textContent = '● HORS LIGNE';
+      badge.style.backgroundColor = 'var(--color-orange)';
+    }
+  }
+  updateNetworkStatus();
+  window.addEventListener('online', updateNetworkStatus);
+  window.addEventListener('offline', updateNetworkStatus);
+
+  // Couleur → classe CSS
+  function couleurClass(couleur) {
+    if (!couleur) return 'vert';
+    const c = couleur.toLowerCase();
+    if (c === 'rouge' || c === 'red') return 'rouge';
+    if (c === 'orange') return 'orange';
+    return 'vert';
+  }
+
+  // Formatage date
+  function formatDate(iso) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    const today = new Date();
+    const isToday = d.toDateString() === today.toDateString();
+    const yesterday = new Date(today); yesterday.setDate(today.getDate() - 1);
+    const isYesterday = d.toDateString() === yesterday.toDateString();
+    const hhmm = String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+    if (isToday) return `Aujourd'hui ${hhmm}`;
+    if (isYesterday) return `Hier ${hhmm}`;
+    return d.toLocaleDateString('fr-FR', {day:'numeric', month:'short'}) + ' ' + hhmm;
+  }
+
+  // Rendu des consultations dans la liste
+  function renderConsultations(list, source) {
+    const el = document.getElementById('recent-consultations');
+    const srcEl = document.getElementById('consult-source');
+
+    if (!list || list.length === 0) {
+      el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--color-text-secondary);font-size:13px;">Aucune consultation enregistrée</div>';
+      return;
+    }
+
+    srcEl.textContent = source === 'postgresql' ? '(base centrale)' : '(local)';
+
+    el.innerHTML = list.slice(0, 8).map(c => {
+      const cls = couleurClass(c.couleur || c.couleur_alerte);
+      const diag = c.diagnostic || c.maladie_code || 'Diagnostic inconnu';
+      const nom = c.patient_nom || 'Patient anonyme';
+      const dateStr = formatDate(c.date || c.date_heure);
+      return `
+        <div class="consultation-item">
+          <div class="consultation-dot ${cls}"></div>
+          <div class="consultation-info">
+            <div class="consultation-diag">${diag}</div>
+            <div class="consultation-date">${dateStr} — ${nom}</div>
+          </div>
+          <span style="color:var(--color-text-secondary);">›</span>
+        </div>`;
+    }).join('');
+  }
+
+  // Chargement principal : API d'abord, localStorage en fallback
+  async function loadDashboard() {
+    const localData = JSON.parse(localStorage.getItem('hg_consultations') || '[]');
+    const today = new Date().toDateString();
+    const todayLocal = localData.filter(c => new Date(c.date).toDateString() === today);
+
+    // Stats depuis localStorage (toujours disponible et à jour)
+    document.getElementById('stat-consultations').textContent = todayLocal.length;
+    document.getElementById('stat-urgences').textContent =
+      todayLocal.filter(c => c.gravite === 3 || c.couleur === 'ROUGE').length;
+    document.getElementById('stat-attente').textContent =
+      localData.filter(c => !c.synced).length;
+
+    // Alerte sync si plus de 48h
+    const lastSync = localStorage.getItem('hg_last_sync');
+    if (lastSync) {
+      const diff = (Date.now() - parseInt(lastSync)) / (1000 * 60 * 60);
+      if (diff > 48) document.getElementById('sync-alert').style.display = 'block';
+    }
+
+    // Nom agent depuis localStorage
+    const agents = JSON.parse(localStorage.getItem('hg_agents') || '[]');
+    const agentId = localStorage.getItem('hg_agent_id') || '';
+    const agent = agents.find(a => a.id === agentId);
+    if (agent) {
+      document.getElementById('agent-name').textContent = agent.nom;
+    } else if (agentId === 'agent_aminatou') {
+      document.getElementById('agent-name').textContent = 'Aminatou Wali';
+    } else if (agentId === 'urgence_anonyme') {
+      document.getElementById('agent-name').textContent = 'Urgence (anonyme)';
+    }
+
+    // Tentative de chargement depuis l'API PostgreSQL
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 2500);
+      const r = await fetch(`${API}/api/v1/consultations/recent`, { signal: controller.signal });
+      clearTimeout(timeout);
+      if (r.ok) {
+        const data = await r.json();
+        if (data.consultations && data.consultations.length > 0) {
+          renderConsultations(data.consultations, 'postgresql');
+          return;
+        }
+      }
+    } catch (e) { /* API indisponible — on utilise localStorage */ }
+
+    // Fallback localStorage
+    renderConsultations(localData, 'local');
+  }
+
+  loadDashboard();
+</script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+{
+  "maladie": "malnutrition",
+  "version": "1.0",
+  "source": "OMS 2023 + UNICEF + Protocole National Cameroun PCIMAS",
+  "noeud_entree": "N1",
+  "description": "Arbre décisionnel Malnutrition Aiguë Sévère (MAS) et Modérée (MAM)",
+  "noeuds": {
+    "N1": {
+      "id": "N1",
+      "type": "question",
+      "question_fr": "Patient est-il un enfant de moins de 5 ans OU une femme enceinte/allaitante ?",
+      "aide": "Le dépistage de la malnutrition aiguë cible prioritairement les enfants <5 ans et les femmes enceintes/allaitantes",
+      "reponse_oui": "N2",
+      "reponse_non": "N1B_ADULTE"
+    },
+    "N1B_ADULTE": {
+      "id": "N1B_ADULTE",
+      "type": "question",
+      "question_fr": "Signes évocateurs de malnutrition sévère chez adulte ? (amaigrissement extrême visible, IMC estimé très bas, œdèmes)",
+      "aide": "Malnutrition adulte possible dans contexte de crise alimentaire, VIH, tuberculose avancée",
+      "reponse_oui": "N3_ADULTE",
+      "reponse_non": "FIN_MALNUTRITION_PEU_PROBABLE"
+    },
+    "N2": {
+      "id": "N2",
+      "type": "mesure",
+      "question_fr": "Mesure du Périmètre Brachial (PB/MUAC) en mm ?",
+      "aide": "Mesurer bras gauche mi-distance entre épaule et coude. Bras détendu. SEUILS : MAS < 115mm (rouge), MAM 115-125mm (orange), Normal ≥ 125mm (vert). Si femme enceinte : MAS < 210mm, MAM 210-230mm.",
+      "unite": "mm",
+      "seuil_mas_enfant": 115,
+      "seuil_mam_enfant": 125,
+      "si_inferieur_115": "N3_MAS",
+      "si_115_a_125": "N3_MAM",
+      "si_superieur_125": "N4_OEDEMES_CHECK",
+      "si_non_mesurable": "N4_OEDEMES_CHECK"
+    },
+    "N3_MAS": {
+      "id": "N3_MAS",
+      "type": "question",
+      "question_fr": "Présence d'œdèmes bilatéraux des membres inférieurs (pieds/chevilles gonflés) ?",
+      "aide": "Appuyer 3 secondes avec le pouce sur le dos du pied. Si empreinte reste = œdème positif (kwashiorkor). Œdème = MAS même si PB normal.",
+      "reponse_oui": "N4_COMPLICATIONS",
+      "reponse_non": "N4_COMPLICATIONS"
+    },
+    "N3_MAM": {
+      "id": "N3_MAM",
+      "type": "question",
+      "question_fr": "Présence d'œdèmes bilatéraux des membres inférieurs ?",
+      "aide": "Présence d'œdèmes reclasse automatiquement en MAS même si PB en zone MAM",
+      "reponse_oui": "N4_COMPLICATIONS",
+      "reponse_non": "N5_MAM_SANS_COMPLICATION"
+    },
+    "N4_OEDEMES_CHECK": {
+      "id": "N4_OEDEMES_CHECK",
+      "type": "question",
+      "question_fr": "Présence d'œdèmes bilatéraux des membres inférieurs ?",
+      "aide": "Œdème bilatéral = critère de MAS (kwashiorkor) même si PB normal",
+      "reponse_oui": "N4_COMPLICATIONS",
+      "reponse_non": "FIN_MALNUTRITION_PEU_PROBABLE"
+    },
+    "N3_ADULTE": {
+      "id": "N3_ADULTE",
+      "type": "question",
+      "question_fr": "Présence d'œdèmes bilatéraux ou mesure MUAC < 160mm ?",
+      "aide": "MUAC adulte : seuil sévère < 160mm. Œdèmes = signe de malnutrition sévère (kwashiorkor adulte possible).",
+      "reponse_oui": "N4_COMPLICATIONS",
+      "reponse_non": "FIN_MALNUTRITION_MODEREE"
+    },
+    "N4_COMPLICATIONS": {
+      "id": "N4_COMPLICATIONS",
+      "type": "question",
+      "question_fr": "Présence d'une ou plusieurs complications médicales ? (fièvre ≥38.5°C, déshydratation, infections graves, anémie sévère, refus alimentation)",
+      "aide": "MAS avec complications = urgence médicale nécessitant hospitalisation. MAS sans complications = traitement ambulatoire ATPE possible.",
+      "reponse_oui": "FIN_MAS_COMPLICATIONS",
+      "reponse_non": "N5_TEST_APPETIT"
+    },
+    "N5_TEST_APPETIT": {
+      "id": "N5_TEST_APPETIT",
+      "type": "question",
+      "question_fr": "Test d'appétit réalisé — Enfant accepte et mange au moins 1/4 sachet ATPE (Plumpy'Nut) ?",
+      "aide": "Donner 1/4 sachet ATPE. Observation 10-15 min. Si enfant mange > 1/4 sachet sans effort = appétit satisfaisant → traitement ambulatoire possible.",
+      "reponse_oui": "FIN_MAS_SANS_COMPLICATION",
+      "reponse_non": "FIN_MAS_ECHEC_APPETIT"
+    },
+    "N5_MAM_SANS_COMPLICATION": {
+      "id": "N5_MAM_SANS_COMPLICATION",
+      "type": "question",
+      "question_fr": "Présence de complications médicales associées (fièvre, infection, anémie) ?",
+      "aide": "MAM avec complications nécessite une prise en charge renforcée",
+      "reponse_oui": "FIN_MAM_AVEC_COMPLICATIONS",
+      "reponse_non": "FIN_MAM_SIMPLE"
+    },
+    "FIN_MAS_COMPLICATIONS": {
+      "id": "FIN_MAS_COMPLICATIONS",
+      "type": "resultat",
+      "diagnostic": "malnutrition_mas",
+      "gravite": 3,
+      "couleur_alerte": "ROUGE",
+      "action_immediate": "TRANSFERT_IMMEDIAT",
+      "recommandation_courte": "MAS avec complications — TRANSFERT IMMÉDIAT CRENAS/CRENI",
+      "recommandation_complete": "Malnutrition Aiguë Sévère avec complications médicales. TRANSFERT IMMÉDIAT au CRENAS (Centre de Récupération et Éducation Nutritionnelle Ambulatoire Sévère) ou CRENI si hospitalisé. Pré-transfert : (1) Si déshydratation modérée : SRO en petites quantités. (2) Si hypoglycémie : lait F75 ou sucre. (3) Ne pas forcer l'alimentation. Surveiller conscience.",
+      "traitement_pretransfert": ["SRO_si_deshydratation", "lait_F75_si_hypoglycemie"],
+      "structure_reference": "CRENAS_CRENI",
+      "notification_district": false
+    },
+    "FIN_MAS_SANS_COMPLICATION": {
+      "id": "FIN_MAS_SANS_COMPLICATION",
+      "type": "resultat",
+      "diagnostic": "malnutrition_mas",
+      "gravite": 2,
+      "couleur_alerte": "ORANGE",
+      "action_immediate": "TRAITEMENT_ATPE_AMBULATOIRE",
+      "recommandation_courte": "MAS sans complication — ATPE (Plumpy'Nut) + suivi J3/J7/J14",
+      "recommandation_complete": "MAS sans complication médicale, appétit conservé. Traitement ambulatoire ATPE : (1) Plumpy'Nut 92g/kg/semaine (3-4 sachets/jour selon poids). (2) Amoxicilline prophylactique 50mg/kg/j × 7j. (3) Vitamine A si non donnée dans les 6 mois. (4) Suivi OBLIGATOIRE : J3, J7, J14, J21, J28. Critères de sortie : MUAC ≥ 125mm × 2 consultations consécutives.",
+      "traitement": ["ATPE_Plumpy_Nut", "amoxicilline_prophylactique", "vitamine_A"],
+      "suivi": "J3_J7_J14",
+      "structure_reference": null,
+      "notification_district": false
+    },
+    "FIN_MAS_ECHEC_APPETIT": {
+      "id": "FIN_MAS_ECHEC_APPETIT",
+      "type": "resultat",
+      "diagnostic": "malnutrition_mas",
+      "gravite": 3,
+      "couleur_alerte": "ROUGE",
+      "action_immediate": "TRANSFERT_URGENT",
+      "recommandation_courte": "MAS — Échec test d'appétit — Transfert CRENAS/CRENI urgent",
+      "recommandation_complete": "Échec du test d'appétit = critère d'hospitalisation. Transfert urgent vers CRENAS ou CRENI. L'enfant ne peut pas bénéficier du traitement ambulatoire ATPE sans appétit conservé.",
+      "traitement_pretransfert": ["hydratation_prudente"],
+      "structure_reference": "CRENAS_CRENI",
+      "notification_district": false
+    },
+    "FIN_MAM_SIMPLE": {
+      "id": "FIN_MAM_SIMPLE",
+      "type": "resultat",
+      "diagnostic": "malnutrition_mas",
+      "gravite": 1,
+      "couleur_alerte": "ORANGE",
+      "action_immediate": "TRAITEMENT_NUTRITIONNEL",
+      "recommandation_courte": "MAM — Supplémentation nutritionnelle + suivi mensuel",
+      "recommandation_complete": "Malnutrition Aiguë Modérée. Programme de supplémentation : (1) CSB++ (farine enrichie) ou Plumpy'Sup selon disponibilité. (2) Éducation nutritionnelle à la mère/famille. (3) Suivi mensuel pendant 3 mois. Critères référence CRENAS si aggravation (PB < 115mm ou complications).",
+      "traitement": ["CSB_plus_plus_ou_Plumpy_Sup", "education_nutritionnelle"],
+      "suivi": "mensuel_3_mois",
+      "structure_reference": null,
+      "notification_district": false
+    },
+    "FIN_MAM_AVEC_COMPLICATIONS": {
+      "id": "FIN_MAM_AVEC_COMPLICATIONS",
+      "type": "resultat",
+      "diagnostic": "malnutrition_mas",
+      "gravite": 2,
+      "couleur_alerte": "ORANGE",
+      "action_immediate": "TRAITEMENT_LOCAL_RENFORCE",
+      "recommandation_courte": "MAM avec complications — Traitement complications + supplémentation",
+      "recommandation_complete": "MAM avec complications médicales. Traiter les complications en priorité : antibiotiques si infection bactérienne, antipaludéens si paludisme associé. Supplémentation nutritionnelle parallèle. Suivi rapproché J7.",
+      "traitement": ["traiter_complications", "supplementation_nutritionnelle"],
+      "suivi": "J7",
+      "structure_reference": null,
+      "notification_district": false
+    },
+    "FIN_MALNUTRITION_MODEREE": {
+      "id": "FIN_MALNUTRITION_MODEREE",
+      "type": "resultat",
+      "diagnostic": "malnutrition_mas",
+      "gravite": 1,
+      "couleur_alerte": "VERT",
+      "action_immediate": "EDUCATION_NUTRITIONNELLE",
+      "recommandation_courte": "Risque nutritionnel — Conseils alimentation + suivi",
+      "recommandation_complete": "Risque de malnutrition à surveiller. Conseils nutritionnels : diversification alimentaire, alimentation enrichie locale. Peser régulièrement. Revenir si MUAC diminue.",
+      "traitement": ["conseils_nutritionnels"],
+      "suivi": "mensuel",
+      "structure_reference": null,
+      "notification_district": false
+    },
+    "FIN_MALNUTRITION_PEU_PROBABLE": {
+      "id": "FIN_MALNUTRITION_PEU_PROBABLE",
+      "type": "resultat",
+      "diagnostic": "malnutrition_peu_probable",
+      "gravite": 0,
+      "couleur_alerte": "VERT",
+      "action_immediate": "PREVENTION",
+      "recommandation_courte": "Malnutrition peu probable — Mesures préventives recommandées",
+      "recommandation_complete": "Pas de signe de malnutrition aiguë. Mesures préventives : alimentation diversifiée, suivi croissance, vaccination complète.",
+      "traitement": [],
+      "suivi": "routine",
+      "structure_reference": null,
+      "notification_district": false
+    }
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "maladie": "tuberculose",
+  "version": "1.0",
+  "source": "OMS Stratégie End TB + Protocole National PNT Cameroun 2023",
+  "noeud_entree": "N1",
+  "description": "Arbre décisionnel Tuberculose pulmonaire — Dépistage clinique sans laboratoire",
+  "noeuds": {
+    "N1": {
+      "id": "N1",
+      "type": "mesure",
+      "question_fr": "Durée de la toux (en semaines) ?",
+      "aide": "La toux chronique ≥ 3 semaines est le critère majeur de suspicion TB. Demander précisément depuis combien de semaines.",
+      "unite": "semaines",
+      "seuil_suspect": 3,
+      "si_superieur_ou_egal_3": "N2",
+      "si_inferieur_3": "N1B",
+      "si_non_mesurable": "N1B"
+    },
+    "N1B": {
+      "id": "N1B",
+      "type": "question",
+      "question_fr": "Hémoptysie (crachats contenant du sang) présente ?",
+      "aide": "Présence de sang dans les crachats = signe d'alarme TB même sans toux prolongée",
+      "reponse_oui": "N2",
+      "reponse_non": "FIN_TB_PEU_PROBABLE"
+    },
+    "N2": {
+      "id": "N2",
+      "type": "question",
+      "question_fr": "Amaigrissement notable (perte de poids > 5% en 1 mois ou perte visible) ?",
+      "aide": "L'amaigrissement progressif associé à la toux est très évocateur de TB. Comparer au poids habituel du patient.",
+      "reponse_oui": "N3",
+      "reponse_non": "N3_SANS_AMAIGRISSEMENT"
+    },
+    "N3": {
+      "id": "N3",
+      "type": "question",
+      "question_fr": "Sueurs nocturnes abondantes (trempe les draps) présentes ?",
+      "aide": "Sueurs nocturnes profuses = symptôme constitutionnel majeur de la TB active",
+      "reponse_oui": "N4",
+      "reponse_non": "N4_SANS_SUEURS"
+    },
+    "N3_SANS_AMAIGRISSEMENT": {
+      "id": "N3_SANS_AMAIGRISSEMENT",
+      "type": "question",
+      "question_fr": "Sueurs nocturnes abondantes et/ou fièvre vespérale (température qui monte le soir) ?",
+      "aide": "Fièvre vespérale = fièvre qui apparaît en fin de journée, caractéristique de la TB",
+      "reponse_oui": "N4_MODERE",
+      "reponse_non": "N4_SANS_SIGNES"
+    },
+    "N4": {
+      "id": "N4",
+      "type": "question",
+      "question_fr": "Contact proche avec un patient tuberculeux connu dans les 2 dernières années ?",
+      "aide": "Contact = vie sous le même toit ou côtoiement régulier prolongé. Facteur de risque majeur.",
+      "reponse_oui": "N5_GRAVITE",
+      "reponse_non": "N5_SANS_CONTACT"
+    },
+    "N4_SANS_SUEURS": {
+      "id": "N4_SANS_SUEURS",
+      "type": "question",
+      "question_fr": "Contact proche avec un patient tuberculeux connu ?",
+      "aide": "Contact = cohabitation ou exposition régulière à une personne sous traitement TB ou décédée de TB",
+      "reponse_oui": "N5_GRAVITE",
+      "reponse_non": "N5_SANS_CONTACT"
+    },
+    "N4_MODERE": {
+      "id": "N4_MODERE",
+      "type": "question",
+      "question_fr": "Contact proche avec patient TB connu OU résidence en zone de forte incidence TB ?",
+      "aide": "Région Est-Cameroun = incidence TB élevée. Contexte de contact ou zone endémique augmente la probabilité.",
+      "reponse_oui": "N5_GRAVITE",
+      "reponse_non": "FIN_TB_SUSPECTEE_FAIBLE"
+    },
+    "N4_SANS_SIGNES": {
+      "id": "N4_SANS_SIGNES",
+      "type": "question",
+      "question_fr": "Contact TB connu ET hémoptysie présente ?",
+      "aide": "Même sans signes constitutionnels, l'hémoptysie + contact TB = suspicion justifiée",
+      "reponse_oui": "N5_GRAVITE",
+      "reponse_non": "FIN_TB_PEU_PROBABLE"
+    },
+    "N5_SANS_CONTACT": {
+      "id": "N5_SANS_CONTACT",
+      "type": "question",
+      "question_fr": "Immunodépression suspectée ou connue ? (VIH, corticothérapie prolongée, diabète) OU résidence en zone de forte incidence TB ?",
+      "aide": "VIH = facteur multiplicateur de risque TB (risque × 20). Diabète augmente aussi le risque. Est-Cameroun = zone haute incidence.",
+      "reponse_oui": "N5_GRAVITE",
+      "reponse_non": "FIN_TB_SUSPECTEE_FAIBLE"
+    },
+    "N5_GRAVITE": {
+      "id": "N5_GRAVITE",
+      "type": "question",
+      "question_fr": "Signes de gravité présents ? (dyspnée au repos, douleur thoracique intense, altération sévère état général, confusion)",
+      "aide": "TB grave = TB miliaire, pleurésie abondante, ou TB chez immunodéprimé sévère. Nécessite hospitalisation urgente.",
+      "reponse_oui": "FIN_TB_GRAVE",
+      "reponse_non": "FIN_TB_HAUTEMENT_SUSPECTEE"
+    },
+    "FIN_TB_GRAVE": {
+      "id": "FIN_TB_GRAVE",
+      "type": "resultat",
+      "diagnostic": "tuberculose",
+      "gravite": 3,
+      "couleur_alerte": "ROUGE",
+      "action_immediate": "TRANSFERT_URGENT_CDTB",
+      "recommandation_courte": "TB grave probable — Transfert urgent CDTB + Isolement respiratoire",
+      "recommandation_complete": "Tuberculose grave probable. TRANSFERT URGENT au CDTB (Centre de Diagnostic et Traitement de la Tuberculose). (1) ISOLEMENT RESPIRATOIRE : masque chirurgical sur le patient, éviter salles communes. (2) NE PAS initier antibiotiques empiriques (risque résistance). (3) Crachat × 3 si possible avant transfert. (4) Signalez au district. (5) Évaluation VIH recommandée si non connue. Surveillance de l'entourage familial.",
+      "traitement_pretransfert": ["isolement_respiratoire", "crachat_si_possible"],
+      "contre_indications": ["antibiotiques_empiriques", "corticoides_sans_avis_specialiste"],
+      "structure_reference": "CDTB",
+      "notification_district": true
+    },
+    "FIN_TB_HAUTEMENT_SUSPECTEE": {
+      "id": "FIN_TB_HAUTEMENT_SUSPECTEE",
+      "type": "resultat",
+      "diagnostic": "tuberculose",
+      "gravite": 2,
+      "couleur_alerte": "ORANGE",
+      "action_immediate": "REFERENCE_CDTB",
+      "recommandation_courte": "TB hautement suspectée — Référence CDTB OBLIGATOIRE — Ne pas traiter par antibiotiques",
+      "recommandation_complete": "Tuberculose hautement suspectée. RÉFÉRENCE OBLIGATOIRE au CDTB pour confirmation diagnostique. (1) NE PAS donner antibiotiques (amoxicilline, cotrimoxazole) — risque de masquer la TB et créer une résistance. (2) ISOLEMENT RESPIRATOIRE : éviter rassemblements, masque. (3) Crachat à collecter si possible. (4) Notifier le CDTB du district par téléphone. (5) Dépistage de l'entourage familial recommandé. Sigles TB = Tuberculose bacillifère contagieuse jusqu'à preuve du contraire.",
+      "traitement": ["isolement_respiratoire_conseille"],
+      "contre_indications": ["antibiotiques_empiriques", "anti_inflammatoires_prolonges"],
+      "structure_reference": "CDTB",
+      "notification_district": true
+    },
+    "FIN_TB_SUSPECTEE_FAIBLE": {
+      "id": "FIN_TB_SUSPECTEE_FAIBLE",
+      "type": "resultat",
+      "diagnostic": "tuberculose",
+      "gravite": 1,
+      "couleur_alerte": "ORANGE",
+      "action_immediate": "SURVEILLANCE_SUIVI",
+      "recommandation_courte": "TB possible — Surveillance 2 semaines + réévaluation si persistance",
+      "recommandation_complete": "Suspicion modérée de tuberculose. Surveiller l'évolution sur 2 semaines. Si toux persiste ou aggravation des symptômes → référence CDTB. En attendant : (1) Hygiène respiratoire (couvrir la bouche). (2) NE PAS traiter par antibiotiques empiriques. (3) Réévaluation dans 2 semaines.",
+      "traitement": ["surveillance_clinique"],
+      "suivi": "J14_reevaluation",
+      "structure_reference": "CDTB_si_persistance",
+      "notification_district": false
+    },
+    "FIN_TB_PEU_PROBABLE": {
+      "id": "FIN_TB_PEU_PROBABLE",
+      "type": "resultat",
+      "diagnostic": "tuberculose_peu_probable",
+      "gravite": 0,
+      "couleur_alerte": "VERT",
+      "action_immediate": "EXPLORER_AUTRES_DIAGNOSTICS",
+      "recommandation_courte": "TB peu probable — Explorer autres étiologies",
+      "recommandation_complete": "Critères insuffisants pour suspecter une tuberculose. Toux aiguë < 3 semaines sans hémoptysie ni signes constitutionnels → explorer IRA/pneumonie. Si toux persistante dans le temps → réévaluer.",
+      "traitement": [],
+      "suivi": "selon_clinique",
+      "structure_reference": null,
+      "notification_district": false
+    }
+  }
+}

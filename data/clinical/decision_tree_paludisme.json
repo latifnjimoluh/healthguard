@@ -1,0 +1,215 @@
+{
+  "maladie": "paludisme",
+  "version": "1.0",
+  "source": "OMS AFRO + MSF Cameroun 2024 + MINSANTE Cameroun 2023",
+  "noeud_entree": "N1",
+  "description": "Arbre décisionnel paludisme (Plasmodium falciparum) — Régions Adamaoua et Est-Cameroun",
+  "noeuds": {
+    "N1": {
+      "id": "N1",
+      "type": "question",
+      "question_fr": "Fièvre présente ou antécédent de fièvre dans les 48 dernières heures ?",
+      "question_local": "Woundè ko nder faango nder wakati 48 wonndu ?",
+      "aide": "Fièvre = température ≥ 37.5°C ou sensation de chaleur rapportée par le patient ou son accompagnant",
+      "reponse_oui": "N2",
+      "reponse_non": "FIN_FAIBLE_PROBA"
+    },
+    "N2": {
+      "id": "N2",
+      "type": "mesure",
+      "question_fr": "Température corporelle mesurée (°C) ?",
+      "aide": "Si thermomètre non disponible, estimer par palper frontal",
+      "unite": "°C",
+      "seuil_positif": 38.5,
+      "si_superieur_ou_egal": "N3",
+      "si_inferieur": "N3_ATTENUATION",
+      "si_non_mesurable": "N3",
+      "valeur_par_defaut": 38.5
+    },
+    "N3": {
+      "id": "N3",
+      "type": "question",
+      "question_fr": "Patient appartient-il à un groupe vulnérable ? (Enfant < 5 ans OU femme enceinte)",
+      "aide": "Groupe vulnérable = risque élevé de paludisme grave. Vérifier âge et statut de grossesse.",
+      "reponse_oui": "N4",
+      "reponse_non": "N5"
+    },
+    "N3_ATTENUATION": {
+      "id": "N3_ATTENUATION",
+      "type": "question",
+      "question_fr": "Patient appartient-il à un groupe vulnérable ? (Enfant < 5 ans OU femme enceinte)",
+      "aide": "Fièvre modérée chez groupe vulnérable nécessite une vigilance accrue",
+      "reponse_oui": "N4",
+      "reponse_non": "N5_FAIBLE"
+    },
+    "N4": {
+      "id": "N4",
+      "type": "question",
+      "question_fr": "Présence de signes de gravité ? (au moins 1 parmi : convulsions, trouble de conscience, vomissements incoercibles, ictère, saignements anormaux, prostration extrême)",
+      "aide": "Trouble de conscience = enfant ne reconnaît pas sa mère / adulte désorienté. Convulsions = mouvements involontaires généralisés.",
+      "reponse_oui": "FIN_PALUDISME_GRAVE",
+      "reponse_non": "N4B"
+    },
+    "N4B": {
+      "id": "N4B",
+      "type": "question",
+      "question_fr": "TDR paludisme disponible et résultat positif ?",
+      "aide": "Test de Diagnostic Rapide. Si non disponible, traiter selon la clinique dans zone d'endémie.",
+      "reponse_oui": "FIN_PALUDISME_SIMPLE_VULNERABLE",
+      "reponse_non": "FIN_PALUDISME_SIMPLE_VULNERABLE"
+    },
+    "N5": {
+      "id": "N5",
+      "type": "question",
+      "question_fr": "Association de symptômes : céphalée + frissons + courbatures présents ?",
+      "aide": "Triade classique du paludisme non compliqué chez l'adulte",
+      "reponse_oui": "N6",
+      "reponse_non": "N6_INCERTAIN"
+    },
+    "N5_FAIBLE": {
+      "id": "N5_FAIBLE",
+      "type": "question",
+      "question_fr": "Association de symptômes : céphalée + frissons + courbatures présents ?",
+      "aide": "Fièvre modérée avec triade palustre — probabilité modérée",
+      "reponse_oui": "FIN_PALUDISME_SIMPLE_ADULTE",
+      "reponse_non": "FIN_DIAGNOSTIC_DIFFERENTIEL"
+    },
+    "N6": {
+      "id": "N6",
+      "type": "question",
+      "question_fr": "Vomissements présents (≥ 3 épisodes) ou incapacité à conserver les médicaments per os ?",
+      "aide": "Vomissements répétés contre-indiquent l'artéméther-luméfantrine oral — risque de sous-dosage",
+      "reponse_oui": "FIN_PALUDISME_MODERE_VOMISSEMENTS",
+      "reponse_non": "N6B"
+    },
+    "N6B": {
+      "id": "N6B",
+      "type": "question",
+      "question_fr": "Durée des symptômes > 5 jours ?",
+      "aide": "Durée prolongée augmente le risque de complications",
+      "reponse_oui": "FIN_PALUDISME_SURVEILLER",
+      "reponse_non": "FIN_PALUDISME_SIMPLE_ADULTE"
+    },
+    "N6_INCERTAIN": {
+      "id": "N6_INCERTAIN",
+      "type": "question",
+      "question_fr": "Localisation en zone d'endémie palustre ou saison des pluies ?",
+      "aide": "Régions Adamaoua et Est-Cameroun : endémie stable. Saison des pluies (avril-octobre) = pic de transmission.",
+      "reponse_oui": "FIN_PALUDISME_SUSPECTE_BILAN",
+      "reponse_non": "FIN_DIAGNOSTIC_DIFFERENTIEL"
+    },
+    "FIN_PALUDISME_GRAVE": {
+      "id": "FIN_PALUDISME_GRAVE",
+      "type": "resultat",
+      "diagnostic": "paludisme_grave",
+      "gravite": 3,
+      "couleur_alerte": "ROUGE",
+      "action_immediate": "TRANSFERT_IMMEDIAT",
+      "recommandation_courte": "TRANSFERT IMMÉDIAT — Paludisme grave probable",
+      "recommandation_complete": "Paludisme grave probable. TRANSFERT IMMÉDIAT au CMA le plus proche. Pré-transfert : (1) Quinine IV si disponible — 20mg/kg en 4h puis 10mg/kg/8h. (2) Voie veineuse périphérique. (3) Glucose 10% si hypoglycémie suspectée. (4) Position latérale de sécurité si trouble de conscience. NE PAS donner artéméther-luméfantrine oral (inefficace si vomissements, absorption imprévisible). Surveiller : conscience, FR, T° toutes 15 min.",
+      "traitement_pretransfert": ["quinine_iv", "voie_veineuse", "glucose_10pct_si_hypoglycemie"],
+      "contre_indications": ["artemether_lumefantrine_oral"],
+      "structure_reference": "CMA_DISTRICT",
+      "notification_district": false
+    },
+    "FIN_PALUDISME_SIMPLE_VULNERABLE": {
+      "id": "FIN_PALUDISME_SIMPLE_VULNERABLE",
+      "type": "resultat",
+      "diagnostic": "paludisme_simple",
+      "gravite": 2,
+      "couleur_alerte": "ORANGE",
+      "action_immediate": "TRAITEMENT_LOCAL_SURVEILLANCE",
+      "recommandation_courte": "Paludisme simple — Groupe vulnérable — Traitement AL + surveillance rapprochée",
+      "recommandation_complete": "Paludisme simple probable chez patient vulnérable (enfant <5 ans ou femme enceinte). Traitement : Artéméther-Luméfantrine (AL) selon poids. ENFANT : dose poids-dépendante (voir tableau). FEMME ENCEINTE 1er trimestre : quinine préférable à AL. Suivi obligatoire à J3. Si aggravation ou persistance fièvre > J3 → TRANSFERT.",
+      "traitement": ["artemether_lumefantrine_selon_poids"],
+      "contre_indications_grossesse_t1": ["artemether_lumefantrine"],
+      "suivi": "J3_obligatoire",
+      "structure_reference": null,
+      "notification_district": false
+    },
+    "FIN_PALUDISME_SIMPLE_ADULTE": {
+      "id": "FIN_PALUDISME_SIMPLE_ADULTE",
+      "type": "resultat",
+      "diagnostic": "paludisme_simple",
+      "gravite": 1,
+      "couleur_alerte": "ORANGE",
+      "action_immediate": "TRAITEMENT_LOCAL",
+      "recommandation_courte": "Paludisme simple probable — Artéméther-Luméfantrine 6 comprimés sur 3 jours",
+      "recommandation_complete": "Paludisme non compliqué probable. Traitement AL adulte : 4 comprimés à J0 (0h), 4 comprimés à J0 (8h), puis 4 comprimés matin et soir à J1 et J2. Prendre avec de la nourriture ou du lait. Suivi J3 si persistance des symptômes.",
+      "traitement": ["artemether_lumefantrine_4cp_2xj_3j"],
+      "suivi": "J3_si_persistance",
+      "structure_reference": null,
+      "notification_district": false
+    },
+    "FIN_PALUDISME_MODERE_VOMISSEMENTS": {
+      "id": "FIN_PALUDISME_MODERE_VOMISSEMENTS",
+      "type": "resultat",
+      "diagnostic": "paludisme_simple",
+      "gravite": 2,
+      "couleur_alerte": "ORANGE",
+      "action_immediate": "TRAITEMENT_ALTERNATIF_SURVEILLANCE",
+      "recommandation_courte": "Paludisme avec vomissements — Quinine orale ou transfert si persistance",
+      "recommandation_complete": "Paludisme probable avec vomissements fréquents. AL oral risque inefficace. Option 1 : Quinine orale 10mg/kg/8h × 7j (si disponible). Option 2 : Transfert si quinine IM/IV non disponible et vomissements persistants. Surveillance hydratation.",
+      "traitement": ["quinine_orale_si_disponible"],
+      "suivi": "J1_obligatoire",
+      "structure_reference": null,
+      "notification_district": false
+    },
+    "FIN_PALUDISME_SURVEILLER": {
+      "id": "FIN_PALUDISME_SURVEILLER",
+      "type": "resultat",
+      "diagnostic": "paludisme_simple",
+      "gravite": 1,
+      "couleur_alerte": "ORANGE",
+      "action_immediate": "TRAITEMENT_LOCAL",
+      "recommandation_courte": "Paludisme probable — Durée prolongée — Traitement + surveillance renforcée",
+      "recommandation_complete": "Symptômes depuis > 5 jours. Traitement AL standard mais surveillance renforcée. Si pas d'amélioration à J3 → référence district pour bilan.",
+      "traitement": ["artemether_lumefantrine"],
+      "suivi": "J3_strict",
+      "structure_reference": null,
+      "notification_district": false
+    },
+    "FIN_PALUDISME_SUSPECTE_BILAN": {
+      "id": "FIN_PALUDISME_SUSPECTE_BILAN",
+      "type": "resultat",
+      "diagnostic": "paludisme_simple",
+      "gravite": 1,
+      "couleur_alerte": "VERT",
+      "action_immediate": "TRAITEMENT_LOCAL",
+      "recommandation_courte": "Paludisme possible en zone endémique — Traitement empirique recommandé",
+      "recommandation_complete": "En zone d'endémie pendant saison des pluies, présomption de paludisme justifie traitement empirique sans TDR. Traitement AL. Réévaluer si pas d'amélioration à 48h.",
+      "traitement": ["artemether_lumefantrine"],
+      "suivi": "J2_reevaluation",
+      "structure_reference": null,
+      "notification_district": false
+    },
+    "FIN_DIAGNOSTIC_DIFFERENTIEL": {
+      "id": "FIN_DIAGNOSTIC_DIFFERENTIEL",
+      "type": "resultat",
+      "diagnostic": "diagnostic_differentiel",
+      "gravite": 1,
+      "couleur_alerte": "VERT",
+      "action_immediate": "BILAN_COMPLEMENTAIRE",
+      "recommandation_courte": "Paludisme peu probable — Explorer autres diagnostics (IRA, typhoïde, méningite)",
+      "recommandation_complete": "Les symptômes ne correspondent pas à un profil palustre typique. Explorer : (1) Infection respiratoire si toux, (2) Diarrhée aiguë si troubles digestifs, (3) Méningite si raideur nuque. Continuer évaluation avec les autres arbres diagnostiques.",
+      "traitement": [],
+      "suivi": "selon_diagnostic_final",
+      "structure_reference": null,
+      "notification_district": false
+    },
+    "FIN_FAIBLE_PROBA": {
+      "id": "FIN_FAIBLE_PROBA",
+      "type": "resultat",
+      "diagnostic": "paludisme_peu_probable",
+      "gravite": 0,
+      "couleur_alerte": "VERT",
+      "action_immediate": "EXPLORER_AUTRES_DIAGNOSTICS",
+      "recommandation_courte": "Paludisme peu probable sans fièvre — Explorer autres étiologies",
+      "recommandation_complete": "Absence de fièvre ou d'antécédent fébrile récent. Paludisme peu probable comme diagnostic principal. Évaluer selon les autres symptômes présentés.",
+      "traitement": [],
+      "suivi": "selon_clinique",
+      "structure_reference": null,
+      "notification_district": false
+    }
+  }
+}

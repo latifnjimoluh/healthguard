@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>HealthGuard IA — Paramètres</title>
+  <link rel="stylesheet" href="../css/healthguard.css">
+  <style>
+    .settings-section { margin: 12px; background: white; border-radius: var(--border-radius); box-shadow: var(--shadow-card); overflow: hidden; }
+    .settings-section-header { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--color-primary); padding: 10px 16px 6px; background: var(--color-primary-light); }
+    .setting-row { display: flex; align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--color-border); cursor: pointer; }
+    .setting-row:last-child { border-bottom: none; }
+    .setting-row:hover { background: var(--color-background); }
+    .setting-icon { font-size: 22px; min-width: 32px; }
+    .setting-info { flex: 1; }
+    .setting-label { font-size: 15px; font-weight: 500; color: var(--color-text-primary); }
+    .setting-desc { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
+    .setting-value { font-size: 13px; color: var(--color-text-secondary); }
+    .setting-arrow { color: var(--color-text-secondary); font-size: 18px; margin-left: 8px; }
+    .toggle-switch { width: 44px; height: 24px; background: var(--color-border); border-radius: 12px; position: relative; cursor: pointer; transition: background 0.2s; flex-shrink: 0; }
+    .toggle-switch.on { background: var(--color-primary); }
+    .toggle-knob { width: 20px; height: 20px; border-radius: 50%; background: white; position: absolute; top: 2px; left: 2px; transition: left 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+    .toggle-switch.on .toggle-knob { left: 22px; }
+
+    /* Panneau sync */
+    .sync-panel { margin: 12px; background: white; border-radius: var(--border-radius); padding: 16px; box-shadow: var(--shadow-card); }
+    .sync-status-bar { height: 8px; border-radius: 4px; background: var(--color-border); overflow: hidden; margin: 10px 0; }
+    .sync-progress { height: 100%; border-radius: 4px; background: var(--color-primary); transition: width 1s ease; }
+    .sync-stat-row { display: flex; justify-content: space-between; margin-bottom: 6px; }
+    .sync-stat-label { font-size: 13px; color: var(--color-text-secondary); }
+    .sync-stat-val { font-size: 13px; font-weight: 600; }
+
+    /* Modal PIN */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
+    .modal-overlay.show { display: flex; }
+    .modal-card { background: white; border-radius: var(--border-radius-large); padding: 24px; width: 90%; max-width: 360px; }
+    .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .pin-dots-small { display: flex; gap: 10px; justify-content: center; margin: 12px 0; }
+    .pin-dot-sm { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--color-border); }
+    .pin-dot-sm.filled { background: var(--color-primary); border-color: var(--color-primary); }
+    .pin-kb-mini { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0; }
+    .pin-kb-mini button { padding: 12px; border: 1px solid var(--color-border); border-radius: 8px; font-size: 18px; font-weight: 600; cursor: pointer; background: white; }
+
+    .version-footer { text-align: center; padding: 16px; font-size: 12px; color: var(--color-text-secondary); }
+    .danger-zone { margin: 12px; }
+    .btn-danger-outline { width: 100%; padding: 12px; border: 1.5px solid var(--color-rouge); border-radius: var(--border-radius); background: white; color: var(--color-rouge); font-size: 14px; font-weight: 600; cursor: pointer; }
+  </style>
+</head>
+<body>
+<div class="app-container">
+  <div class="status-bar">
+    <span class="time" id="current-time">08:24</span>
+    <span class="offline-badge" id="network-badge">● HORS LIGNE</span>
+  </div>
+
+  <div class="screen-header">
+    <a href="e2_dashboard.html" style="color:white;text-decoration:none;font-size:22px;padding:8px 12px 8px 4px;">‹</a>
+    <div style="flex:1">
+      <div style="font-size:16px;font-weight:700;">Paramètres</div>
+    </div>
+  </div>
+
+  <!-- Profil agent -->
+  <div style="background:white;padding:16px;border-bottom:1px solid var(--color-border);display:flex;align-items:center;gap:14px;">
+    <div style="width:52px;height:52px;border-radius:50%;background:var(--color-primary);color:white;font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center;" id="agent-avatar">AW</div>
+    <div>
+      <div style="font-size:17px;font-weight:700;" id="agent-name-display">Aminatou Wali</div>
+      <div style="font-size:13px;color:var(--color-text-secondary);" id="agent-role">Agent de santé communautaire</div>
+      <div style="font-size:12px;color:var(--color-primary);margin-top:2px;" id="etablissement-display">CSI Ngaoundéré Rural</div>
+    </div>
+  </div>
+
+  <!-- Synchronisation -->
+  <div id="sync-section">
+    <div class="settings-section-header" style="margin:12px 12px 0;border-radius:8px 8px 0 0;">🔄 Synchronisation</div>
+    <div class="sync-panel" style="margin-top:0;border-radius:0 0 8px 8px;">
+      <div class="sync-stat-row">
+        <span class="sync-stat-label">Statut connexion</span>
+        <span class="sync-stat-val" id="sync-connexion" style="color:var(--color-orange);">● Hors ligne</span>
+      </div>
+      <div class="sync-stat-row">
+        <span class="sync-stat-label">Consultations en attente</span>
+        <span class="sync-stat-val" id="sync-pending">12</span>
+      </div>
+      <div class="sync-stat-row">
+        <span class="sync-stat-label">Dernière sync réussie</span>
+        <span class="sync-stat-val" id="sync-last">il y a 51h</span>
+      </div>
+      <div class="sync-status-bar"><div class="sync-progress" id="sync-progress" style="width:0%"></div></div>
+      <div id="sync-msg" style="font-size:12px;color:var(--color-text-secondary);text-align:center;margin-bottom:10px;">Synchronisation automatique dès reconnexion</div>
+      <button class="btn btn-primary btn-full" onclick="triggerSync()" id="sync-btn">
+        🔄 Synchroniser maintenant
+      </button>
+    </div>
+  </div>
+
+  <!-- Sécurité -->
+  <div class="settings-section">
+    <div class="settings-section-header">🔐 Sécurité</div>
+    <div class="setting-row" onclick="openChangePIN()">
+      <span class="setting-icon">🔑</span>
+      <div class="setting-info">
+        <div class="setting-label">Changer le code PIN</div>
+        <div class="setting-desc">Argon2id — dernière modification: jamais</div>
+      </div>
+      <span class="setting-arrow">›</span>
+    </div>
+    <div class="setting-row" onclick="toggleSetting('biometrie-toggle')">
+      <span class="setting-icon">👆</span>
+      <div class="setting-info">
+        <div class="setting-label">Authentification biométrique</div>
+        <div class="setting-desc">Empreinte digitale si disponible</div>
+      </div>
+      <div class="toggle-switch" id="biometrie-toggle" onclick="event.stopPropagation();toggleSetting('biometrie-toggle')">
+        <div class="toggle-knob"></div>
+      </div>
+    </div>
+    <div class="setting-row" onclick="toggleSetting('autolock-toggle')">
+      <span class="setting-icon">⏰</span>
+      <div class="setting-info">
+        <div class="setting-label">Verrouillage automatique</div>
+        <div class="setting-desc">Après 5 minutes d'inactivité</div>
+      </div>
+      <div class="toggle-switch on" id="autolock-toggle" onclick="event.stopPropagation();toggleSetting('autolock-toggle')">
+        <div class="toggle-knob"></div>
+      </div>
+    </div>
+    <div class="setting-row" onclick="showAuditTrail()">
+      <span class="setting-icon">📋</span>
+      <div class="setting-info">
+        <div class="setting-label">Journal d'audit</div>
+        <div class="setting-desc">Traçabilité des accès et actions</div>
+      </div>
+      <span class="setting-value" id="audit-count">0 entrées</span>
+      <span class="setting-arrow">›</span>
+    </div>
+  </div>
+
+  <!-- Application -->
+  <div class="settings-section">
+    <div class="settings-section-header">📱 Application</div>
+    <div class="setting-row">
+      <span class="setting-icon">🌍</span>
+      <div class="setting-info">
+        <div class="setting-label">Langue</div>
+        <div class="setting-desc">Interface et arbre décisionnel</div>
+      </div>
+      <span class="setting-value">Français</span>
+      <span class="setting-arrow">›</span>
+    </div>
+    <div class="setting-row" onclick="toggleSetting('notif-toggle')">
+      <span class="setting-icon">🔔</span>
+      <div class="setting-info">
+        <div class="setting-label">Notifications</div>
+        <div class="setting-desc">Rappels de suivi patients</div>
+      </div>
+      <div class="toggle-switch on" id="notif-toggle" onclick="event.stopPropagation();toggleSetting('notif-toggle')">
+        <div class="toggle-knob"></div>
+      </div>
+    </div>
+    <div class="setting-row">
+      <span class="setting-icon">🏥</span>
+      <div class="setting-info">
+        <div class="setting-label">Établissement de santé</div>
+        <div class="setting-desc" id="etab-name-setting">CSI Ngaoundéré Rural</div>
+      </div>
+      <span class="setting-arrow">›</span>
+    </div>
+    <div class="setting-row" onclick="showModelInfo()">
+      <span class="setting-icon">🧠</span>
+      <div class="setting-info">
+        <div class="setting-label">Modèle IA</div>
+        <div class="setting-desc">Version et performance du modèle</div>
+      </div>
+      <span class="setting-value" id="model-version">v1.0</span>
+      <span class="setting-arrow">›</span>
+    </div>
+  </div>
+
+  <!-- Données -->
+  <div class="settings-section">
+    <div class="settings-section-header">💾 Données locales</div>
+    <div class="setting-row">
+      <span class="setting-icon">📊</span>
+      <div class="setting-info">
+        <div class="setting-label">Consultations stockées</div>
+        <div class="setting-desc">Données chiffrées AES-256</div>
+      </div>
+      <span class="setting-value" id="local-count">0</span>
+    </div>
+    <div class="setting-row" onclick="exportData()">
+      <span class="setting-icon">📤</span>
+      <div class="setting-info">
+        <div class="setting-label">Exporter les données</div>
+        <div class="setting-desc">JSON chiffré pour sauvegarde</div>
+      </div>
+      <span class="setting-arrow">›</span>
+    </div>
+  </div>
+
+  <!-- Zone danger -->
+  <div class="danger-zone">
+    <button class="btn-danger-outline" onclick="confirmReset()">
+      🗑️ Réinitialiser toutes les données locales
+    </button>
+  </div>
+
+  <div class="version-footer">
+    HealthGuard IA v1.0.0 — Build 2025.01<br>
+    Développé pour le Ministère de la Santé du Cameroun<br>
+    <span style="font-size:11px;">Conforme aux protocoles PCIME/IMCI OMS</span>
+  </div>
+</div>
+
+<!-- Modal changement PIN -->
+<div class="modal-overlay" id="pin-modal">
+  <div class="modal-card">
+    <div class="modal-title" id="pin-modal-title">🔑 Nouveau code PIN</div>
+    <p style="font-size:13px;color:var(--color-text-secondary);margin-bottom:12px;" id="pin-modal-desc">Choisissez un nouveau PIN de 6 chiffres. Évitez les séquences (123456) ou répétitions.</p>
+    <div class="pin-dots-small" id="pin-dots">
+      <div class="pin-dot-sm" id="pdot-0"></div>
+      <div class="pin-dot-sm" id="pdot-1"></div>
+      <div class="pin-dot-sm" id="pdot-2"></div>
+      <div class="pin-dot-sm" id="pdot-3"></div>
+      <div class="pin-dot-sm" id="pdot-4"></div>
+      <div class="pin-dot-sm" id="pdot-5"></div>
+    </div>
+    <div id="pin-error" style="color:var(--color-rouge);font-size:12px;text-align:center;margin-bottom:6px;display:none;"></div>
+    <div class="pin-kb-mini">
+      <button onclick="pinKey('1')">1</button><button onclick="pinKey('2')">2</button><button onclick="pinKey('3')">3</button>
+      <button onclick="pinKey('4')">4</button><button onclick="pinKey('5')">5</button><button onclick="pinKey('6')">6</button>
+      <button onclick="pinKey('7')">7</button><button onclick="pinKey('8')">8</button><button onclick="pinKey('9')">9</button>
+      <button onclick="closePinModal()" style="font-size:13px;color:var(--color-text-secondary);">Annuler</button>
+      <button onclick="pinKey('0')">0</button>
+      <button onclick="pinDelete()">⌫</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let newPin = '';
+  let confirmingPin = false;
+  let firstPin = '';
+
+  // Horloge + réseau
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('current-time').textContent =
+      String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+  }
+  updateClock(); setInterval(updateClock, 10000);
+  function updateNet() {
+    const badge = document.getElementById('network-badge');
+    const online = navigator.onLine;
+    badge.textContent = online ? '● EN LIGNE' : '● HORS LIGNE';
+    badge.style.backgroundColor = online ? 'var(--color-vert)' : 'var(--color-orange)';
+    document.getElementById('sync-connexion').textContent = online ? '● En ligne' : '● Hors ligne';
+    document.getElementById('sync-connexion').style.color = online ? 'var(--color-vert)' : 'var(--color-orange)';
+  }
+  updateNet();
+  window.addEventListener('online', updateNet);
+  window.addEventListener('offline', updateNet);
+
+  // Chargement stats
+  function loadStats() {
+    const consultations = JSON.parse(localStorage.getItem('hg_consultations') || '[]');
+    document.getElementById('local-count').textContent = consultations.length;
+    document.getElementById('sync-pending').textContent = consultations.filter(c => !c.synced).length;
+
+    const lastSync = localStorage.getItem('hg_last_sync');
+    if (lastSync) {
+      const hours = Math.round((Date.now() - parseInt(lastSync)) / 3600000);
+      document.getElementById('sync-last').textContent = 'il y a ' + hours + 'h';
+    }
+
+    const agentId = localStorage.getItem('hg_agent_id') || '';
+    document.getElementById('audit-count').textContent = consultations.length + ' entrées';
+
+    // Onglet sync depuis URL
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('tab') === 'sync') {
+      document.getElementById('sync-section').scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  async function triggerSync() {
+    const btn = document.getElementById('sync-btn');
+    const msg = document.getElementById('sync-msg');
+    const prog = document.getElementById('sync-progress');
+
+    btn.disabled = true;
+    btn.textContent = '⏳ Synchronisation en cours…';
+    msg.textContent = 'Envoi vers PostgreSQL…';
+    msg.style.color = 'var(--color-text-secondary)';
+    prog.style.width = '20%';
+
+    // Lire les consultations stockées dans le navigateur
+    const consultations = JSON.parse(localStorage.getItem('hg_consultations') || '[]');
+    const agentId = localStorage.getItem('hg_agent_id') || 'prototype';
+    prog.style.width = '50%';
+
+    try {
+      const response = await fetch('http://localhost:8000/api/v1/sync/from-browser', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ consultations: consultations, agent_id: agentId })
+      });
+      const data = await response.json();
+      prog.style.width = '100%';
+
+      if (data.success) {
+        btn.textContent = '✅ Synchronisé avec succès';
+        btn.style.background = 'var(--color-vert)';
+        msg.textContent = data.message;
+        msg.style.color = 'var(--color-vert)';
+        localStorage.setItem('hg_last_sync', Date.now().toString());
+        document.getElementById('sync-pending').textContent = '0';
+        document.getElementById('sync-last').textContent = 'À l\'instant';
+      } else {
+        btn.textContent = '⚠️ Erreur partielle';
+        btn.style.background = 'var(--color-orange)';
+        msg.textContent = data.errors?.[0] || 'Synchronisation incomplète';
+        msg.style.color = 'var(--color-orange)';
+      }
+    } catch (e) {
+      prog.style.width = '0%';
+      btn.textContent = '⚠️ API non démarrée';
+      btn.style.background = 'var(--color-orange)';
+      msg.textContent = 'Lance : uvicorn src.api.app:app --reload';
+      msg.style.color = 'var(--color-rouge)';
+    }
+
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.style.background = '';
+      btn.textContent = '🔄 Synchroniser maintenant';
+      prog.style.width = '0%';
+      msg.style.color = 'var(--color-text-secondary)';
+    }, 5000);
+  }
+
+  function toggleSetting(id) {
+    const el = document.getElementById(id);
+    el.classList.toggle('on');
+  }
+
+  function openChangePIN() {
+    newPin = ''; confirmingPin = false; firstPin = '';
+    document.getElementById('pin-modal-title').textContent = '🔑 Nouveau code PIN';
+    document.getElementById('pin-modal-desc').textContent = 'Choisissez un nouveau PIN de 6 chiffres.';
+    updatePinDots();
+    document.getElementById('pin-modal').classList.add('show');
+  }
+
+  function closePinModal() {
+    document.getElementById('pin-modal').classList.remove('show');
+    newPin = ''; confirmingPin = false;
+  }
+
+  function pinKey(d) {
+    if (newPin.length >= 6) return;
+    newPin += d;
+    updatePinDots();
+    if (newPin.length === 6) setTimeout(validateNewPin, 100);
+  }
+
+  function pinDelete() {
+    newPin = newPin.slice(0, -1);
+    updatePinDots();
+    document.getElementById('pin-error').style.display = 'none';
+  }
+
+  function updatePinDots() {
+    for (let i = 0; i < 6; i++) {
+      document.getElementById('pdot-' + i).classList.toggle('filled', i < newPin.length);
+    }
+  }
+
+  function validateNewPin() {
+    const errEl = document.getElementById('pin-error');
+    // Vérification complexité
+    const seq = ['012345','123456','234567','345678','456789','987654','876543','765432','654321','543210'];
+    const rep = /^(.)\1{5}$/.test(newPin);
+    if (seq.includes(newPin) || rep) {
+      errEl.textContent = 'PIN trop simple — évitez séquences et répétitions';
+      errEl.style.display = 'block';
+      newPin = ''; updatePinDots(); return;
+    }
+    errEl.style.display = 'none';
+
+    if (!confirmingPin) {
+      firstPin = newPin; newPin = '';
+      confirmingPin = true;
+      document.getElementById('pin-modal-title').textContent = '🔁 Confirmer le PIN';
+      document.getElementById('pin-modal-desc').textContent = 'Entrez à nouveau le même PIN pour confirmer.';
+      updatePinDots();
+    } else {
+      if (newPin !== firstPin) {
+        errEl.textContent = 'Les deux PIN ne correspondent pas — recommencez';
+        errEl.style.display = 'block';
+        newPin = ''; confirmingPin = false; firstPin = '';
+        document.getElementById('pin-modal-title').textContent = '🔑 Nouveau code PIN';
+        document.getElementById('pin-modal-desc').textContent = 'Choisissez un nouveau PIN de 6 chiffres.';
+        updatePinDots();
+      } else {
+        localStorage.setItem('hg_pin_hash', newPin);
+        closePinModal();
+        hgAlert('Votre code PIN a bien été enregistré.', 'PIN modifié', '✅');
+      }
+    }
+  }
+
+  function showAuditTrail() {
+    const consultations = JSON.parse(localStorage.getItem('hg_consultations') || '[]');
+    const lines = consultations.slice(0, 5).map(c =>
+      `• ${new Date(c.date).toLocaleString('fr-FR')} — ${c.diagnostic}`
+    ).join('\n');
+    hgAlert(lines || 'Aucune entrée enregistrée.', 'Journal d\'audit — 5 dernières entrées', '📋');
+  }
+
+  function showModelInfo() {
+    hgAlert(
+      '<table>'
+      + '<tr><td>Version</td><td>1.0.0</td></tr>'
+      + '<tr><td>Algorithme</td><td>XGBoost + Arbre décisionnel</td></tr>'
+      + '<tr><td>Précision globale</td><td>97 %</td></tr>'
+      + '<tr><td>Sensibilité — Paludisme grave</td><td>97,3 %</td></tr>'
+      + '<tr><td>Sensibilité — Tuberculose</td><td>100 %</td></tr>'
+      + '<tr><td>Taille modèle</td><td>7,2 MB</td></tr>'
+      + '<tr><td>Dernière mise à jour</td><td>Janvier 2025</td></tr>'
+      + '</table>',
+      'Modèle IA HealthGuard',
+      '🤖',
+      true  /* HTML */
+    );
+  }
+
+  function exportData() {
+    const data = {
+      export_date: new Date().toISOString(),
+      version: '1.0.0',
+      consultations: JSON.parse(localStorage.getItem('hg_consultations') || '[]'),
+      agent: localStorage.getItem('hg_agent_id')
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'healthguard_export_' + Date.now() + '.json';
+    a.click(); URL.revokeObjectURL(url);
+  }
+
+  function confirmReset() {
+    hgConfirm(
+      'Cette action supprimera TOUTES les données locales non synchronisées. Cette opération est irréversible.',
+      '⚠️ Suppression des données',
+      function () {
+        hgConfirm(
+          'Dernière confirmation : toutes les consultations non synchronisées seront perdues définitivement.',
+          'Confirmer la suppression',
+          function () {
+            localStorage.clear();
+            hgAlert('Toutes les données locales ont été supprimées.', 'Données supprimées', '🗑️',
+              false);
+            setTimeout(function () { window.location.href = 'e1_login.html'; }, 1800);
+          },
+          null, '⚠️', 'Supprimer', 'btn-danger'
+        );
+      },
+      null, '⚠️'
+    );
+  }
+
+  loadStats();
+</script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

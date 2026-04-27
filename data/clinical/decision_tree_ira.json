@@ -1,0 +1,223 @@
+{
+  "maladie": "ira_pneumonie",
+  "version": "1.0",
+  "source": "OMS IMCI/PCIME + MSF Cameroun 2024",
+  "noeud_entree": "N1",
+  "description": "Arbre décisionnel IRA/Pneumonie — Tachypnée et signes de détresse respiratoire",
+  "noeuds": {
+    "N1": {
+      "id": "N1",
+      "type": "question",
+      "question_fr": "Toux présente ou difficultés respiratoires signalées ?",
+      "aide": "Toux sèche ou productive, respiration sifflante, difficulté à respirer",
+      "reponse_oui": "N2",
+      "reponse_non": "FIN_IRA_PEU_PROBABLE"
+    },
+    "N2": {
+      "id": "N2",
+      "type": "question",
+      "question_fr": "Fièvre présente (≥ 38°C) ou antécédent de fièvre récente ?",
+      "aide": "Fièvre oriente vers pneumonie bactérienne. Absence de fièvre possible dans certaines pneumonies atypiques.",
+      "reponse_oui": "N3",
+      "reponse_non": "N3_SANS_FIEVRE"
+    },
+    "N3": {
+      "id": "N3",
+      "type": "question",
+      "question_fr": "Tirage sous-costal visible (rétraction de la cage thoracique sous les côtes) ?",
+      "aide": "Observer le thorax nu de l'enfant. Signe de détresse respiratoire sévère. Si présent → gravité certaine.",
+      "reponse_oui": "FIN_PNEUMONIE_SEVERE",
+      "reponse_non": "N4"
+    },
+    "N3_SANS_FIEVRE": {
+      "id": "N3_SANS_FIEVRE",
+      "type": "question",
+      "question_fr": "Tirage sous-costal visible ?",
+      "aide": "Même sans fièvre, tirage = signe de gravité",
+      "reponse_oui": "FIN_PNEUMONIE_SEVERE",
+      "reponse_non": "N4_SANS_FIEVRE"
+    },
+    "N4": {
+      "id": "N4",
+      "type": "question",
+      "question_fr": "SpO2 disponible — Saturation en oxygène < 95% ?",
+      "aide": "SpO2 est OPTIONNELLE. Si oxymètre non disponible, répondre NON et continuer.",
+      "reponse_oui": "N4B_SPO2",
+      "reponse_non": "N5_FREQUENCE"
+    },
+    "N4B_SPO2": {
+      "id": "N4B_SPO2",
+      "type": "mesure",
+      "question_fr": "Valeur de la SpO2 mesurée (%)",
+      "unite": "%",
+      "seuil_critique": 90,
+      "seuil_severe": 94,
+      "si_inferieur_90": "FIN_PNEUMONIE_SEVERE",
+      "si_90_a_94": "FIN_PNEUMONIE_SEVERE",
+      "si_superieur_ou_egal_95": "N5_FREQUENCE",
+      "si_non_mesurable": "N5_FREQUENCE"
+    },
+    "N4_SANS_FIEVRE": {
+      "id": "N4_SANS_FIEVRE",
+      "type": "question",
+      "question_fr": "SpO2 disponible — Saturation < 95% ?",
+      "aide": "Sans fièvre mais SpO2 basse → bronchiolite ou asthme possible",
+      "reponse_oui": "FIN_PNEUMONIE_SEVERE",
+      "reponse_non": "N5_FREQUENCE_SANS_FIEVRE"
+    },
+    "N5_FREQUENCE": {
+      "id": "N5_FREQUENCE",
+      "type": "question",
+      "question_fr": "Quel est l'âge du patient ?",
+      "aide": "L'âge détermine le seuil de tachypnée (fréquence respiratoire anormalement élevée)",
+      "reponse_moins_2_mois": "N5A_2MOIS",
+      "reponse_2_a_12_mois": "N5B_12MOIS",
+      "reponse_1_a_5_ans": "N5C_5ANS",
+      "reponse_plus_5_ans": "N5D_ADULTE",
+      "type_reponse": "tranche_age"
+    },
+    "N5_FREQUENCE_SANS_FIEVRE": {
+      "id": "N5_FREQUENCE_SANS_FIEVRE",
+      "type": "question",
+      "question_fr": "Quel est l'âge du patient ?",
+      "aide": "Tachypnée sans fièvre peut indiquer bronchiolite, asthme ou corps étranger",
+      "reponse_moins_2_mois": "N5A_2MOIS",
+      "reponse_2_a_12_mois": "N5B_12MOIS",
+      "reponse_1_a_5_ans": "N5C_5ANS",
+      "reponse_plus_5_ans": "N5D_ADULTE",
+      "type_reponse": "tranche_age"
+    },
+    "N5A_2MOIS": {
+      "id": "N5A_2MOIS",
+      "type": "mesure",
+      "question_fr": "Fréquence respiratoire mesurée sur 1 minute (< 2 mois) ?",
+      "aide": "Compter les mouvements respiratoires sur 60 secondes. Seuil tachypnée < 2 mois : > 60/min",
+      "unite": "respirations/min",
+      "seuil_tachypnee": 60,
+      "si_superieur": "FIN_PNEUMONIE_SEVERE",
+      "si_inferieur_ou_egal": "N6_SIGNES_GENERAUX",
+      "si_non_mesurable": "N6_SIGNES_GENERAUX"
+    },
+    "N5B_12MOIS": {
+      "id": "N5B_12MOIS",
+      "type": "mesure",
+      "question_fr": "Fréquence respiratoire mesurée sur 1 minute (2-12 mois) ?",
+      "aide": "Seuil tachypnée 2-12 mois : > 50/min",
+      "unite": "respirations/min",
+      "seuil_tachypnee": 50,
+      "si_superieur": "N6_GRAVITE",
+      "si_inferieur_ou_egal": "N6_SIGNES_GENERAUX",
+      "si_non_mesurable": "N6_SIGNES_GENERAUX"
+    },
+    "N5C_5ANS": {
+      "id": "N5C_5ANS",
+      "type": "mesure",
+      "question_fr": "Fréquence respiratoire mesurée sur 1 minute (1-5 ans) ?",
+      "aide": "Seuil tachypnée 1-5 ans : > 40/min",
+      "unite": "respirations/min",
+      "seuil_tachypnee": 40,
+      "si_superieur": "N6_GRAVITE",
+      "si_inferieur_ou_egal": "N6_SIGNES_GENERAUX",
+      "si_non_mesurable": "N6_SIGNES_GENERAUX"
+    },
+    "N5D_ADULTE": {
+      "id": "N5D_ADULTE",
+      "type": "mesure",
+      "question_fr": "Fréquence respiratoire mesurée sur 1 minute (> 5 ans / adulte) ?",
+      "aide": "Seuil tachypnée adulte : > 30/min (pneumonie grave) ou > 20/min (pneumonie légère)",
+      "unite": "respirations/min",
+      "seuil_tachypnee_severe": 30,
+      "seuil_tachypnee_legere": 20,
+      "si_superieur_30": "FIN_PNEUMONIE_SEVERE",
+      "si_20_a_30": "N6_GRAVITE",
+      "si_inferieur_20": "N6_SIGNES_GENERAUX",
+      "si_non_mesurable": "N6_SIGNES_GENERAUX"
+    },
+    "N6_GRAVITE": {
+      "id": "N6_GRAVITE",
+      "type": "question",
+      "question_fr": "Signes de détresse sévère présents ? (cyanose des lèvres, incapacité à boire/téter, gémissements)",
+      "aide": "Cyanose = coloration bleutée des lèvres. Incapacité à téter chez nourrisson = signe de gravité majeur.",
+      "reponse_oui": "FIN_PNEUMONIE_SEVERE",
+      "reponse_non": "FIN_PNEUMONIE_MODEREE"
+    },
+    "N6_SIGNES_GENERAUX": {
+      "id": "N6_SIGNES_GENERAUX",
+      "type": "question",
+      "question_fr": "Durée des symptômes respiratoires > 5 jours ou aggravation rapide ?",
+      "aide": "Pneumonie qui évolue depuis plus de 5 jours sans amélioration nécessite surveillance renforcée",
+      "reponse_oui": "FIN_IRA_SIMPLE_SURVEILLANCE",
+      "reponse_non": "FIN_IRA_SIMPLE"
+    },
+    "FIN_PNEUMONIE_SEVERE": {
+      "id": "FIN_PNEUMONIE_SEVERE",
+      "type": "resultat",
+      "diagnostic": "ira_pneumonie",
+      "gravite": 3,
+      "couleur_alerte": "ROUGE",
+      "action_immediate": "TRANSFERT_URGENT",
+      "recommandation_courte": "PNEUMONIE SÉVÈRE — Transfert urgent + traitement pré-transfert",
+      "recommandation_complete": "Pneumonie sévère confirmée. TRANSFERT URGENT. Pré-transfert : (1) Amoxicilline IM si disponible (enfant : 50mg/kg; adulte : 1g IM). (2) Position semi-assise (45°). (3) Oxygène si disponible (cible SpO2 ≥ 95%). (4) Surveiller fréquence respiratoire toutes les 15 min. (5) Hydratation par voie orale si tolérée (pas de perfusion qui surchargrait le cœur). NE PAS allonger à plat.",
+      "traitement_pretransfert": ["amoxicilline_im", "position_semi_assise", "oxygene_si_disponible"],
+      "contre_indications": ["position_allongee_plate", "perfusion_abondante"],
+      "structure_reference": "CMA_DISTRICT",
+      "notification_district": false
+    },
+    "FIN_PNEUMONIE_MODEREE": {
+      "id": "FIN_PNEUMONIE_MODEREE",
+      "type": "resultat",
+      "diagnostic": "ira_pneumonie",
+      "gravite": 2,
+      "couleur_alerte": "ORANGE",
+      "action_immediate": "TRAITEMENT_LOCAL",
+      "recommandation_courte": "Pneumonie modérée — Amoxicilline orale 5 jours + surveillance",
+      "recommandation_complete": "Pneumonie modérée. Traitement ambulatoire : Amoxicilline orale 40-45mg/kg/jour en 2 prises × 5 jours (enfant). Adulte : 1g × 3/jour × 7 jours. Paracétamol si fièvre. Hydratation. Retour consultation si : aggravation, incapacité à boire, fréquence respiratoire augmente.",
+      "traitement": ["amoxicilline_orale_5j"],
+      "suivi": "J2_si_aggravation",
+      "structure_reference": null,
+      "notification_district": false
+    },
+    "FIN_IRA_SIMPLE": {
+      "id": "FIN_IRA_SIMPLE",
+      "type": "resultat",
+      "diagnostic": "ira_pneumonie",
+      "gravite": 1,
+      "couleur_alerte": "VERT",
+      "action_immediate": "TRAITEMENT_SYMPTOMATIQUE",
+      "recommandation_courte": "IRA légère — Traitement symptomatique, surveiller évolution",
+      "recommandation_complete": "Infection respiratoire aiguë légère. Traitement symptomatique : paracétamol si fièvre, hydratation, position semi-assise pour dormir. Pas d'antibiotique systématique (viral probable). Consulter si : fièvre > 3 jours, aggravation respiratoire, refus d'alimentation.",
+      "traitement": ["paracetamol_si_fievre", "hydratation"],
+      "suivi": "J3_si_persistance",
+      "structure_reference": null,
+      "notification_district": false
+    },
+    "FIN_IRA_SIMPLE_SURVEILLANCE": {
+      "id": "FIN_IRA_SIMPLE_SURVEILLANCE",
+      "type": "resultat",
+      "diagnostic": "ira_pneumonie",
+      "gravite": 1,
+      "couleur_alerte": "ORANGE",
+      "action_immediate": "TRAITEMENT_LOCAL_SURVEILLANCE",
+      "recommandation_courte": "IRA prolongée — Traitement antibiotique + surveillance renforcée",
+      "recommandation_complete": "Symptômes persistants > 5 jours. Traitement antibiotique justifié : Amoxicilline 5 jours. Surveillance rapprochée. Si pas d'amélioration à J3 → référence.",
+      "traitement": ["amoxicilline_orale"],
+      "suivi": "J3_strict",
+      "structure_reference": null,
+      "notification_district": false
+    },
+    "FIN_IRA_PEU_PROBABLE": {
+      "id": "FIN_IRA_PEU_PROBABLE",
+      "type": "resultat",
+      "diagnostic": "ira_peu_probable",
+      "gravite": 0,
+      "couleur_alerte": "VERT",
+      "action_immediate": "EXPLORER_AUTRES_DIAGNOSTICS",
+      "recommandation_courte": "IRA peu probable sans toux ni difficultés respiratoires",
+      "recommandation_complete": "Absence de symptômes respiratoires caractéristiques. Explorer d'autres diagnostics selon les symptômes présentés.",
+      "traitement": [],
+      "suivi": "selon_clinique",
+      "structure_reference": null,
+      "notification_district": false
+    }
+  }
+}

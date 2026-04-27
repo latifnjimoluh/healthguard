@@ -1,0 +1,117 @@
+{
+  "region": "Est-Cameroun",
+  "pays": "Cameroun",
+  "source": "MINSANTE Cameroun 2023 + OMS AFRO + MSF Est-Cameroun + UNHCR",
+  "annee_reference": 2023,
+  "population_totale": 950000,
+  "densite_infirmiers": "1 pour 5200 habitants (zones forestières : 1/8000)",
+  "contexte_particulier": "Présence réfugiés RCA + populations Baka vulnérables + forêt équatoriale",
+  "prevalences": {
+    "paludisme": {
+      "description": "Paludisme — endémie hyperendémique en zone forestière",
+      "incidence_annuelle_pour_1000": 342,
+      "note": "Incidence plus élevée qu'Adamaoua — forêt = plus de moustiques",
+      "par_saison": {
+        "grande_saison_pluies_mars_juin": {
+          "prevalence_pct": 55,
+          "note": "Deux saisons des pluies en zone équatoriale"
+        },
+        "petite_saison_pluies_sept_nov": {
+          "prevalence_pct": 42
+        },
+        "saisons_seches": { "prevalence_pct": 25 }
+      },
+      "par_groupe_age": {
+        "moins_5_ans": {
+          "prevalence_pct": 62,
+          "mortalite_pour_100000": 65,
+          "note": "Populations Baka à risque extrêmement élevé"
+        },
+        "5_15_ans": { "prevalence_pct": 42 },
+        "adulte": { "prevalence_pct": 28 }
+      },
+      "par_zone": {
+        "bertoua_urbain": { "prevalence_pct": 22 },
+        "zone_forestiere": { "prevalence_pct": 55 },
+        "camps_refugies_rca": {
+          "prevalence_pct": 68,
+          "note": "Camps réfugiés Gado-Badzere et Mbilé — conditions précaires"
+        },
+        "village_baka": {
+          "prevalence_pct": 72,
+          "note": "Populations Baka — accès aux soins très limité, mobilité"
+        }
+      },
+      "taux_paludisme_grave": 0.18
+    },
+    "ira_pneumonie": {
+      "description": "IRA — 1ère cause mortalité infantile Est-Cameroun",
+      "incidence_annuelle_pour_1000": 178,
+      "note": "Incidence élevée liée à la densité forestière et humidité",
+      "par_groupe_age": {
+        "moins_5_ans": {
+          "prevalence_pct": 44,
+          "mortalite_pour_100000": 52
+        }
+      },
+      "frequence_pneumonie_severe": 0.30
+    },
+    "malnutrition_mas": {
+      "description": "Malnutrition — crise humanitaire prolongée",
+      "prevalence_enfants_moins_5_ans_pct": 14.8,
+      "note": "Crise humanitaire — réfugiés + déplacés internes",
+      "par_population": {
+        "population_hote": { "prevalence_pct": 11 },
+        "refugies_rca": { "prevalence_pct": 22 },
+        "population_baka": {
+          "prevalence_pct": 28,
+          "note": "Malnutrition chronique et aiguë combinées — mode vie nomade"
+        }
+      },
+      "couverture_crenas_pct": 35,
+      "acces_crenas_km_moyen": 45
+    },
+    "diarrhee_cholera": {
+      "description": "Diarrhées — risque choléra élevé via corridor RCA",
+      "incidence_pour_1000": 198,
+      "alertes_cholera_5_ans": 4,
+      "note": "Corridor de transmission choléra via réfugiés RCA",
+      "derniere_epidemie_cholera": "2023 — triangle Bertoua/Batouri/Yokadouma",
+      "acces_eau_potable_pct": 28
+    },
+    "tuberculose": {
+      "description": "Tuberculose — incidence la plus élevée du Cameroun",
+      "incidence_pour_100000": 285,
+      "note": "Est-Cameroun = région à plus forte incidence TB nationale (2023)",
+      "taux_detection_pct": 48,
+      "note_detection": "Sous-détection importante en zone forestière",
+      "co_infection_vih_pct": 14,
+      "par_zone": {
+        "bertoua_chef_lieu": { "incidence_pour_100000": 320 },
+        "zone_forestiere": { "incidence_pour_100000": 265 },
+        "corridors_routiers": {
+          "incidence_pour_100000": 380,
+          "note": "Axes routiers Bertoua-Batouri et Bertoua-Abong Mbang"
+        }
+      },
+      "centres_cdtb": [
+        "CDTB Bertoua (chef-lieu région Est)",
+        "CDTB Batouri (Kadey)",
+        "Antenne TB Abong Mbang"
+      ]
+    }
+  },
+  "structures_sanitaires": {
+    "hopitaux_district": 6,
+    "cma": 18,
+    "postes_sante": 142,
+    "crenas": 8,
+    "creni": 1,
+    "cdtb": 3
+  },
+  "contexte_refugies": {
+    "nombre_refugies": 285000,
+    "camps": ["Gado-Badzere", "Mbilé", "Lolo"],
+    "acces_soins_camps_pct": 65
+  }
+}

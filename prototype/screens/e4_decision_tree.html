@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>HealthGuard IA — Arbre Décisionnel</title>
+  <link rel="stylesheet" href="../css/healthguard.css">
+  <style>
+    .tree-progress { padding: 12px 16px; background: white; border-bottom: 1px solid var(--color-border); }
+    .progress-bar { height: 6px; background: var(--color-border); border-radius: 3px; overflow: hidden; margin-top: 6px; }
+    .progress-fill { height: 100%; background: var(--color-primary); border-radius: 3px; transition: width 0.4s ease; }
+    .progress-label { font-size: 12px; color: var(--color-text-secondary); display: flex; justify-content: space-between; }
+    .question-card { margin: 16px 12px; background: white; border-radius: var(--border-radius-large); padding: 20px; box-shadow: var(--shadow); }
+    .question-maladie { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--color-primary); margin-bottom: 6px; }
+    .question-text { font-size: 17px; font-weight: 600; color: var(--color-text-primary); line-height: 1.45; margin-bottom: 8px; }
+    .question-subtitle { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 20px; }
+    .answer-btns { display: flex; flex-direction: column; gap: 10px; }
+    .answer-btn { padding: 14px 16px; border-radius: var(--border-radius); border: 2px solid var(--color-border); background: white; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s; text-align: left; display: flex; align-items: center; gap: 10px; }
+    .answer-btn:hover { border-color: var(--color-primary); background: var(--color-primary-light); }
+    .answer-btn.oui { border-color: var(--color-vert); }
+    .answer-btn.non { border-color: var(--color-border); }
+    .answer-btn.urgent { border-color: var(--color-rouge); background: var(--color-rouge-light); }
+    .answer-icon { font-size: 22px; min-width: 28px; }
+    .numeric-input-card { background: var(--color-primary-light); border-radius: var(--border-radius); padding: 12px; margin-bottom: 16px; }
+    .numeric-row { display: flex; align-items: center; gap: 10px; }
+    .numeric-input { flex: 1; padding: 10px; border: 2px solid var(--color-primary); border-radius: var(--border-radius); font-size: 18px; font-weight: 700; text-align: center; color: var(--color-primary); }
+    .numeric-unit { font-size: 14px; color: var(--color-primary); font-weight: 600; }
+    .context-banner { margin: 0 12px 12px; padding: 10px 14px; border-radius: var(--border-radius); font-size: 13px; display: flex; align-items: flex-start; gap: 8px; }
+    .context-banner.rouge { background: var(--color-rouge-light); border-left: 3px solid var(--color-rouge); color: var(--color-rouge-dark); }
+    .context-banner.orange { background: var(--color-orange-light); border-left: 3px solid var(--color-orange); color: #E65100; }
+    .history-trail { padding: 8px 16px; display: flex; gap: 6px; flex-wrap: wrap; }
+    .trail-chip { font-size: 11px; padding: 4px 8px; border-radius: 12px; background: var(--color-primary-light); color: var(--color-primary); font-weight: 500; }
+    .trail-chip.rouge { background: var(--color-rouge-light); color: var(--color-rouge-dark); }
+    .skip-btn { text-align: center; padding: 8px; }
+    .skip-link { font-size: 13px; color: var(--color-text-secondary); text-decoration: underline; cursor: pointer; }
+  </style>
+</head>
+<body>
+<div class="app-container">
+  <div class="status-bar">
+    <span class="time" id="current-time">08:24</span>
+    <span class="offline-badge" id="network-badge">● HORS LIGNE</span>
+  </div>
+
+  <div class="screen-header">
+    <button onclick="goBack()" style="background:none;border:none;color:white;font-size:22px;padding:8px 12px 8px 4px;cursor:pointer;">‹</button>
+    <div style="flex:1">
+      <div style="font-size:16px;font-weight:700;">Diagnostic guidé</div>
+      <div style="font-size:12px;opacity:0.8;" id="arbre-actif">Analyse en cours…</div>
+    </div>
+    <button onclick="skipToResult()" style="background:rgba(255,255,255,0.2);border:none;color:white;font-size:12px;padding:6px 10px;border-radius:16px;cursor:pointer;">Passer →</button>
+  </div>
+
+  <!-- Progression -->
+  <div class="tree-progress">
+    <div class="progress-label">
+      <span>Étape <span id="step-current">1</span> / <span id="step-total">8</span></span>
+      <span id="progress-pct">12%</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:12%"></div></div>
+  </div>
+
+  <!-- Historique (chips) -->
+  <div class="history-trail" id="history-trail"></div>
+
+  <!-- Bannière contexte (si alerte) -->
+  <div class="context-banner rouge" id="alert-banner" style="display:none;">
+    <span>⚡</span>
+    <span id="alert-text"></span>
+  </div>
+
+  <!-- Question principale -->
+  <div class="question-card" id="question-card">
+    <div class="question-maladie" id="q-maladie">PALUDISME</div>
+    <div class="question-text" id="q-text">Le patient présente-t-il de la fièvre (température ≥ 37,5°C) ?</div>
+    <div class="question-subtitle" id="q-subtitle"></div>
+    <div id="numeric-section" style="display:none;">
+      <div class="numeric-input-card">
+        <div class="numeric-row">
+          <input type="number" class="numeric-input" id="numeric-val" placeholder="—" step="0.1">
+          <span class="numeric-unit" id="numeric-unit">°C</span>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="submitNumeric()" style="margin-top:4px;">Valider →</button>
+    </div>
+    <div class="answer-btns" id="answer-btns">
+      <button class="answer-btn oui" onclick="answer(true)">
+        <span class="answer-icon">✅</span>
+        <span>Oui</span>
+      </button>
+      <button class="answer-btn non" onclick="answer(false)">
+        <span class="answer-icon">❌</span>
+        <span>Non</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="skip-btn">
+    <span class="skip-link" onclick="skipToResult()">Aller directement au résultat avec les données actuelles</span>
+  </div>
+</div>
+
+<script>
+  // Données de consultation passées depuis e3
+  let consultation = {};
+  try {
+    consultation = JSON.parse(localStorage.getItem('hg_current_consultation') || '{}');
+  } catch(e) { consultation = {}; }
+
+  // État de l'arbre
+  let currentStep = 0;
+  let answers = {};
+  let historyChips = [];
+
+  // Arbre décisionnel simplifié (version prototype interactive)
+  const QUESTIONS = [
+    {
+      id: 'Q_FIEVRE', maladie: 'Évaluation générale', type: 'bool',
+      text: 'Le patient présente-t-il de la fièvre ?',
+      subtitle: 'Température ≥ 37,5°C ou sensation de chaleur intense',
+      pre_fill: () => consultation.fievre === 1 || (consultation.temperature_celsius >= 37.5),
+      alert_if_yes: null
+    },
+    {
+      id: 'Q_TEMP', maladie: 'Signes vitaux', type: 'numeric',
+      text: 'Quelle est la température mesurée ?',
+      subtitle: 'Utiliser le thermomètre axillaire ou auriculaire',
+      unit: '°C', min: 35, max: 43, step: 0.1,
+      pre_fill: () => consultation.temperature_celsius,
+      show_if: () => answers['Q_FIEVRE'] === true
+    },
+    {
+      id: 'Q_GRAVITE', maladie: 'Signes de gravité', type: 'bool',
+      text: 'Signes de gravité présents ?',
+      subtitle: 'Convulsions, trouble de conscience, prostration, vomissements incoercibles',
+      icon_oui: '⚡', label_oui: 'Oui — signes de gravité présents',
+      icon_non: '✅', label_non: 'Non — état général conservé',
+      pre_fill: () => consultation.convulsions === 1 || consultation.trouble_conscience === 1,
+      alert_if_yes: { type: 'rouge', text: 'Signes de gravité détectés — orientation ROUGE probable' },
+      show_if: () => answers['Q_FIEVRE'] === true
+    },
+    {
+      id: 'Q_VULNERABLE', maladie: 'Groupe vulnérable', type: 'bool',
+      text: 'Patient appartient à un groupe vulnérable ?',
+      subtitle: 'Enfant < 5 ans, femme enceinte, immunodéprimé',
+      pre_fill: () => (consultation.age_ans < 5) || consultation.grossesse === 1,
+      show_if: () => answers['Q_FIEVRE'] === true
+    },
+    {
+      id: 'Q_TOUX', maladie: 'Système respiratoire', type: 'bool',
+      text: 'Le patient présente-t-il une toux ?',
+      subtitle: 'Toux sèche, grasse ou avec expectorations',
+      pre_fill: () => consultation.toux === 1
+    },
+    {
+      id: 'Q_TOUX_DUREE', maladie: 'IRA / Tuberculose', type: 'numeric',
+      text: 'Depuis combien de semaines dure la toux ?',
+      subtitle: 'Toux > 3 semaines → suspecter tuberculose',
+      unit: 'semaines', min: 0, max: 52, step: 1,
+      pre_fill: () => consultation.duree_symptomes_jours ? Math.floor(consultation.duree_symptomes_jours / 7) : null,
+      show_if: () => answers['Q_TOUX'] === true
+    },
+    {
+      id: 'Q_DIARRHEE', maladie: 'Système digestif', type: 'bool',
+      text: 'Présence de diarrhée (≥ 3 selles liquides / 24h) ?',
+      subtitle: '',
+      pre_fill: () => consultation.diarrhee === 1
+    },
+    {
+      id: 'Q_CHOLERA', maladie: 'Alerte épidémique', type: 'bool',
+      text: 'Épidémie de choléra active dans la zone de résidence ?',
+      subtitle: 'Alerte district ou signalement d\'autres cas similaires',
+      pre_fill: () => consultation.epidemie_cholera_active === 1,
+      alert_if_yes: { type: 'orange', text: 'Contexte épidémique — protocole choléra à appliquer' },
+      show_if: () => answers['Q_DIARRHEE'] === true
+    }
+  ];
+
+  // Horloge + réseau
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('current-time').textContent =
+      String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+  }
+  updateClock(); setInterval(updateClock, 10000);
+
+  function updateNet() {
+    const badge = document.getElementById('network-badge');
+    badge.textContent = navigator.onLine ? '● EN LIGNE' : '● HORS LIGNE';
+    badge.style.backgroundColor = navigator.onLine ? 'var(--color-vert)' : 'var(--color-orange)';
+  }
+  updateNet();
+  window.addEventListener('online', updateNet);
+  window.addEventListener('offline', updateNet);
+
+  // --- Navigation ---
+  function getVisibleQuestions() {
+    return QUESTIONS.filter(q => !q.show_if || q.show_if());
+  }
+
+  function renderQuestion(idx) {
+    const visible = getVisibleQuestions();
+    if (idx >= visible.length) { finalize(); return; }
+
+    const q = visible[idx];
+    currentStep = idx;
+
+    // Progression
+    const total = visible.length;
+    const pct = Math.round(((idx + 1) / (total + 1)) * 100);
+    document.getElementById('step-current').textContent = idx + 1;
+    document.getElementById('step-total').textContent = total;
+    document.getElementById('progress-pct').textContent = pct + '%';
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('arbre-actif').textContent = q.maladie;
+
+    // Question
+    document.getElementById('q-maladie').textContent = q.maladie.toUpperCase();
+    document.getElementById('q-text').textContent = q.text;
+    document.getElementById('q-subtitle').textContent = q.subtitle || '';
+
+    // Pré-remplissage
+    const preFilled = q.pre_fill ? q.pre_fill() : undefined;
+
+    // Alerte
+    const banner = document.getElementById('alert-banner');
+    banner.style.display = 'none';
+
+    // Affichage selon type
+    if (q.type === 'numeric') {
+      document.getElementById('numeric-section').style.display = 'block';
+      document.getElementById('answer-btns').style.display = 'none';
+      document.getElementById('numeric-unit').textContent = q.unit || '';
+      const input = document.getElementById('numeric-val');
+      input.min = q.min || ''; input.max = q.max || ''; input.step = q.step || '1';
+      if (preFilled != null) { input.value = preFilled; input.style.background = '#E8F5E9'; }
+      else { input.value = ''; input.style.background = ''; }
+    } else {
+      document.getElementById('numeric-section').style.display = 'none';
+      document.getElementById('answer-btns').style.display = 'flex';
+      // Boutons OUI/NON
+      const btns = document.getElementById('answer-btns');
+      btns.innerHTML = `
+        <button class="answer-btn oui" onclick="answer(true)"
+          style="opacity:1;font-weight:500;background:white;border-color:var(--color-border);">
+          <span class="answer-icon">${q.icon_oui || '✅'}</span>
+          <span>${q.label_oui || 'Oui'}</span>
+        </button>
+        <button class="answer-btn non" onclick="answer(false)"
+          style="opacity:1;font-weight:500;background:white;border-color:var(--color-border);">
+          <span class="answer-icon">${q.icon_non || '❌'}</span>
+          <span>${q.label_non || 'Non'}</span>
+        </button>
+      `;
+      // Pré-surligner la réponse suggérée SANS avancer automatiquement
+      // L'agent doit confirmer chaque réponse par un clic
+      if (preFilled === true || preFilled === false) {
+        setTimeout(() => preHighlight(preFilled), 150);
+      }
+    }
+  }
+
+  // Surligne visuellement la réponse issue des données E3,
+  // mais n'avance pas — l'agent confirme ou corrige manuellement.
+  function preHighlight(val) {
+    const btns = document.querySelectorAll('.answer-btn');
+    const suggested = val ? btns[0] : btns[1];
+    const other     = val ? btns[1] : btns[0];
+
+    if (suggested) {
+      suggested.style.background    = val ? '#E8F5E9' : '#FFF3E0';
+      suggested.style.borderColor   = val ? 'var(--color-vert)' : 'var(--color-orange)';
+      suggested.style.fontWeight    = '700';
+      // Badge "Pré-rempli"
+      if (!suggested.querySelector('.pre-badge')) {
+        const badge = document.createElement('span');
+        badge.className = 'pre-badge';
+        badge.textContent = '★ Pré-rempli';
+        badge.style.cssText = 'font-size:10px;font-weight:600;background:rgba(0,0,0,0.08);' +
+          'padding:2px 6px;border-radius:10px;margin-left:auto;opacity:0.75;white-space:nowrap;';
+        suggested.appendChild(badge);
+      }
+    }
+    if (other) {
+      other.style.opacity = '0.6';
+    }
+  }
+
+  function answer(val) {
+    const visible = getVisibleQuestions();
+    const q = visible[currentStep];
+    answers[q.id] = val;
+
+    // Feedback visuel immédiat sur le bouton cliqué
+    const allBtns = document.querySelectorAll('.answer-btn');
+    allBtns.forEach((b, i) => {
+      const isChosen = (val && i === 0) || (!val && i === 1);
+      b.style.opacity      = isChosen ? '1' : '0.4';
+      b.style.fontWeight   = isChosen ? '700' : '400';
+      b.style.background   = isChosen ? (val ? '#E8F5E9' : '#FFEBEE') : 'white';
+      b.style.borderColor  = isChosen ? (val ? 'var(--color-vert)' : 'var(--color-rouge)') : 'var(--color-border)';
+    });
+    // Désactiver les boutons pour éviter un double-clic
+    allBtns.forEach(b => b.onclick = null);
+
+    // Alerte
+    if (val === true && q.alert_if_yes) {
+      const banner = document.getElementById('alert-banner');
+      banner.className = 'context-banner ' + q.alert_if_yes.type;
+      document.getElementById('alert-text').textContent = q.alert_if_yes.text;
+      banner.style.display = 'flex';
+    }
+
+    // Ajouter au trail
+    const chip = { text: q.id.replace('Q_','') + ': ' + (val ? 'OUI' : 'NON'), rouge: val && q.alert_if_yes };
+    historyChips.push(chip);
+    renderTrail();
+
+    // Courte pause pour que le feedback soit visible, puis question suivante
+    setTimeout(() => renderQuestion(currentStep + 1), 420);
+  }
+
+  function submitNumeric() {
+    const val = parseFloat(document.getElementById('numeric-val').value);
+    if (isNaN(val)) { document.getElementById('numeric-val').focus(); return; }
+    const visible = getVisibleQuestions();
+    const q = visible[currentStep];
+    answers[q.id] = val;
+    historyChips.push({ text: q.id.replace('Q_','') + ': ' + val + (q.unit || ''), rouge: false });
+    renderTrail();
+    renderQuestion(currentStep + 1);
+  }
+
+  function renderTrail() {
+    const trail = document.getElementById('history-trail');
+    trail.innerHTML = historyChips.map(c =>
+      `<span class="trail-chip ${c.rouge ? 'rouge' : ''}">${c.text}</span>`
+    ).join('');
+    trail.scrollLeft = trail.scrollWidth;
+  }
+
+  function finalize() {
+    // Merge answers with consultation data for result
+    const enriched = {
+      ...consultation,
+      fievre: answers['Q_FIEVRE'] ? 1 : (consultation.fievre || 0),
+      temperature_celsius: answers['Q_TEMP'] || consultation.temperature_celsius,
+      convulsions: (answers['Q_GRAVITE'] && consultation.convulsions) ? 1 : (consultation.convulsions || 0),
+      trouble_conscience: (answers['Q_GRAVITE'] && consultation.trouble_conscience) ? 1 : (consultation.trouble_conscience || 0),
+      toux: answers['Q_TOUX'] ? 1 : (consultation.toux || 0),
+      diarrhee: answers['Q_DIARRHEE'] ? 1 : (consultation.diarrhee || 0),
+      epidemie_cholera_active: answers['Q_CHOLERA'] ? 1 : (consultation.epidemie_cholera_active || 0),
+      arbre_answers: answers
+    };
+    localStorage.setItem('hg_current_consultation', JSON.stringify(enriched));
+    window.location.href = 'e5_result.html';
+  }
+
+  function skipToResult() {
+    // Save with current data
+    const enriched = { ...consultation, arbre_answers: answers };
+    localStorage.setItem('hg_current_consultation', JSON.stringify(enriched));
+    window.location.href = 'e5_result.html';
+  }
+
+  function goBack() {
+    if (currentStep > 0) {
+      historyChips.pop();
+      renderTrail();
+      renderQuestion(currentStep - 1);
+    } else {
+      window.location.href = 'e3_consultation.html';
+    }
+  }
+
+  // Démarrage
+  renderQuestion(0);
+</script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

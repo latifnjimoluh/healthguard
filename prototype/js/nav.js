@@ -291,6 +291,18 @@
   /* ---- POINT D'ENTRÉE ---- */
   function _init() {
     _ensureModal();
+    
+    /* Enregistrement du Service Worker pour la PWA */
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/app/sw.js').then(function(registration) {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function(err) {
+          console.log('ServiceWorker registration failed: ', err);
+        });
+      });
+    }
+
     if (_shouldSkipNav()) return;
 
     if (window.innerWidth >= DESKTOP_MIN) {

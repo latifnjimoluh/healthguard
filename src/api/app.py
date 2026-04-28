@@ -614,7 +614,9 @@ async def root_redirect():
     return RedirectResponse(url="/app/screens/e1_login.html")
 
 
-# ---- Serveur frontend (prototype HTML) ----
+# ---- Serveur frontend (prototype HTML + PWA) ----
 _PROTOTYPE_DIR = Path(__file__).parent.parent.parent / "prototype"
 if _PROTOTYPE_DIR.exists():
+    # On monte le dossier prototype sur /app
+    # Les fichiers manifest.json et sw.js seront accessibles via /app/manifest.json et /app/sw.js
     app.mount("/app", StaticFiles(directory=_PROTOTYPE_DIR, html=True), name="frontend")

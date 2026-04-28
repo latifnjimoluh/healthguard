@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <link rel="manifest" href="/app/manifest.json">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>HealthGuard IA — Résultat Diagnostic</title>
   <link rel="stylesheet" href="../css/healthguard.css">
@@ -494,9 +495,64 @@
     setTimeout(function () { window.location.href = 'e2_dashboard.html'; }, 1800);
   }
 
-  // Exécution
-  const diagnostic = runDiagnostic(data);
-  renderResult(diagnostic);
+  // Exécution : Tentative API si en ligne, sinon fallback local
+  async function performDiagnostic() {
+    const API = '';
+    const isOnline = navigator.onLine;
+    
+    // On prépare le diagnostic local comme fallback
+    const localResult = runDiagnostic(data);
+    
+    if (isOnline) {
+      try {
+        const response = await fetch(`${API}/api/v1/diagnostic/new`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            patient_id: data.patient_nom || 'anonyme', // Simplifié pour le prototype
+            agent_id: localStorage.getItem('hg_agent_id') || 'prototype',
+            symptomes: data
+          }),
+          signal: AbortSignal.timeout(4000)
+        });
+        
+        if (response.ok) {
+          const apiData = await response.json();
+          // Conversion format API -> format Prototype
+          const converted = {
+            diagnostic: apiData.resultat.diagnostic,
+            code: apiData.resultat.diagnostic.toLowerCase().replace(/ /g, '_'),
+            gravite: apiData.resultat.gravite,
+            couleur: apiData.resultat.couleur_alerte,
+            badge: 'NIVEAU DE GRAVITÉ : ' + (apiData.resultat.gravite === 3 ? 'CRITIQUE' : apiData.resultat.gravite === 2 ? 'ÉLEVÉ' : 'FAIBLE'),
+            action: apiData.recommandation.action_immediate,
+            proba: apiData.resultat.probabilite,
+            source: 'Moteur IA XGBoost (Connecté)',
+            points: apiData.recommandation.resume_3_points,
+            traitement: apiData.recommandation.medicaments.map(m => ({
+              medoc: m.nom || m, 
+              posologie: m.posologie || 'Selon protocole'
+            })),
+            ci: apiData.recommandation.contre_indications,
+            transfert: apiData.recommandation.transfert,
+            notif: apiData.recommandation.notification_district,
+            diff: apiData.resultat.diagnostic_differentiel,
+            diff_proba: apiData.resultat.proba_differentiel,
+            suivi: apiData.recommandation.suivi_recommande
+          };
+          renderResult(converted);
+          return;
+        }
+      } catch (e) {
+        console.warn('API Diagnostic inaccessible, passage au mode local:', e);
+      }
+    }
+    
+    // Si offline ou erreur API : usage du moteur local
+    renderResult(localResult);
+  }
+
+  performDiagnostic();
 </script>
 <script src="../js/nav.js"></script>
 </body>

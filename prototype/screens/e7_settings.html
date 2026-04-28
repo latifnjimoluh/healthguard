@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <link rel="manifest" href="/app/manifest.json">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>HealthGuard IA — Paramètres</title>
   <link rel="stylesheet" href="../css/healthguard.css">
@@ -300,7 +301,7 @@
     prog.style.width = '50%';
 
     try {
-      const response = await fetch('http://localhost:8000/api/v1/sync/from-browser', {
+      const response = await fetch('/api/v1/sync/from-browser', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ consultations: consultations, agent_id: agentId })

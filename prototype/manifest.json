@@ -1,0 +1,22 @@
+{
+  "name": "HealthGuard IA - Assistant Médical",
+  "short_name": "HealthGuard",
+  "description": "Assistant de diagnostic médical IA pour zones rurales.",
+  "start_url": "/app/screens/e1_login.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2c3e50",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/app/assets/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/app/assets/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

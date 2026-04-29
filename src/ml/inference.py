@@ -46,11 +46,8 @@ def load_model() -> dict:
         return _model_cache
 
     if not MODEL_PATH.exists():
-        # Modèle absent — entraîner automatiquement
-        print("Modèle absent — entraînement automatique en cours...")
-        from src.ml.train_model import train_model, save_model
-        results = train_model()
-        save_model(results)
+        # En production, le modèle doit être présent (Audit Fix)
+        raise FileNotFoundError(f"Modèle ML non trouvé à l'emplacement : {MODEL_PATH}. L'entraînement automatique en runtime est désactivé par sécurité.")
 
     with open(MODEL_PATH, 'rb') as f:
         _model_cache = pickle.load(f)
@@ -72,6 +69,8 @@ def _prepare_input(symptomes: dict, feature_names: list) -> np.ndarray:
         Array numpy de shape (1, n_features)
     """
     # Valeurs par défaut pour les features manquantes
+    # Audit Fix: Ne pas imputer SpO2 a 97% par defaut car cela masque la detresse respiratoire
+    # On laisse XGBoost gerer les valeurs manquantes (NaN) si possible.
     defaults = {
         "fievre": 0, "toux": 0, "diarrhee": 0, "vomissements": 0,
         "cephalee": 0, "frissons": 0, "courbatures": 0, "dyspnee": 0,
@@ -80,7 +79,7 @@ def _prepare_input(symptomes: dict, feature_names: list) -> np.ndarray:
         "age_ans": 30.0,
         "poids_kg": 60.0,
         "frequence_respiratoire": 18.0,
-        "spo2_percent": 97.0,   # Valeur normale par défaut si non mesuré
+        "spo2_percent": np.nan,   # Inconnu (Audit Fix)
         "duree_symptomes_jours": 3.0,
         "saison_pluie": 0, "zone_endemie_tb": 0,
         "contact_tb_connu": 0, "epidemie_cholera_active": 0,

@@ -130,7 +130,7 @@
       "services": ["diagnostic_tb", "traitement_dots", "crachat_baar", "culture_tb"],
       "lits": 30,
       "medecin_present": true,
-      "note": "Principal CDTB de la région Est — référence obligatoire"
+      "note": "Principal CDTB de la région Est  référence obligatoire"
     },
     {
       "id": "CDTB_BATOURI_01",
@@ -173,7 +173,7 @@
       "services": ["malnutrition_mas_complications", "hospitalisation_nutritionnelle", "f75_f100"],
       "lits": 20,
       "medecin_present": true,
-      "note": "Seul CRENI de la région — malnutrition avec complications médicales"
+      "note": "Seul CRENI de la région  malnutrition avec complications médicales"
     },
     {
       "id": "CMA_BATOURI_01",
@@ -202,7 +202,7 @@
       "services": ["consultations", "urgences", "pediatrie", "maternite"],
       "lits": 16,
       "medecin_present": false,
-      "note": "Zone forestière — accès difficile en saison des pluies"
+      "note": "Zone forestière  accès difficile en saison des pluies"
     },
     {
       "id": "CMA_ABONG_MBANG_01",
@@ -232,7 +232,7 @@
       "lits": 30,
       "medecin_present": true,
       "gestionnaire": "UNHCR/MSF",
-      "note": "Centre pour réfugiés RCA — 45 000 réfugiés enregistrés"
+      "note": "Centre pour réfugiés RCA  45 000 réfugiés enregistrés"
     }
   ],
   "contacts_urgences": {

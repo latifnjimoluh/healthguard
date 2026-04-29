@@ -1,5 +1,5 @@
 """
-Simulation Cas 5 — Choléra Femme Enceinte
+Simulation Cas 5  Choléra Femme Enceinte
 Patient : Femme, 25 ans, 58 kg, enceinte 7 mois, Est-Cameroun
 """
 
@@ -13,7 +13,7 @@ from src.decision_engine.recommendation import generate_recommendation
 
 def simulate_cas5():
     print("\n" + "="*60)
-    print("CAS 5 — CHOLÉRA FEMME ENCEINTE")
+    print("CAS 5  CHOLÉRA FEMME ENCEINTE")
     print("="*60)
     print("Patient : Femme, 25 ans, enceinte 7 mois, Village Est-Cameroun")
     print("Symptômes : Diarrhée profuse 18h, vomissements, déshydratation sévère, épidémie active")

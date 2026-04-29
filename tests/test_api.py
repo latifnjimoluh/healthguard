@@ -1,5 +1,5 @@
 """
-Tests unitaires — API FastAPI HealthGuard IA.
+Tests unitaires  API FastAPI HealthGuard IA.
 Couvre : health check, création patient, diagnostic, sync.
 """
 
@@ -39,6 +39,30 @@ class TestHealthEndpoint:
         assert data["status"] == "ok"
         assert "version" in data
         assert "db_status" in data
+
+
+class TestPinEndpoints:
+    """Tests des endpoints de securite PIN."""
+
+    def test_hash_pin_endpoint(self, client):
+        response = client.post("/api/v1/security/pin/hash", json={"pin": "246810"})
+        assert response.status_code == 200
+        data = response.json()
+        assert "pin_hash" in data
+        assert isinstance(data["pin_hash"], str)
+
+    def test_verify_pin_endpoint(self, client):
+        hashed = client.post("/api/v1/security/pin/hash", json={"pin": "246810"}).json()["pin_hash"]
+        response = client.post(
+            "/api/v1/security/pin/verify",
+            json={"pin": "246810", "stored_hash": hashed},
+        )
+        assert response.status_code == 200
+        assert response.json()["valid"] is True
+
+    def test_hash_pin_rejects_simple_sequence(self, client):
+        response = client.post("/api/v1/security/pin/hash", json={"pin": "123456"})
+        assert response.status_code == 400
 
 
 class TestPatientEndpoints:

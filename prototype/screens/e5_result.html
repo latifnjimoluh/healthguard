@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <link rel="manifest" href="/app/manifest.json">
+  <link rel="icon" type="image/png" href="/app/assets/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>HealthGuard IA — Résultat Diagnostic</title>
+  <title>HealthGuard IA - Resultat Diagnostic</title>
   <link rel="stylesheet" href="../css/healthguard.css">
   <style>
     .result-hero { margin: 12px; border-radius: var(--border-radius-large); padding: 20px; color: white; }
@@ -29,8 +30,6 @@
     .ci-item:last-child { border-bottom: none; }
     .diff-chip { display: inline-block; padding: 4px 10px; border-radius: 12px; background: var(--color-orange-light); color: #E65100; font-size: 13px; font-weight: 500; margin-top: 4px; }
     .transfert-banner { background: var(--color-rouge-light); border-left: 4px solid var(--color-rouge); border-radius: var(--border-radius); padding: 12px 14px; margin: 8px 12px; }
-    .transfert-banner-title { font-size: 14px; font-weight: 700; color: var(--color-rouge-dark); margin-bottom: 4px; }
-    .transfert-banner-text { font-size: 13px; color: var(--color-text-primary); }
     .notif-banner { background: #FFF8E1; border-left: 4px solid #FFC107; border-radius: var(--border-radius); padding: 10px 14px; margin: 8px 12px; font-size: 13px; }
     .actions-bottom { display: flex; gap: 8px; padding: 12px; }
     .actions-bottom .btn { flex: 1; }
@@ -50,105 +49,80 @@
 
   <div class="screen-header">
     <a href="e4_decision_tree.html" style="color:white;text-decoration:none;font-size:22px;padding:8px 12px 8px 4px;">‹</a>
+    <img src="../assets/logo.png" alt="Logo HealthGuard IA" style="width:34px;height:34px;border-radius:10px;object-fit:cover;background:#ffffff;padding:4px;">
     <div style="flex:1">
-      <div style="font-size:16px;font-weight:700;">Résultat Diagnostic</div>
-      <div style="font-size:12px;opacity:0.8;" id="patient-name-header">—</div>
+      <div style="font-size:16px;font-weight:700;">Resultat Diagnostic</div>
+      <div style="font-size:12px;opacity:0.8;" id="patient-name-header">-</div>
     </div>
     <span style="font-size:20px;padding:8px;" id="result-icon">🔴</span>
   </div>
 
-  <!-- Hero résultat -->
   <div class="result-hero rouge" id="result-hero">
-    <div class="result-hero-badge" id="hero-badge">NIVEAU DE GRAVITÉ : CRITIQUE</div>
-    <div class="result-hero-diag" id="hero-diag">Paludisme grave probable</div>
-    <div class="result-hero-proba" id="hero-proba">Probabilité combinée : 90%</div>
-    <div class="confidence-bar"><div class="confidence-fill" id="confidence-fill" style="width:90%;background:rgba(255,255,255,0.7);"></div></div>
-    <div class="result-hero-action" id="hero-action">⚡ ACTION IMMÉDIATE : TRANSFERT D'URGENCE</div>
-    <span class="source-badge" id="source-badge">🌲 Arbre décisionnel + IA</span>
+    <div class="result-hero-badge" id="hero-badge">NIVEAU DE GRAVITE : CRITIQUE</div>
+    <div class="result-hero-diag" id="hero-diag">Analyse en cours</div>
+    <div class="result-hero-proba" id="hero-proba">Probabilite combinee : 0%</div>
+    <div class="confidence-bar"><div class="confidence-fill" id="confidence-fill" style="width:0%;background:rgba(255,255,255,0.7);"></div></div>
+    <div class="result-hero-action" id="hero-action">Preparation du resultat...</div>
+    <span class="source-badge" id="source-badge">Moteur local</span>
   </div>
 
-  <!-- Bannière transfert (si applicable) -->
   <div class="transfert-banner" id="transfert-banner" style="display:none;">
-    <div class="transfert-banner-title">🚑 Transfert requis</div>
-    <div class="transfert-banner-text" id="transfert-text">Orienter vers l'hôpital de district — accompagner le patient</div>
+    <div style="font-size:14px;font-weight:700;color:var(--color-rouge-dark);margin-bottom:4px;">Transfert requis</div>
+    <div id="transfert-text" style="font-size:13px;color:var(--color-text-primary);"></div>
   </div>
 
-  <!-- Bannière notification -->
   <div class="notif-banner" id="notif-banner" style="display:none;">
-    📢 <strong>Notification district requise</strong> — Remplir le formulaire de signalement épidémique
+    Notification district requise.
   </div>
 
-  <!-- Résumé 3 points -->
   <div class="result-section">
-    <div class="result-section-title">📋 Résumé clinique</div>
-    <div id="points-list">
-      <div class="point-item">
-        <span class="point-num rouge">1</span>
-        <span class="point-text">Chargement de l'analyse…</span>
-      </div>
-    </div>
+    <div class="result-section-title">Resume clinique</div>
+    <div id="points-list"></div>
   </div>
 
-  <!-- Traitement recommandé -->
   <div class="result-section" id="traitement-section">
-    <div class="result-section-title">💊 Traitement recommandé</div>
-    <div id="medoc-list">
-      <div class="medoc-item">
-        <span class="medoc-pill">Artéméther</span>
-        <span class="medoc-text">IM 3,2 mg/kg dose initiale</span>
-      </div>
-    </div>
+    <div class="result-section-title">Traitement recommande</div>
+    <div id="medoc-list"></div>
   </div>
 
-  <!-- Contre-indications -->
   <div class="result-section" id="ci-section" style="display:none;">
-    <div class="result-section-title">🚫 Contre-indications</div>
+    <div class="result-section-title">Contre-indications</div>
     <div id="ci-list"></div>
   </div>
 
-  <!-- Diagnostic différentiel -->
   <div class="result-section" id="diff-section" style="display:none;">
-    <div class="result-section-title">🔍 Diagnostic différentiel</div>
+    <div class="result-section-title">Diagnostic differentiel</div>
     <div id="diff-content"></div>
   </div>
 
-  <!-- Suivi recommandé -->
   <div class="result-section">
-    <div class="result-section-title">📅 Suivi recommandé</div>
-    <div id="suivi-list">
-      <div class="suivi-item">📞 Contacter le district pour validation</div>
-      <div class="suivi-item">📝 Réévaluer dans 24h</div>
-      <div class="suivi-item">📷 Documenter les signes vitaux</div>
-    </div>
+    <div class="result-section-title">Suivi recommande</div>
+    <div id="suivi-list"></div>
   </div>
 
-  <!-- Actions -->
   <div class="actions-bottom">
-    <button class="btn btn-secondary" onclick="saveAndNew()" style="font-size:13px;">
-      + Nouvelle<br>consultation
-    </button>
-    <button class="btn btn-primary" onclick="saveRecord()" style="font-size:13px;">
-      💾 Sauvegarder<br>le dossier
-    </button>
+    <button class="btn btn-secondary" onclick="saveAndNew()" style="font-size:13px;">Nouvelle consultation</button>
+    <button class="btn btn-primary" onclick="saveRecord()" style="font-size:13px;">Sauvegarder le dossier</button>
   </div>
-
-  <div style="height:8px;"></div>
 </div>
 
 <script>
-  // Chargement des données de consultation
+  const API = '';
   let data = {};
+  let lastRenderedResult = null;
   try {
     data = JSON.parse(localStorage.getItem('hg_current_consultation') || '{}');
-  } catch(e) { data = {}; }
+  } catch (e) {
+    data = {};
+  }
 
-  // Horloge + réseau
   function updateClock() {
     const now = new Date();
     document.getElementById('current-time').textContent =
-      String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+      String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
   }
-  updateClock(); setInterval(updateClock, 10000);
+  updateClock();
+  setInterval(updateClock, 10000);
 
   function updateNet() {
     const badge = document.getElementById('network-badge');
@@ -159,8 +133,14 @@
   window.addEventListener('online', updateNet);
   window.addEventListener('offline', updateNet);
 
-  // Diagnostic moteur (simulation côté prototype)
-  function runDiagnostic(d) {
+  function normalizeColor(color) {
+    const value = (color || '').toString().toLowerCase();
+    if (value.includes('rouge')) return 'rouge';
+    if (value.includes('orange')) return 'orange';
+    return 'vert';
+  }
+
+  function runDiagnosticLocal(d) {
     const temp = d.temperature_celsius || 37;
     const fievre = d.fievre || (temp >= 38 ? 1 : 0);
     const convulsions = d.convulsions || 0;
@@ -171,299 +151,260 @@
     const age = d.age_ans || 30;
     const oedemes = d.oedemes || 0;
     const amaigrissement = d.amaigrissement || 0;
-    const hemoptysie = d.hemoptysie || 0;
     const duree = d.duree_symptomes_jours || 1;
     const cholera = d.epidemie_cholera_active || 0;
 
-    // Règle 1 : Paludisme grave
     if (fievre && (convulsions || trouble) && age < 15) {
       return {
-        diagnostic: 'Paludisme grave probable', code: 'paludisme_grave',
-        gravite: 3, couleur: 'rouge',
-        badge: 'NIVEAU DE GRAVITÉ : CRITIQUE',
-        action: '⚡ ACTION IMMÉDIATE : TRANSFERT D\'URGENCE',
+        diagnostic: 'Paludisme grave probable',
+        code: 'paludisme_grave',
+        gravite: 3,
+        couleur: 'rouge',
+        badge: 'NIVEAU DE GRAVITE : CRITIQUE',
+        action: 'TRANSFERT D URGENCE',
         proba: 90,
-        source: 'Arbre décisionnel (priorité ROUGE)',
+        source: 'Moteur local de secours',
         points: [
-          'Paludisme grave suspecté — enfant fébrile avec signes neurologiques (convulsions/trouble de conscience)',
-          'Artéméther IM en dose initiale, dextrose IV si hypoglycémie — NE PAS donner quinine IV seul',
-          'Transfert immédiat vers hôpital de district — ne pas attendre'
+          'Paludisme grave suspecte avec signes neurologiques',
+          'Traitement d urgence avant transfert',
+          'Transfert immediat vers hopital de district'
         ],
         traitement: [
-          { medoc: 'Artéméther', posologie: 'IM 3,2 mg/kg dose initiale, puis 1,6 mg/kg/j × 5j' },
-          { medoc: 'Dextrose 10%', posologie: 'IV si hypoglycémie confirmée' },
-          { medoc: 'Paracétamol', posologie: '15 mg/kg per os si T° > 38,5°C' }
+          { medoc: 'Artemether', posologie: 'IM 3.2 mg/kg dose initiale' }
         ],
-        ci: ['Artémisinine orale (vomissements probables)', 'Aspirine (enfant < 15 ans)'],
-        transfert: 'Hôpital de district — service pédiatrie en urgence',
+        ci: ['Artemisinine orale si vomissements'],
+        transfert: 'Hopital de district',
         notif: false,
-        diff: null, diff_proba: null,
-        suivi: ['Résultat TDR paludisme à documenter', 'Glycémie capillaire toutes les 6h', 'Surveillance neurologique horaire']
+        diff: null,
+        diff_proba: null,
+        suivi: ['Surveillance neurologique rapprochee']
       };
     }
 
-    // Règle 2 : Paludisme simple adulte
-    if (fievre && temp >= 38.5 && !convulsions && !trouble) {
-      const saison = d.saison_pluie || 0;
-      const isVulnerable = age < 5 || d.grossesse;
+    if (pb < 115 || (pb < 125 && oedemes)) {
       return {
-        diagnostic: 'Paludisme simple probable', code: 'paludisme_simple',
-        gravite: isVulnerable ? 2 : 1, couleur: isVulnerable ? 'orange' : 'orange',
-        badge: 'NIVEAU DE GRAVITÉ : MODÉRÉ',
-        action: '💊 TRAITEMENT AMBULATOIRE + SURVEILLANCE',
-        proba: 75,
-        source: 'Arbre décisionnel + IA',
+        diagnostic: 'Malnutrition aigue severe',
+        code: 'malnutrition_mas',
+        gravite: 3,
+        couleur: 'rouge',
+        badge: 'NIVEAU DE GRAVITE : CRITIQUE',
+        action: 'TRANSFERT CRENAS OU CRENI',
+        proba: 85,
+        source: 'Moteur local de secours',
         points: [
-          'Paludisme simple probable — fièvre sans signes de gravité',
-          'CTA (Artéméther-Luméfantrine) selon le poids — administrer avec aliment gras',
-          'Revenir si pas d\'amélioration en 48h ou apparition de signes de gravité'
+          `PB critique a ${pb} mm`,
+          'Evaluation appetit et complications',
+          'Reference nutritionnelle rapide'
         ],
         traitement: [
-          { medoc: 'Artéméther-Luméfantrine', posologie: '6 doses sur 3 jours selon poids — avec nourriture' },
-          { medoc: 'Paracétamol', posologie: '500 mg × 3/j adulte ou 15 mg/kg × 3/j enfant' }
+          { medoc: 'RUTF', posologie: 'Selon protocole nutritionnel' }
+        ],
+        ci: [],
+        transfert: 'CRENAS ou CRENI',
+        notif: false,
+        diff: null,
+        diff_proba: null,
+        suivi: ['Suivi hebdomadaire du poids']
+      };
+    }
+
+    if (diarrhee && cholera) {
+      return {
+        diagnostic: 'Cholera presume',
+        code: 'cholera_presume',
+        gravite: 3,
+        couleur: 'rouge',
+        badge: 'ALERTE EPIDEMIQUE',
+        action: 'ISOLEMENT ET NOTIFICATION',
+        proba: 80,
+        source: 'Moteur local de secours',
+        points: [
+          'Contexte epidemique compatible',
+          'Rehydratation immediate',
+          'Notification district requise'
+        ],
+        traitement: [
+          { medoc: 'Ringer Lactate', posologie: 'Selon protocole de rehydratation' }
+        ],
+        ci: [],
+        transfert: 'Centre de traitement cholera',
+        notif: true,
+        diff: null,
+        diff_proba: null,
+        suivi: ['Surveillance diurese']
+      };
+    }
+
+    if (toux && fievre) {
+      return {
+        diagnostic: 'Pneumonie moderee probable',
+        code: 'pneumonie_moderee',
+        gravite: 2,
+        couleur: 'orange',
+        badge: 'NIVEAU DE GRAVITE : ELEVE',
+        action: 'ANTIBIOTHERAPIE ET SURVEILLANCE',
+        proba: 70,
+        source: 'Moteur local de secours',
+        points: [
+          'Tableau respiratoire infectieux probable',
+          'Traitement oral selon protocole',
+          'Reevaluation rapide si aggravation'
+        ],
+        traitement: [
+          { medoc: 'Amoxicilline', posologie: 'Selon protocole age et poids' }
         ],
         ci: [],
         transfert: null,
         notif: false,
-        diff: 'IRA virale', diff_proba: 25,
-        suivi: ['TDR paludisme si disponible', 'Consultation de contrôle J3', 'SRO si vomissements']
+        diff: 'Paludisme',
+        diff_proba: 25,
+        suivi: ['Controle a 48h']
       };
     }
 
-    // Règle 3 : Malnutrition MAS
-    if (pb < 115 || (pb < 125 && oedemes)) {
-      return {
-        diagnostic: 'Malnutrition aiguë sévère (MAS)', code: 'malnutrition_mas',
-        gravite: 3, couleur: 'rouge',
-        badge: 'NIVEAU DE GRAVITÉ : CRITIQUE',
-        action: '⚡ TRANSFERT CRENAS/CRENI',
-        proba: 85,
-        source: 'Arbre décisionnel (PB critique)',
-        points: [
-          `PB ${pb}mm < 115mm — critère MAS confirmé, enfant en danger vital`,
-          'Tester l\'appétit (RUTF Plumpy\'Nut) — si échec → CRENI, si succès → CRENAS',
-          'Vaccination et déparasitage systématiques à la prise en charge'
-        ],
-        traitement: [
-          { medoc: 'RUTF Plumpy\'Nut', posologie: 'Test appétit : 1/4 sachet. Si positif : 3 sachets/j × 8 semaines' },
-          { medoc: 'Amoxicilline', posologie: '80 mg/kg/j × 7j (traitement systématique infections)' },
-          { medoc: 'Vitamine A', posologie: '200 000 UI dose unique (si non donné < 6 mois)' }
-        ],
-        ci: [],
-        transfert: 'CRENAS/CRENI selon test appétit',
-        notif: false,
-        diff: null, diff_proba: null,
-        suivi: ['Peser chaque semaine', 'Mesure PB hebdomadaire', 'Carnet suivi PNLMCA']
-      };
-    }
-
-    // Règle 4 : Diarrhée / Choléra
-    if (diarrhee && cholera) {
-      return {
-        diagnostic: 'Choléra présumé', code: 'cholera_presume',
-        gravite: 3, couleur: 'rouge',
-        badge: 'ALERTE ÉPIDÉMIQUE — CRITIQUE',
-        action: '⚡ ISOLEMENT + NOTIFICATION IMMÉDIATE',
-        proba: 80,
-        source: 'Arbre décisionnel (contexte épidémique)',
-        points: [
-          'Choléra présumé — diarrhée en contexte épidémique actif',
-          'Réhydratation IV (Ringer Lactate) si déshydratation sévère — Plan C OMS',
-          'Isolement du patient, notification district obligatoire dans l\'heure'
-        ],
-        traitement: [
-          { medoc: 'Ringer Lactate', posologie: 'IV 100 mL/kg sur 3h (adulte) / 6h (enfant)' },
-          { medoc: 'SRO', posologie: '500 mL après chaque selle liquide' },
-          { medoc: 'Doxycycline', posologie: '300 mg dose unique adulte (ou Azithro 1g si grossesse)' }
-        ],
-        ci: ['Tétracyclines si < 8 ans', 'Doxycycline si grossesse'],
-        transfert: 'Centre de traitement choléra (CTC) — isolement strict',
-        notif: true,
-        diff: 'Diarrhée infectieuse aiguë', diff_proba: 20,
-        suivi: ['Notification DISTRICT dans l\'heure', 'Surveillance diurèse', 'Désinfection environnement immédiat']
-      };
-    }
-
-    // Règle 5 : IRA / Pneumonie
-    if (toux && fievre) {
-      const spo2 = d.spo2 || 99;
-      const grave = spo2 < 90 || d.dyspnee;
-      return {
-        diagnostic: grave ? 'Pneumonie sévère' : 'Pneumonie modérée', code: grave ? 'pneumonie_severe' : 'pneumonie_moderee',
-        gravite: grave ? 3 : 2, couleur: grave ? 'rouge' : 'orange',
-        badge: grave ? 'NIVEAU DE GRAVITÉ : CRITIQUE' : 'NIVEAU DE GRAVITÉ : ÉLEVÉ',
-        action: grave ? '⚡ TRANSFERT + OXYGÈNE IMMÉDIAT' : '💊 ANTIBIOTHÉRAPIE ORALE',
-        proba: grave ? 82 : 70,
-        source: 'Arbre décisionnel + IA',
-        points: [
-          grave ? `Pneumonie sévère — SpO₂ ${spo2}% < 90%, dyspnée présente` : 'Pneumonie modérée — toux fébrile sans signe de gravité',
-          grave ? 'Oxygène nasal 2-4 L/min, amoxicilline IV/IM en urgence' : 'Amoxicilline orale 3 jours — revenir si aggravation',
-          grave ? 'Transfert hôpital district immédiat' : 'Surveillance fréquence respiratoire à J2'
-        ],
-        traitement: [
-          { medoc: 'Amoxicilline', posologie: grave ? 'IV 90 mg/kg/j (ou IM Ceftriaxone 80 mg/kg)' : 'Orale 80-90 mg/kg/j × 5j' }
-        ],
-        ci: [],
-        transfert: grave ? 'Hôpital district — urgence respiratoire' : null,
-        notif: false,
-        diff: 'Paludisme', diff_proba: 30,
-        suivi: ['FR de contrôle H24', 'SpO₂ si dégradation', 'Revenir si pas amélioration 48h']
-      };
-    }
-
-    // Règle 6 : Tuberculose suspectée
     if (toux && amaigrissement && duree > 14) {
       return {
-        diagnostic: 'Tuberculose suspectée', code: 'tuberculose_suspect',
-        gravite: 2, couleur: 'orange',
-        badge: 'NIVEAU DE GRAVITÉ : ÉLEVÉ',
-        action: '🏥 RÉFÉRER CDTB POUR BILAN',
+        diagnostic: 'Tuberculose suspectee',
+        code: 'tuberculose_suspect',
+        gravite: 2,
+        couleur: 'orange',
+        badge: 'NIVEAU DE GRAVITE : ELEVE',
+        action: 'REFERER POUR BILAN',
         proba: 65,
-        source: 'Arbre décisionnel + IA',
+        source: 'Moteur local de secours',
         points: [
-          'TB suspectée — toux > 2 semaines avec amaigrissement',
-          'Référence au Centre de Diagnostic et de Traitement de la Tuberculose (CDTB)',
-          'Ne pas initier d\'antibiotiques empiriques — risque de masquer résultats'
+          'Toux prolongee avec amaigrissement',
+          'Bilan tuberculose necessaire',
+          'Reference CDTB recommandee'
         ],
         traitement: [
-          { medoc: 'Référence CDTB', posologie: 'Crachat × 3 pour bacilloscopie + radiographie thoracique' }
+          { medoc: 'Reference CDTB', posologie: 'Bilan crachats et radiographie' }
         ],
-        ci: ['Antibiotiques empiriques (fluoroquinolones)'],
-        transfert: 'CDTB / Hôpital de référence pour bilan diagnostic',
+        ci: [],
+        transfert: 'CDTB',
         notif: false,
-        diff: 'Pneumonie chronique', diff_proba: 25,
-        suivi: ['Résultat bacilloscopie sous 48h', 'Contacter le district si contact TB confirmé', 'Recherche des contacts familiaux']
+        diff: null,
+        diff_proba: null,
+        suivi: ['Recherche contacts familiaux']
       };
     }
 
-    // Résultat par défaut
     return {
-      diagnostic: 'Pathologie à préciser', code: 'indetermine',
-      gravite: 1, couleur: 'vert',
-      badge: 'NIVEAU DE GRAVITÉ : FAIBLE',
-      action: '👁️ SURVEILLANCE ET RÉÉVALUATION',
+      diagnostic: 'Pathologie a preciser',
+      code: 'indetermine',
+      gravite: 1,
+      couleur: 'vert',
+      badge: 'NIVEAU DE GRAVITE : FAIBLE',
+      action: 'SURVEILLANCE ET REEVALUATION',
       proba: 50,
-      source: 'Données insuffisantes — évaluation clinique',
+      source: 'Moteur local de secours',
       points: [
-        'Tableau clinique insuffisant pour un diagnostic précis',
-        'Examen clinique complet recommandé — prise de constantes',
-        'Réévaluer dans 24-48h ou si aggravation'
+        'Tableau clinique insuffisant pour conclure',
+        'Examen clinique complet recommande',
+        'Reevaluation si aggravation'
       ],
       traitement: [
-        { medoc: 'Paracétamol', posologie: '500 mg × 3/j adulte si douleur/fièvre' }
+        { medoc: 'Paracetamol', posologie: 'Si douleur ou fievre' }
       ],
       ci: [],
       transfert: null,
       notif: false,
-      diff: null, diff_proba: null,
-      suivi: ['Consultation de contrôle dans 48h', 'Revenir si fièvre > 38,5°C', 'Bilan si pas d\'amélioration']
+      diff: null,
+      diff_proba: null,
+      suivi: ['Controle dans 24 a 48h']
     };
   }
 
-  // Rendu du résultat
-  function renderResult(r) {
-    // Nom patient
-    document.getElementById('patient-name-header').textContent = data.patient_nom || 'Patient anonyme';
+  function saveBrowserHistory(record) {
+    const consultations = JSON.parse(localStorage.getItem('hg_consultations') || '[]');
+    consultations.unshift(record);
+    localStorage.setItem('hg_consultations', JSON.stringify(consultations.slice(0, 100)));
+  }
 
-    // Hero
+  function renderResult(r) {
+    lastRenderedResult = r;
+    document.getElementById('patient-name-header').textContent = data.patient_nom || 'Patient anonyme';
+    const color = normalizeColor(r.couleur);
     const hero = document.getElementById('result-hero');
-    hero.className = 'result-hero ' + r.couleur;
+    hero.className = 'result-hero ' + color;
     document.getElementById('hero-badge').textContent = r.badge;
     document.getElementById('hero-diag').textContent = r.diagnostic;
-    document.getElementById('hero-proba').textContent = 'Probabilité combinée : ' + r.proba + '%';
-    document.getElementById('confidence-fill').style.width = r.proba + '%';
+    document.getElementById('hero-proba').textContent = 'Probabilite combinee : ' + (r.proba || 0) + '%';
+    document.getElementById('confidence-fill').style.width = (r.proba || 0) + '%';
     document.getElementById('confidence-fill').style.background = 'rgba(255,255,255,0.7)';
     document.getElementById('hero-action').textContent = r.action;
-    document.getElementById('source-badge').textContent = '🌲 ' + r.source;
-    document.getElementById('result-icon').textContent = r.couleur === 'rouge' ? '🔴' : r.couleur === 'orange' ? '🟠' : '🟢';
+    document.getElementById('source-badge').textContent = r.source;
+    document.getElementById('result-icon').textContent = color === 'rouge' ? '🔴' : color === 'orange' ? '🟠' : '🟢';
 
-    // Transfert
     if (r.transfert) {
       document.getElementById('transfert-banner').style.display = 'block';
       document.getElementById('transfert-text').textContent = r.transfert;
     }
 
-    // Notification
-    if (r.notif) document.getElementById('notif-banner').style.display = 'block';
+    if (r.notif) {
+      document.getElementById('notif-banner').style.display = 'block';
+    }
 
-    // Points résumé
-    const pointsList = document.getElementById('points-list');
-    pointsList.innerHTML = r.points.map((p, i) => `
+    document.getElementById('points-list').innerHTML = (r.points || []).map((p, i) => `
       <div class="point-item">
-        <span class="point-num ${r.couleur === 'rouge' && i === 0 ? 'rouge' : ''}">${i + 1}</span>
+        <span class="point-num ${color === 'rouge' && i === 0 ? 'rouge' : ''}">${i + 1}</span>
         <span class="point-text">${p}</span>
       </div>
     `).join('');
 
-    // Traitement
-    const medocList = document.getElementById('medoc-list');
-    medocList.innerHTML = r.traitement.map(t => `
+    document.getElementById('medoc-list').innerHTML = (r.traitement || []).map(t => `
       <div class="medoc-item">
-        <span class="medoc-pill">${t.medoc.split(' ')[0]}</span>
-        <span class="medoc-text"><strong>${t.medoc}</strong> — ${t.posologie}</span>
+        <span class="medoc-pill">${(t.medoc || '').split(' ')[0] || 'Trait.'}</span>
+        <span class="medoc-text"><strong>${t.medoc || 'Traitement'}</strong> - ${t.posologie || 'Selon protocole'}</span>
       </div>
     `).join('');
 
-    // Contre-indications
-    if (r.ci && r.ci.length > 0) {
+    if (r.ci && r.ci.length) {
       document.getElementById('ci-section').style.display = 'block';
-      document.getElementById('ci-list').innerHTML = r.ci.map(c =>
-        `<div class="ci-item">🚫 ${c}</div>`
-      ).join('');
+      document.getElementById('ci-list').innerHTML = r.ci.map(c => `<div class="ci-item">- ${c}</div>`).join('');
     }
 
-    // Diagnostic différentiel
     if (r.diff) {
       document.getElementById('diff-section').style.display = 'block';
       document.getElementById('diff-content').innerHTML = `
-        <div style="font-size:14px;margin-bottom:6px;">À ne pas exclure :</div>
-        <span class="diff-chip">⚡ ${r.diff} — ${r.diff_proba}%</span>
-        <div style="font-size:12px;color:var(--color-text-secondary);margin-top:6px;">
-          Évaluation complémentaire recommandée si traitement initial inefficace.
-        </div>
-      `;
+        <div style="font-size:14px;margin-bottom:6px;">A ne pas exclure :</div>
+        <span class="diff-chip">${r.diff} - ${r.diff_proba || 0}%</span>`;
     }
 
-    // Suivi
-    if (r.suivi && r.suivi.length > 0) {
-      document.getElementById('suivi-list').innerHTML = r.suivi.map(s =>
-        `<div class="suivi-item">📋 ${s}</div>`
-      ).join('');
-    }
+    document.getElementById('suivi-list').innerHTML = (r.suivi || []).map(s => `<div class="suivi-item">- ${s}</div>`).join('');
 
-    // Sauvegarder résultat enrichi (toutes les données pour sync PostgreSQL)
-    const consultations = JSON.parse(localStorage.getItem('hg_consultations') || '[]');
-    consultations.unshift({
-      // Identification
+    saveBrowserHistory({
       date: new Date().toISOString(),
       patient_nom: data.patient_nom || 'Anonyme',
+      patient_id: data.patient_id || null,
+      consultation_id: data.consultation_id || null,
+      diagnostic_id: data.diagnostic_id || null,
       agent_id: localStorage.getItem('hg_agent_id') || 'prototype',
-      // Données patient
       age_ans: data.age_ans || null,
       sexe: data.sexe || null,
       village_code: data.village_code || null,
       poids_kg: data.poids_kg || null,
-      // Diagnostic
       diagnostic: r.diagnostic,
       code: r.code,
       gravite: r.gravite,
-      couleur: r.couleur,
+      couleur: color,
       proba: r.proba,
-      decision_arbre: r.source || 'arbre+ml',
+      decision_arbre: r.source,
       recommandation: {
-        points: r.points,
-        traitement: r.traitement,
+        points: r.points || [],
+        traitement: r.traitement || [],
         contre_indications: r.ci || [],
         transfert: r.transfert || null,
-        suivi: r.suivi || []
+        suivi: r.suivi || [],
+        action_immediate: r.action || null,
+        notification_district: !!r.notif
       },
-      // Symptômes mesurés
       symptomes: {
         temperature_celsius: data.temperature_celsius || null,
-        spo2: data.spo2 || null,
-        frequence_respiratoire: data.frequence_resp || null,
+        spo2_percent: data.spo2 || null,
+        frequence_respiratoire: data.frequence_respiratoire || null,
         pb_mm: data.pb_mm || null,
-        duree_jours: data.duree_symptomes_jours || null,
+        duree_symptomes_jours: data.duree_symptomes_jours || null,
         fievre: data.fievre || 0,
         toux: data.toux || 0,
         convulsions: data.convulsions || 0,
@@ -473,11 +414,96 @@
         dyspnee: data.dyspnee || 0,
         hemoptysie: data.hemoptysie || 0,
         amaigrissement: data.amaigrissement || 0,
-        trouble_conscience: data.trouble_conscience || 0
+        trouble_conscience: data.trouble_conscience || 0,
+        grossesse: data.grossesse || 0,
+        saison_pluie: data.saison_pluie || 0,
+        contact_tb_connu: data.contact_tb_connu || data.contact_tuberculose || 0,
+        epidemie_cholera_active: data.epidemie_cholera_active || 0
       },
-      synced: false
+      synced: !!data.consultation_id
     });
-    localStorage.setItem('hg_consultations', JSON.stringify(consultations.slice(0, 100)));
+  }
+
+  async function ensurePatientExists() {
+    if (data.patient_id) return data.patient_id;
+    const response = await fetch(`${API}/api/v1/patients/new`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nom: data.patient_nom || 'Anonyme',
+        date_naissance: data.date_naissance || null,
+        sexe: data.sexe || null,
+        village_code: data.village_code || 'NON_SPECIFIE'
+      }),
+      signal: AbortSignal.timeout(4000)
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.detail || 'Creation patient impossible');
+    }
+    const payload = await response.json();
+    data.patient_id = payload.patient_id;
+    localStorage.setItem('hg_current_consultation', JSON.stringify(data));
+    return data.patient_id;
+  }
+
+  function convertApiResult(apiData) {
+    return {
+      diagnostic: apiData.resultat.diagnostic,
+      code: apiData.resultat.diagnostic.toLowerCase().replace(/ /g, '_'),
+      gravite: apiData.resultat.gravite,
+      couleur: normalizeColor(apiData.resultat.couleur_alerte),
+      badge: 'NIVEAU DE GRAVITE : ' + (apiData.resultat.gravite === 3 ? 'CRITIQUE' : apiData.resultat.gravite === 2 ? 'ELEVE' : apiData.resultat.gravite === 1 ? 'MODERE' : 'FAIBLE'),
+      action: apiData.recommandation.action_immediate || 'EVALUATION CLINIQUE',
+      proba: apiData.resultat.probabilite,
+      source: 'Moteur IA XGBoost + SQLite locale',
+      points: apiData.recommandation.resume_3_points || [],
+      traitement: (apiData.recommandation.medicaments || []).map(m => ({
+        medoc: m.nom || m.medoc || m || 'Traitement',
+        posologie: m.posologie || 'Selon protocole'
+      })),
+      ci: apiData.recommandation.contre_indications || [],
+      transfert: apiData.recommandation.transfert || null,
+      notif: !!apiData.recommandation.notification_district,
+      diff: apiData.resultat.diagnostic_differentiel || null,
+      diff_proba: apiData.resultat.proba_differentiel || null,
+      suivi: apiData.recommandation.suivi_recommande || []
+    };
+  }
+
+  async function performDiagnostic() {
+    // On essaie TOUJOURS l'API locale en premier (meme "hors ligne" reseau, localhost peut repondre)
+    try {
+      const patientId = await ensurePatientExists();
+      const response = await fetch(`${API}/api/v1/diagnostic/new`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          patient_id: patientId,
+          agent_id: localStorage.getItem('hg_agent_id') || 'prototype',
+          symptomes: {
+            ...data,
+            spo2_percent: data.spo2 || null,
+            contact_tb_connu: data.contact_tb_connu || data.contact_tuberculose || 0
+          }
+        }),
+        signal: AbortSignal.timeout(3000)
+      });
+
+      if (response.ok) {
+        const apiData = await response.json();
+        data.consultation_id = apiData.consultation_id;
+        data.diagnostic_id = apiData.diagnostic_id;
+        localStorage.setItem('hg_current_consultation', JSON.stringify(data));
+        renderResult(convertApiResult(apiData));
+        return;
+      }
+    } catch (e) {
+      console.warn('API locale non joignable, bascule sur moteur JS de secours:', e);
+    }
+
+    // Moteur JS de secours (Audit Fix: unification du parcours)
+    renderResult(runDiagnosticLocal(data));
   }
 
   function saveAndNew() {
@@ -487,69 +513,9 @@
 
   function saveRecord() {
     const nom = data.patient_nom || 'Anonyme';
-    hgAlert(
-      `Dossier de ${nom} enregistré sur cet appareil.\nSynchronisation automatique dès la prochaine reconnexion réseau.`,
-      'Dossier sauvegardé',
-      '✅'
-    );
-    setTimeout(function () { window.location.href = 'e2_dashboard.html'; }, 1800);
-  }
-
-  // Exécution : Tentative API si en ligne, sinon fallback local
-  async function performDiagnostic() {
-    const API = '';
-    const isOnline = navigator.onLine;
-    
-    // On prépare le diagnostic local comme fallback
-    const localResult = runDiagnostic(data);
-    
-    if (isOnline) {
-      try {
-        const response = await fetch(`${API}/api/v1/diagnostic/new`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            patient_id: data.patient_nom || 'anonyme', // Simplifié pour le prototype
-            agent_id: localStorage.getItem('hg_agent_id') || 'prototype',
-            symptomes: data
-          }),
-          signal: AbortSignal.timeout(4000)
-        });
-        
-        if (response.ok) {
-          const apiData = await response.json();
-          // Conversion format API -> format Prototype
-          const converted = {
-            diagnostic: apiData.resultat.diagnostic,
-            code: apiData.resultat.diagnostic.toLowerCase().replace(/ /g, '_'),
-            gravite: apiData.resultat.gravite,
-            couleur: apiData.resultat.couleur_alerte,
-            badge: 'NIVEAU DE GRAVITÉ : ' + (apiData.resultat.gravite === 3 ? 'CRITIQUE' : apiData.resultat.gravite === 2 ? 'ÉLEVÉ' : 'FAIBLE'),
-            action: apiData.recommandation.action_immediate,
-            proba: apiData.resultat.probabilite,
-            source: 'Moteur IA XGBoost (Connecté)',
-            points: apiData.recommandation.resume_3_points,
-            traitement: apiData.recommandation.medicaments.map(m => ({
-              medoc: m.nom || m, 
-              posologie: m.posologie || 'Selon protocole'
-            })),
-            ci: apiData.recommandation.contre_indications,
-            transfert: apiData.recommandation.transfert,
-            notif: apiData.recommandation.notification_district,
-            diff: apiData.resultat.diagnostic_differentiel,
-            diff_proba: apiData.resultat.proba_differentiel,
-            suivi: apiData.recommandation.suivi_recommande
-          };
-          renderResult(converted);
-          return;
-        }
-      } catch (e) {
-        console.warn('API Diagnostic inaccessible, passage au mode local:', e);
-      }
-    }
-    
-    // Si offline ou erreur API : usage du moteur local
-    renderResult(localResult);
+    const storageMode = data.consultation_id ? 'SQLite locale' : 'stockage navigateur';
+    hgAlert(`Dossier de ${nom} enregistre. Mode courant: ${storageMode}.`, 'Dossier sauvegarde', 'OK');
+    setTimeout(function () { window.location.href = 'e2_dashboard.html'; }, 1500);
   }
 
   performDiagnostic();

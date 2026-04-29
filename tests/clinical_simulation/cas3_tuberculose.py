@@ -1,5 +1,5 @@
 """
-Simulation Cas 3 — Tuberculose Pulmonaire
+Simulation Cas 3  Tuberculose Pulmonaire
 Patient : Homme, 42 ans, Village Bertoua, Est-Cameroun
 """
 
@@ -13,7 +13,7 @@ from src.decision_engine.recommendation import generate_recommendation
 
 def simulate_cas3():
     print("\n" + "="*60)
-    print("CAS 3 — TUBERCULOSE PULMONAIRE SUSPECTÉE")
+    print("CAS 3  TUBERCULOSE PULMONAIRE SUSPECTÉE")
     print("="*60)
     print("Patient : Homme, 42 ans, Village Bertoua, Est-Cameroun")
     print("Symptômes : Toux 5 semaines, hémoptysie x2, amaigrissement 8kg/2 mois")

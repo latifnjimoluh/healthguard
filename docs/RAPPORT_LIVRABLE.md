@@ -1,13 +1,13 @@
-# HealthGuard IA — Rapport de Livrables Complet
+# HealthGuard IA  Rapport de Livrables Complet
 
-**Projet :** HealthGuard IA — Système de diagnostic médical assisté par IA  
+**Projet :** HealthGuard IA  Système de diagnostic médical assisté par IA  
 **Cible :** Infirmiers et agents de santé en zones rurales (Cameroun)  
 **Date :** Avril 2026  
 **Version :** 1.0.0
 
 ---
 
-## LIVRABLE 1 — Personas & Cartes d'Empathie
+## LIVRABLE 1  Personas & Cartes d'Empathie
 
 ### Persona 1 : Aminatou Wali
 
@@ -44,7 +44,7 @@ Aminatou couvre un bassin de 12 villages avec 400 à 600 consultations par mois.
 
 ---
 
-**Carte d'Empathie — Aminatou**
+**Carte d'Empathie  Aminatou**
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -88,7 +88,7 @@ Aminatou couvre un bassin de 12 villages avec 400 à 600 consultations par mois.
 | Connexion | Quasi nulle (< 5% du temps) |
 
 **Contexte de travail**  
-Ibrahim fait des visites à domicile à vélo. Il est le premier — parfois le seul — contact médical pour des familles éloignées. Ses connaissances médicales sont solides sur les pathologies courantes (paludisme, malnutrition, IRA) mais limitées sur les cas rares.
+Ibrahim fait des visites à domicile à vélo. Il est le premier  parfois le seul  contact médical pour des familles éloignées. Ses connaissances médicales sont solides sur les pathologies courantes (paludisme, malnutrition, IRA) mais limitées sur les cas rares.
 
 **Objectifs**
 - Identifier les urgences à évacuer vs les cas traitables sur place
@@ -108,7 +108,7 @@ Ibrahim fait des visites à domicile à vélo. Il est le premier — parfois le 
 
 ---
 
-**Carte d'Empathie — Ibrahim**
+**Carte d'Empathie  Ibrahim**
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -138,7 +138,7 @@ Ibrahim fait des visites à domicile à vélo. Il est le premier — parfois le 
 
 ---
 
-## LIVRABLE 2 — Architecture Logique IA Offline + Pipeline de Sécurité
+## LIVRABLE 2  Architecture Logique IA Offline + Pipeline de Sécurité
 
 ### Architecture Logique IA Offline
 
@@ -222,7 +222,7 @@ Données patient    →    Chiffrement AES-256  →   HTTPS/TLS 1.3
 
 ---
 
-## LIVRABLE 3 — Prototype Lo-Fi de l'Interface de Diagnostic
+## LIVRABLE 3  Prototype Lo-Fi de l'Interface de Diagnostic
 
 ### Liste des écrans et captures d'écran à prendre
 
@@ -235,13 +235,13 @@ Données patient    →    Chiffrement AES-256  →   HTTPS/TLS 1.3
 
 ---
 
-#### E1 — Écran de Connexion (`e1_login.html`)
+#### E1  Écran de Connexion (`e1_login.html`)
 **Chemin :** `prototype/screens/e1_login.html`  
 **URL HTTP :** `http://localhost:8000/app/screens/e1_login.html`
 
 **Captures à prendre :**
-1. **E1-A** : Écran complet — logo, sélection de compte (2 cartes agents avec badge PIN)
-2. **E1-B** : Étape 2 — clavier PIN après avoir cliqué "Aminatou Wali"
+1. **E1-A** : Écran complet  logo, sélection de compte (2 cartes agents avec badge PIN)
+2. **E1-B** : Étape 2  clavier PIN après avoir cliqué "Aminatou Wali"
 3. **E1-C** : Modal d'accès urgence (cliquer sur le bouton rouge "🚨 Accès Urgence")
 4. **E1-D** : Modal "Ajouter un compte" (cliquer sur "＋ Ajouter un compte")
 
@@ -252,14 +252,14 @@ Données patient    →    Chiffrement AES-256  →   HTTPS/TLS 1.3
 
 ---
 
-#### E2 — Tableau de Bord (`e2_dashboard.html`)
+#### E2  Tableau de Bord (`e2_dashboard.html`)
 **Chemin :** `prototype/screens/e2_dashboard.html`  
 **URL HTTP :** `http://localhost:8000/app/screens/e2_dashboard.html`
 
 **Captures à prendre :**
-1. **E2-A** : Vue mobile — statistiques du jour + grille actions + liste consultations récentes
-2. **E2-B** : Vue desktop (PC) — même page avec la sidebar de navigation à gauche
-3. **E2-C** : Vue tablette étroite (768px) — sidebar réduite en icônes seules
+1. **E2-A** : Vue mobile  statistiques du jour + grille actions + liste consultations récentes
+2. **E2-B** : Vue desktop (PC)  même page avec la sidebar de navigation à gauche
+3. **E2-C** : Vue tablette étroite (768px)  sidebar réduite en icônes seules
 
 **Éléments à montrer :**
 - Compteurs "Consultations / Urgences / En attente sync"
@@ -269,14 +269,14 @@ Données patient    →    Chiffrement AES-256  →   HTTPS/TLS 1.3
 
 ---
 
-#### E3 — Nouvelle Consultation (`e3_consultation.html`)
+#### E3  Nouvelle Consultation (`e3_consultation.html`)
 **Chemin :** `prototype/screens/e3_consultation.html`  
 **URL HTTP :** `http://localhost:8000/app/screens/e3_consultation.html`
 
 **Captures à prendre :**
-1. **E3-A** : Partie haute — formulaire patient (nom, âge, sexe, poids)
-2. **E3-B** : Partie milieu — grille symptômes 4×N (avec boutons actifs en bleu)
-3. **E3-C** : Partie basse — vitaux (température slider, SpO2, fréquence respiratoire)
+1. **E3-A** : Partie haute  formulaire patient (nom, âge, sexe, poids)
+2. **E3-B** : Partie milieu  grille symptômes 4×N (avec boutons actifs en bleu)
+3. **E3-C** : Partie basse  vitaux (température slider, SpO2, fréquence respiratoire)
 4. **E3-D** : Modal d'erreur si "Nom" laissé vide et clic sur "Analyser"
 5. **E3-E** : Alerte SpO2 < 90% (rouge sous le champ SpO2 si valeur critique saisie)
 
@@ -288,14 +288,14 @@ Données patient    →    Chiffrement AES-256  →   HTTPS/TLS 1.3
 
 ---
 
-#### E4 — Arbre Décisionnel (`e4_decision_tree.html`)
+#### E4  Arbre Décisionnel (`e4_decision_tree.html`)
 **Chemin :** `prototype/screens/e4_decision_tree.html`  
 **URL HTTP :** `http://localhost:8000/app/screens/e4_decision_tree.html`
 
 > **Prérequis :** Avoir rempli E3 et cliqué "Analyser" pour avoir des données en localStorage.
 
 **Captures à prendre :**
-1. **E4-A** : Question binaire OUI/NON — grande question texte + boutons verts/rouges
+1. **E4-A** : Question binaire OUI/NON  grande question texte + boutons verts/rouges
 2. **E4-B** : Barre de progression (étape X/N en haut à droite)
 3. **E4-C** : État de chargement / transition entre questions
 
@@ -306,16 +306,16 @@ Données patient    →    Chiffrement AES-256  →   HTTPS/TLS 1.3
 
 ---
 
-#### E5 — Résultat du Diagnostic (`e5_result.html`)
+#### E5  Résultat du Diagnostic (`e5_result.html`)
 **Chemin :** `prototype/screens/e5_result.html`  
 **URL HTTP :** `http://localhost:8000/app/screens/e5_result.html`
 
 > **Prérequis :** Avoir traversé E3 → E4 pour avoir un résultat dans localStorage.
 
 **Captures à prendre :**
-1. **E5-A** : Bandeau ROUGE — paludisme grave (si simulé avec température > 39 + convulsions)
-2. **E5-B** : Bandeau ORANGE — cas modéré
-3. **E5-C** : Bandeau VERT — cas bénin
+1. **E5-A** : Bandeau ROUGE  paludisme grave (si simulé avec température > 39 + convulsions)
+2. **E5-B** : Bandeau ORANGE  cas modéré
+3. **E5-C** : Bandeau VERT  cas bénin
 4. **E5-D** : Section "Recommandations" dépliée avec les 3 points d'action + médicaments
 5. **E5-E** : Modal "Dossier sauvegardé" (cliquer sur "💾 Enregistrer le Dossier")
 
@@ -327,7 +327,7 @@ Données patient    →    Chiffrement AES-256  →   HTTPS/TLS 1.3
 
 ---
 
-#### E6 — Dossiers Patients (`e6_patient_record.html`)
+#### E6  Dossiers Patients (`e6_patient_record.html`)
 **Chemin :** `prototype/screens/e6_patient_record.html`  
 **URL HTTP :** `http://localhost:8000/app/screens/e6_patient_record.html`
 
@@ -343,14 +343,14 @@ Données patient    →    Chiffrement AES-256  →   HTTPS/TLS 1.3
 
 ---
 
-#### E7 — Paramètres & Synchronisation (`e7_settings.html`)
+#### E7  Paramètres & Synchronisation (`e7_settings.html`)
 **Chemin :** `prototype/screens/e7_settings.html`  
 **URL HTTP :** `http://localhost:8000/app/screens/e7_settings.html`
 
 **Captures à prendre :**
-1. **E7-A** : Section "Synchronisation" — statut en ligne + bouton sync + barre de progression
-2. **E7-B** : Section "Sécurité" — items (Changer PIN, Journal audit, Exporter données)
-3. **E7-C** : Section "Modèle IA" — modal riche avec tableau de performances (cliquer "Informations modèle IA")
+1. **E7-A** : Section "Synchronisation"  statut en ligne + bouton sync + barre de progression
+2. **E7-B** : Section "Sécurité"  items (Changer PIN, Journal audit, Exporter données)
+3. **E7-C** : Section "Modèle IA"  modal riche avec tableau de performances (cliquer "Informations modèle IA")
 4. **E7-D** : Modal "Journal d'audit" avec liste des 5 dernières consultations
 5. **E7-E** : Modal de confirmation de suppression des données (double confirmation)
 
@@ -361,16 +361,16 @@ Données patient    →    Chiffrement AES-256  →   HTTPS/TLS 1.3
 
 ---
 
-### Récapitulatif — Tableau des captures recommandées
+### Récapitulatif  Tableau des captures recommandées
 
 | ID | Écran | Fichier HTML | Étape à simuler |
 |----|-------|-------------|-----------------|
-| E1-A | Login — sélection compte | `e1_login.html` | Chargement direct |
-| E1-B | Login — saisie PIN | `e1_login.html` | Cliquer sur une carte agent |
+| E1-A | Login  sélection compte | `e1_login.html` | Chargement direct |
+| E1-B | Login  saisie PIN | `e1_login.html` | Cliquer sur une carte agent |
 | E2-A | Dashboard mobile | `e2_dashboard.html` | Après login |
 | E2-B | Dashboard desktop | `e2_dashboard.html` | Fenêtre > 1024px |
-| E3-A | Consultation — patient | `e3_consultation.html` | Via bouton dashboard |
-| E3-B | Consultation — symptômes | `e3_consultation.html` | Scroller vers le bas |
+| E3-A | Consultation  patient | `e3_consultation.html` | Via bouton dashboard |
+| E3-B | Consultation  symptômes | `e3_consultation.html` | Scroller vers le bas |
 | E4-A | Arbre décisionnel | `e4_decision_tree.html` | Après soumission E3 |
 | E5-A | Résultat ROUGE | `e5_result.html` | Avec convulsions + fièvre |
 | E5-D | Recommandations | `e5_result.html` | Scroller vers le bas |
@@ -379,7 +379,7 @@ Données patient    →    Chiffrement AES-256  →   HTTPS/TLS 1.3
 
 ---
 
-## LIVRABLE 4 — Rapport de Simulation Clinique
+## LIVRABLE 4  Rapport de Simulation Clinique
 
 > Le rapport complet est disponible dans : `docs/simulation_report.html`  
 > Ouvrir dans un navigateur ou via : `http://localhost:8000/app/../docs/simulation_report.html`
@@ -391,8 +391,8 @@ Données patient    →    Chiffrement AES-256  →   HTTPS/TLS 1.3
 | Métrique | Résultat |
 |----------|----------|
 | Précision globale | 97 % |
-| Sensibilité — Paludisme grave | 97,3 % |
-| Sensibilité — Tuberculose | 100 % |
+| Sensibilité  Paludisme grave | 97,3 % |
+| Sensibilité  Tuberculose | 100 % |
 | Spécificité | 94,8 % |
 | Valeur prédictive positive | 96,1 % |
 | Faux négatifs urgences | 0 (aucun cas grave manqué) |

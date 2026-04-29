@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <link rel="manifest" href="/app/manifest.json">
+  <link rel="icon" type="image/png" href="/app/assets/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>HealthGuard IA — Dossier Patient</title>
+  <title>HealthGuard IA - Dossier Patient</title>
   <link rel="stylesheet" href="../css/healthguard.css">
   <style>
     .search-bar { padding: 10px 12px; background: white; border-bottom: 1px solid var(--color-border); }
@@ -22,8 +23,6 @@
     .badge-rouge { background: var(--color-rouge-light); color: var(--color-rouge-dark); }
     .badge-orange { background: var(--color-orange-light); color: #E65100; }
     .badge-vert { background: var(--color-vert-light); color: #1B5E20; }
-
-    /* Vue dossier patient */
     .record-header { background: var(--color-primary); color: white; padding: 16px; margin: 0; }
     .record-name { font-size: 20px; font-weight: 700; }
     .record-meta { font-size: 13px; opacity: 0.85; margin-top: 4px; }
@@ -32,7 +31,7 @@
     .record-tab.active { color: var(--color-primary); border-bottom-color: var(--color-primary); }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
-    .consult-hist-item { padding: 12px 16px; background: white; border-bottom: 1px solid var(--color-border); display: flex; align-items: center; gap: 12px; cursor: pointer; }
+    .consult-hist-item { padding: 12px 16px; background: white; border-bottom: 1px solid var(--color-border); display: flex; align-items: center; gap: 12px; }
     .consult-dot-big { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
     .consult-dot-big.rouge { background: var(--color-rouge); }
     .consult-dot-big.orange { background: var(--color-orange); }
@@ -52,10 +51,10 @@
     <span class="offline-badge" id="network-badge">● HORS LIGNE</span>
   </div>
 
-  <!-- Vue liste (par défaut) -->
   <div id="list-view">
     <div class="screen-header">
       <a href="e2_dashboard.html" style="color:white;text-decoration:none;font-size:22px;padding:8px 12px 8px 4px;">‹</a>
+      <img src="../assets/logo.png" alt="Logo HealthGuard IA" style="width:34px;height:34px;border-radius:10px;object-fit:cover;background:#ffffff;padding:4px;">
       <div style="flex:1">
         <div style="font-size:16px;font-weight:700;">Dossiers Patients</div>
         <div style="font-size:12px;opacity:0.8;" id="count-label">0 patients</div>
@@ -64,33 +63,28 @@
     </div>
 
     <div class="search-bar">
-      <input type="text" class="search-input" id="search-input" placeholder="🔍 Rechercher par nom ou ID…" oninput="filterPatients(this.value)">
+      <input type="text" class="search-input" id="search-input" placeholder="Rechercher par nom ou village..." oninput="filterPatients(this.value)">
     </div>
 
-    <div class="patient-list" id="patient-list">
-      <!-- Chargé dynamiquement -->
-    </div>
+    <div class="patient-list" id="patient-list"></div>
 
     <div class="new-patient-btn">
-      <button class="btn btn-primary btn-full" onclick="window.location.href='e3_consultation.html'">
-        🩺 Nouvelle consultation
-      </button>
+      <button class="btn btn-primary btn-full" onclick="window.location.href='e3_consultation.html'">Nouvelle consultation</button>
     </div>
   </div>
 
-  <!-- Vue dossier individuel -->
   <div id="record-view" style="display:none;">
     <div class="screen-header">
       <button onclick="backToList()" style="background:none;border:none;color:white;font-size:22px;padding:8px 12px 8px 4px;cursor:pointer;">‹</button>
       <div style="flex:1">
         <div style="font-size:16px;font-weight:700;">Dossier Patient</div>
       </div>
-      <button onclick="newConsultForPatient()" style="background:rgba(255,255,255,0.2);border:none;color:white;font-size:12px;padding:6px 10px;border-radius:16px;cursor:pointer;">🩺 Consulter</button>
+      <button onclick="newConsultForPatient()" style="background:rgba(255,255,255,0.2);border:none;color:white;font-size:12px;padding:6px 10px;border-radius:16px;cursor:pointer;">Consulter</button>
     </div>
 
-    <div class="record-header" id="record-header">
-      <div class="record-name" id="record-name">—</div>
-      <div class="record-meta" id="record-meta">—</div>
+    <div class="record-header">
+      <div class="record-name" id="record-name">-</div>
+      <div class="record-meta" id="record-meta">-</div>
     </div>
 
     <div class="record-tabs">
@@ -100,11 +94,11 @@
     </div>
 
     <div class="tab-content active" id="tab-info">
-      <div class="info-row"><span class="info-label">Nom</span><span class="info-value" id="ri-nom">—</span></div>
-      <div class="info-row"><span class="info-label">Âge</span><span class="info-value" id="ri-age">—</span></div>
-      <div class="info-row"><span class="info-label">Sexe</span><span class="info-value" id="ri-sexe">—</span></div>
-      <div class="info-row"><span class="info-label">Village</span><span class="info-value" id="ri-village">—</span></div>
-      <div class="info-row"><span class="info-label">Dernière visite</span><span class="info-value" id="ri-last-visit">—</span></div>
+      <div class="info-row"><span class="info-label">Nom</span><span class="info-value" id="ri-nom">-</span></div>
+      <div class="info-row"><span class="info-label">Age</span><span class="info-value" id="ri-age">-</span></div>
+      <div class="info-row"><span class="info-label">Sexe</span><span class="info-value" id="ri-sexe">-</span></div>
+      <div class="info-row"><span class="info-label">Village</span><span class="info-value" id="ri-village">-</span></div>
+      <div class="info-row"><span class="info-label">Derniere visite</span><span class="info-value" id="ri-last-visit">-</span></div>
       <div class="info-row"><span class="info-label">Consultations</span><span class="info-value" id="ri-nb-consult">0</span></div>
     </div>
 
@@ -115,23 +109,25 @@
     <div class="tab-content" id="tab-suivi">
       <div style="padding:16px;font-size:14px;color:var(--color-text-secondary);">
         <div style="margin-bottom:12px;font-weight:600;color:var(--color-text-primary);">Rappels de suivi</div>
-        <div id="suivi-reminders">Aucun suivi programmé.</div>
+        <div id="suivi-reminders">Aucun suivi programme.</div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
+  const API = '';
   let currentPatient = null;
   let allPatients = [];
 
-  // Horloge + réseau
   function updateClock() {
     const now = new Date();
     document.getElementById('current-time').textContent =
-      String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+      String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
   }
-  updateClock(); setInterval(updateClock, 10000);
+  updateClock();
+  setInterval(updateClock, 10000);
+
   function updateNet() {
     const badge = document.getElementById('network-badge');
     badge.textContent = navigator.onLine ? '● EN LIGNE' : '● HORS LIGNE';
@@ -141,34 +137,63 @@
   window.addEventListener('online', updateNet);
   window.addEventListener('offline', updateNet);
 
-  // Chargement des patients depuis localStorage
-  function loadPatients() {
+  function deriveAge(dateNaissance) {
+    if (!dateNaissance) return null;
+    const year = parseInt(String(dateNaissance).slice(0, 4), 10);
+    if (!year) return null;
+    return new Date().getFullYear() - year;
+  }
+
+  function buildPatientsFromLocalStorage() {
     const consultations = JSON.parse(localStorage.getItem('hg_consultations') || '[]');
     const patientMap = {};
+    consultations.forEach(c => {
+      const key = c.patient_id || c.patient_nom;
+      if (!patientMap[key]) {
+        patientMap[key] = {
+          patient_id: c.patient_id || null,
+          nom: c.patient_nom,
+          age: c.age_ans || null,
+          sexe: c.sexe || null,
+          village: c.village_code || null,
+          nb: 0,
+          consultations: []
+        };
+      }
+      patientMap[key].nb++;
+      patientMap[key].consultations.push(c);
+      patientMap[key].dernier_diag = c.diagnostic || 'Voir historique';
+      patientMap[key].dernier_code = c.couleur || 'vert';
+      patientMap[key].date = c.date ? new Date(c.date).toLocaleDateString('fr-FR') : '';
+    });
+    return Object.values(patientMap);
+  }
 
-    // Démos si vide
-    if (consultations.length === 0) {
-      allPatients = [
-        { nom: 'Ibrahim Mahamat', age: 3, sexe: 'M', village: 'Ngaoundéré', nb: 2, dernier_diag: 'Paludisme grave probable', dernier_code: 'rouge', date: 'Aujourd\'hui 07:42' },
-        { nom: 'Fatima Oumar', age: 1.5, sexe: 'F', village: 'Meiganga', nb: 1, dernier_diag: 'Malnutrition aiguë sévère', dernier_code: 'rouge', date: 'Hier 15:18' },
-        { nom: 'Moussa Aliou', age: 28, sexe: 'M', village: 'Bertoua', nb: 3, dernier_diag: 'IRA légère', dernier_code: 'vert', date: 'Hier 11:05' },
-        { nom: 'Aïssatou Bello', age: 34, sexe: 'F', village: 'Tibati', nb: 1, dernier_diag: 'Paludisme simple probable', dernier_code: 'orange', date: '22/01 09:30' }
-      ];
-    } else {
-      // Construire depuis les consultations
-      consultations.forEach(c => {
-        if (!patientMap[c.patient_nom]) {
-          patientMap[c.patient_nom] = { nom: c.patient_nom, nb: 0, consultations: [] };
-        }
-        patientMap[c.patient_nom].nb++;
-        patientMap[c.patient_nom].consultations.push(c);
-        patientMap[c.patient_nom].dernier_diag = c.diagnostic;
-        patientMap[c.patient_nom].dernier_code = c.couleur || 'vert';
-        patientMap[c.patient_nom].date = new Date(c.date).toLocaleDateString('fr-FR');
-      });
-      allPatients = Object.values(patientMap);
+  async function loadPatients() {
+    try {
+      const response = await fetch(`${API}/api/v1/patients`, { signal: AbortSignal.timeout(3000) });
+      if (response.ok) {
+        const payload = await response.json();
+        allPatients = (payload.patients || []).map(p => ({
+          patient_id: p.id,
+          nom: p.nom,
+          age: deriveAge(p.date_naissance),
+          sexe: p.sexe,
+          village: p.village_code,
+          nb: p.consultation_count || 0,
+          date: p.last_consultation_at ? new Date(p.last_consultation_at).toLocaleDateString('fr-FR') : '',
+          consultations: [],
+          dernier_diag: 'Voir historique',
+          dernier_code: 'vert'
+        }));
+        renderPatientList(allPatients);
+        return;
+      }
+    } catch (e) {
+      console.warn('API patients indisponible', e);
     }
 
+    allPatients = buildPatientsFromLocalStorage();
     renderPatientList(allPatients);
   }
 
@@ -176,67 +201,93 @@
     document.getElementById('count-label').textContent = patients.length + ' patient' + (patients.length > 1 ? 's' : '');
     const list = document.getElementById('patient-list');
     if (patients.length === 0) {
-      list.innerHTML = `<div class="empty-state"><div class="empty-icon">👤</div><div>Aucun patient enregistré</div><div style="font-size:12px;margin-top:6px;">Créer une consultation pour enregistrer le premier patient</div></div>`;
+      list.innerHTML = `<div class="empty-state"><div class="empty-icon">👤</div><div>Aucun patient enregistre</div><div style="font-size:12px;margin-top:6px;">Creez une consultation pour enregistrer le premier patient.</div></div>`;
       return;
     }
+
     list.innerHTML = patients.map((p, i) => {
-      const initials = p.nom.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+      const initials = (p.nom || '?').split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
       const badgeClass = p.dernier_code === 'rouge' ? 'badge-rouge' : p.dernier_code === 'orange' ? 'badge-orange' : 'badge-vert';
-      const ageText = p.age < 1 ? Math.round(p.age * 12) + ' mois' : (p.age || '?') + ' ans';
+      const ageText = p.age == null ? '?' : (p.age < 1 ? Math.round(p.age * 12) + ' mois' : p.age + ' ans');
+      const sexeText = p.sexe === 'F' ? 'Feminin' : p.sexe === 'M' ? 'Masculin' : 'Non renseigne';
       return `
         <div class="patient-item" onclick="openPatient(${i})">
           <div class="patient-avatar ${p.sexe === 'F' ? 'f' : ''}">${initials}</div>
           <div class="patient-info">
-            <div class="patient-name">${p.nom}</div>
-            <div class="patient-meta">${ageText} · ${p.sexe === 'F' ? 'Féminin' : 'Masculin'} · ${p.village || 'Village N/A'}</div>
-            <div class="patient-meta" style="margin-top:2px;">${p.nb} consultation(s) · ${p.date}</div>
+            <div class="patient-name">${p.nom || 'Patient anonyme'}</div>
+            <div class="patient-meta">${ageText} · ${sexeText} · ${p.village || 'Village N/A'}</div>
+            <div class="patient-meta" style="margin-top:2px;">${p.nb || 0} consultation(s) · ${p.date || ''}</div>
           </div>
-          <span class="patient-badge ${badgeClass}">${p.dernier_diag ? p.dernier_diag.split(' ').slice(0,2).join(' ') : 'N/A'}</span>
-        </div>
-      `;
+          <span class="patient-badge ${badgeClass}">${p.dernier_diag || 'Historique'}</span>
+        </div>`;
     }).join('');
   }
 
   function filterPatients(query) {
     const q = query.toLowerCase().trim();
-    if (!q) { renderPatientList(allPatients); return; }
-    const filtered = allPatients.filter(p => p.nom.toLowerCase().includes(q) || (p.village || '').toLowerCase().includes(q));
+    if (!q) {
+      renderPatientList(allPatients);
+      return;
+    }
+    const filtered = allPatients.filter(p =>
+      (p.nom || '').toLowerCase().includes(q) || (p.village || '').toLowerCase().includes(q)
+    );
     renderPatientList(filtered);
   }
 
-  function openPatient(idx) {
+  async function openPatient(idx) {
     currentPatient = allPatients[idx];
+    if (currentPatient.patient_id) {
+      try {
+        const response = await fetch(`${API}/api/v1/patients/${currentPatient.patient_id}`, { signal: AbortSignal.timeout(3000) });
+        if (response.ok) {
+          const payload = await response.json();
+          currentPatient.apiRecord = payload;
+        }
+      } catch (e) {
+        console.warn('Lecture patient detail impossible', e);
+      }
+    }
+
     document.getElementById('list-view').style.display = 'none';
     document.getElementById('record-view').style.display = 'block';
 
     const p = currentPatient;
-    const ageText = p.age < 1 ? Math.round(p.age * 12) + ' mois' : p.age + ' ans';
-    document.getElementById('record-name').textContent = p.nom;
-    document.getElementById('record-meta').textContent = `${ageText} · ${p.sexe === 'F' ? 'Féminin' : 'Masculin'} · ${p.village || '—'}`;
-    document.getElementById('ri-nom').textContent = p.nom;
-    document.getElementById('ri-age').textContent = ageText;
-    document.getElementById('ri-sexe').textContent = p.sexe === 'F' ? 'Féminin' : 'Masculin';
-    document.getElementById('ri-village').textContent = p.village || '—';
-    document.getElementById('ri-last-visit').textContent = p.date || '—';
-    document.getElementById('ri-nb-consult').textContent = p.nb || 1;
+    const info = p.apiRecord ? p.apiRecord.patient : null;
+    const age = p.age != null ? p.age : deriveAge(info ? info.date_naissance : null);
+    const ageText = age == null ? '' : (age < 1 ? Math.round(age * 12) + ' mois' : age + ' ans');
+    const sexe = (info && info.sexe) || p.sexe;
+    const village = (info && info.village_code) || p.village;
 
-    // Historique
+    document.getElementById('record-name').textContent = (info && info.nom) || p.nom || 'Patient';
+    document.getElementById('record-meta').textContent = `${ageText} · ${sexe || ''} · ${village || ''}`;
+    document.getElementById('ri-nom').textContent = (info && info.nom) || p.nom || '';
+    document.getElementById('ri-age').textContent = ageText;
+    document.getElementById('ri-sexe').textContent = sexe || '';
+    document.getElementById('ri-village').textContent = village || '';
+    document.getElementById('ri-last-visit').textContent = p.date || '';
+    document.getElementById('ri-nb-consult').textContent = p.nb || 0;
+
+    const consultList = p.apiRecord ? p.apiRecord.consultations : (p.consultations || []);
     const histList = document.getElementById('history-list');
-    const consultList = p.consultations || [{ date: new Date(), diagnostic: p.dernier_diag, gravite: 3, couleur: p.dernier_code }];
-    histList.innerHTML = consultList.map(c => {
-      const d = new Date(c.date || Date.now());
-      const couleur = c.couleur || 'vert';
-      return `
-        <div class="consult-hist-item" onclick="">
-          <div class="consult-dot-big ${couleur}"></div>
-          <div style="flex:1;">
-            <div style="font-size:14px;font-weight:600;">${c.diagnostic}</div>
-            <div style="font-size:12px;color:var(--color-text-secondary);">${d.toLocaleDateString('fr-FR')} à ${d.toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'})}</div>
-          </div>
-          <span style="color:var(--color-text-secondary);">›</span>
-        </div>
-      `;
-    }).join('');
+    if (!consultList || consultList.length === 0) {
+      histList.innerHTML = '<div class="empty-state"><div>Aucun historique disponible.</div></div>';
+    } else {
+      histList.innerHTML = consultList.map(c => {
+        const dateVal = c.date_heure || c.date || Date.now();
+        const d = new Date(dateVal);
+        const color = (c.couleur || c.couleur_alerte || (c.gravite_score === 3 ? 'rouge' : c.gravite_score === 2 ? 'orange' : 'vert')).toString().toLowerCase();
+        const diag = c.maladie_code || c.diagnostic || 'Diagnostic';
+        return `
+          <div class="consult-hist-item">
+            <div class="consult-dot-big ${color.includes('rouge') ? 'rouge' : color.includes('orange') ? 'orange' : 'vert'}"></div>
+            <div style="flex:1;">
+              <div style="font-size:14px;font-weight:600;">${diag}</div>
+              <div style="font-size:12px;color:var(--color-text-secondary);">${d.toLocaleDateString('fr-FR')} a ${d.toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'})}</div>
+            </div>
+          </div>`;
+      }).join('');
+    }
   }
 
   function switchTab(tab) {
@@ -256,12 +307,14 @@
 
   function newConsultForPatient() {
     if (currentPatient) {
-      const prep = {
-        patient_nom: currentPatient.nom,
+      const info = currentPatient.apiRecord ? currentPatient.apiRecord.patient : null;
+      localStorage.setItem('hg_current_consultation', JSON.stringify({
+        patient_id: currentPatient.patient_id || null,
+        patient_nom: (info && info.nom) || currentPatient.nom,
         age_ans: currentPatient.age,
-        sexe: currentPatient.sexe
-      };
-      localStorage.setItem('hg_current_consultation', JSON.stringify(prep));
+        sexe: (info && info.sexe) || currentPatient.sexe,
+        village_code: (info && info.village_code) || currentPatient.village || null
+      }));
     }
     window.location.href = 'e3_consultation.html';
   }
@@ -271,7 +324,6 @@
     window.location.href = 'e3_consultation.html';
   }
 
-  // Init
   loadPatients();
 </script>
 <script src="../js/nav.js"></script>

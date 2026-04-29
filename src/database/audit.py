@@ -134,7 +134,7 @@ def verify_chain_integrity(db_connection) -> dict:
             "valid": True,
             "total_logs": 0,
             "first_broken_at": None,
-            "message": "Chaîne vide — aucun log à vérifier"
+            "message": "Chaîne vide  aucun log à vérifier"
         }
 
     previous_hash = GENESIS_HASH
@@ -149,7 +149,7 @@ def verify_chain_integrity(db_connection) -> dict:
                 "valid": False,
                 "total_logs": len(logs),
                 "first_broken_at": log_id,
-                "message": f"Chaîne cassée au log {log_id} — falsification détectée"
+                "message": f"Chaîne cassée au log {log_id}  falsification détectée"
             }
 
         # Vérification du hash_payload
@@ -166,7 +166,7 @@ def verify_chain_integrity(db_connection) -> dict:
                 "valid": False,
                 "total_logs": len(logs),
                 "first_broken_at": log_id,
-                "message": f"Hash payload invalide au log {log_id} — données falsifiées"
+                "message": f"Hash payload invalide au log {log_id}  données falsifiées"
             }
 
         # Calcul du hash de ce log pour la vérification du suivant
@@ -182,5 +182,5 @@ def verify_chain_integrity(db_connection) -> dict:
         "valid": True,
         "total_logs": len(logs),
         "first_broken_at": None,
-        "message": f"Chaîne intègre — {len(logs)} logs vérifiés avec succès"
+        "message": f"Chaîne intègre  {len(logs)} logs vérifiés avec succès"
     }

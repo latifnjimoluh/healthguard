@@ -1,5 +1,5 @@
 """
-Tests unitaires — Moteur de décision HealthGuard IA.
+Tests unitaires  Moteur de décision HealthGuard IA.
 Valide les 5 arbres décisionnels avec scénarios cliniques.
 """
 

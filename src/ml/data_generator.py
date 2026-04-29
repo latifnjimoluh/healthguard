@@ -108,7 +108,7 @@ def _base_case() -> dict:
 
 
 def _gen_paludisme_simple() -> dict:
-    """Cas paludisme non compliqué — présentation typique."""
+    """Cas paludisme non compliqué  présentation typique."""
     base = _base_case()
     base.update({
         "fievre": 1,
@@ -134,7 +134,7 @@ def _gen_paludisme_simple() -> dict:
 
 
 def _gen_paludisme_grave() -> dict:
-    """Cas paludisme grave — signes de gravité présents."""
+    """Cas paludisme grave  signes de gravité présents."""
     base = _base_case()
     # Paludisme grave touche surtout les enfants <5 ans et femmes enceintes
     if np.random.random() < 0.60:
@@ -166,7 +166,7 @@ def _gen_paludisme_grave() -> dict:
 
 
 def _gen_ira_pneumonie() -> dict:
-    """Cas IRA/Pneumonie — symptômes respiratoires dominants."""
+    """Cas IRA/Pneumonie  symptômes respiratoires dominants."""
     base = _base_case()
     age = base["age_ans"]
 
@@ -205,7 +205,7 @@ def _gen_ira_pneumonie() -> dict:
 
 
 def _gen_malnutrition() -> dict:
-    """Cas malnutrition aiguë sévère — enfant <5 ans majoritairement."""
+    """Cas malnutrition aiguë sévère  enfant <5 ans majoritairement."""
     base = _base_case()
     # MAS touche surtout les enfants <5 ans
     age = round(max(0.2, np.random.exponential(2)), 1)
@@ -266,7 +266,7 @@ def _gen_diarrhee_cholera() -> dict:
 
 
 def _gen_tuberculose() -> dict:
-    """Cas tuberculose pulmonaire — adulte majoritairement, toux prolongée."""
+    """Cas tuberculose pulmonaire  adulte majoritairement, toux prolongée."""
     base = _base_case()
     # TB touche surtout les adultes 15-60 ans
     age = round(max(15, np.random.normal(38, 15)), 1)

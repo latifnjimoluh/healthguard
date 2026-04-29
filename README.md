@@ -1,88 +1,75 @@
 # HealthGuard IA
 
-Application mobile de diagnostic médical assisté par intelligence artificielle pour les zones rurales du Cameroun (districts sanitaires d'Adamaoua et de l'Est).
+Prototype d'assistance au diagnostic medical pour zones rurales, avec moteur hybride arbre clinique + modele ML, interface PWA et synchronisation vers PostgreSQL.
 
-## Contexte
+## Etat actuel
 
-Les agents de santé communautaires en zones rurales interviennent souvent sans connexion internet fiable, avec du matériel limité, dans des conditions d'urgence. HealthGuard IA leur fournit un assistant de diagnostic clinique fonctionnant **100% hors ligne**, combinant des arbres décisionnels cliniques (PCIME/IMCI OMS) et un modèle de machine learning embarqué.
+Au 28 avril 2026, l'etat reel du depot est le suivant:
 
-## Fonctionnalités principales
+- API FastAPI fonctionnelle;
+- base SQLite locale persistante;
+- chiffrement local de certains champs sensibles;
+- queue de synchronisation SQLite -> PostgreSQL;
+- PWA de demonstration avec historique navigateur;
+- mecanisme PIN integre via endpoints de hash et verification;
+- documentation historique de soutenance encore presente dans `docs/`.
 
-- **5 arbres décisionnels cliniques** : Paludisme, IRA/Pneumonie, Malnutrition MAS, Diarrhée/Choléra, Tuberculose
-- **Moteur hybride arbre + ML** : Arbre (60%) + XGBoost INT8 (40%), avec override ROUGE prioritaire
-- **Chiffrement bout en bout** : AES-256-CBC pour les données au repos, Argon2id pour les PINs
-- **Audit trail** : Chaîne de hachage SHA-256 pour la traçabilité (registre immuable)
-- **Synchronisation opportuniste** : Queue offline avec retry automatique dès reconnexion
-- **Prototype HTML** : 7 écrans Mobile First (720×1560px)
+Le depot doit etre lu comme un prototype technique avance, pas comme une application medicale prete production.
 
-## Structure du projet
+## Structure utile
 
-```
-healthguard/
+```text
+healthguad/
 ├── src/
-│   ├── api/                    # FastAPI — 7 endpoints REST
-│   ├── database/               # SQLite + chiffrement + audit + sync
-│   ├── decision_engine/        # Arbres JSON + agrégateur + recommandations
-│   ├── ml/                     # XGBoost, génération données, inférence
-│   └── security/               # PIN Argon2id, AES-256, TLS sync
+│   ├── api/
+│   ├── database/
+│   ├── decision_engine/
+│   ├── ml/
+│   └── security/
 ├── data/
-│   ├── db/                     # Schéma SQL + base SQLite
-│   ├── trees/                  # 5 arbres décisionnels JSON (format FHIR-like)
-│   └── ml/                     # Modèle entraîné (.pkl) + features
+│   ├── clinical/
+│   ├── db/
+│   ├── epidemio/
+│   └── ml/
 ├── prototype/
-│   ├── css/                    # Design System Material Design 3
-│   └── screens/                # 7 écrans HTML (E1–E7)
-├── tests/                      # 134 tests unitaires (85% couverture)
-└── docs/                       # Documentation technique
+├── tests/
+└── docs/
 ```
 
-## Installation
+## Installation locale
 
 ```bash
-# Cloner et installer les dépendances
 pip install -r requirements.txt
-
-# Lancer l'API locale
+copy .env.example .env
 uvicorn src.api.app:app --host 0.0.0.0 --port 8000 --reload
-
-# Lancer les tests
-pytest tests/ --cov=src -v
-
-# Ré-entraîner le modèle (si nécessaire)
-python src/ml/train_model.py
 ```
 
-## Performances du modèle ML
+Puis ouvrir:
 
-| Métrique | Valeur | Cible |
-|----------|--------|-------|
-| Précision globale | 97.0% | — |
-| Sensibilité paludisme grave | 97.3% | ≥ 85% ✓ |
-| Sensibilité tuberculose | 100.0% | ≥ 80% ✓ |
-| Taille modèle | ~7.2 MB | < 8 MB ✓ |
-| Couverture tests | 85% | > 80% ✓ |
+```text
+http://localhost:8000
+```
 
-## Architecture de sécurité (STRIDE)
+## Configuration
 
-| Menace | Contre-mesure |
-|--------|--------------|
-| Spoofing (S) | Argon2id PIN, timeout session 5min |
-| Tampering (T) | AES-256-CBC + HMAC-SHA256, audit chain |
-| Repudiation (R) | Audit trail SHA-256 immuable |
-| Information Disclosure (I) | Chiffrement AES-256 au repos |
-| Denial of Service (D) | Verrouillage exponentiel (5s → 625s) |
-| Elevation of Privilege (E) | Accès urgence limité, pas de rôle admin mobile |
+Le fichier `.env` local pilote:
 
-## Protocoles cliniques implémentés
+- l'acces PostgreSQL local;
+- le PIN local de derivation de la cle SQLite;
+- le sel stable utilise pour relire les donnees chiffrees apres redemarrage.
 
-- **Paludisme** : Critères OMS paludisme grave (convulsions, trouble conscience, hyperthermie ≥ 40°C)
-- **IRA/Pneumonie** : Seuils PCIME/IMCI tachypnée par âge (2 mois / 12 mois / 5 ans / adulte)
-- **Malnutrition** : PB < 115mm (MAS), 115-125mm (MAM), test appétit RUTF
-- **Diarrhée/Choléra** : Plans de réhydratation OMS A/B/C, protocole alerte épidémique
-- **Tuberculose** : Critères CDTB — toux > 3 semaines, hémoptysie, contact connu
+Un exemple minimal est fourni dans [`.env.example`](./.env.example).
 
-## PIN démo (prototype)
+## Flux principal
 
-Code PIN de démonstration : **246810**
+1. Creation patient via l'API locale
+2. Diagnostic via moteur arbre + ML
+3. Ecriture SQLite locale
+4. Ajout a la queue de synchronisation
+5. Synchronisation vers PostgreSQL sur declenchement
 
-> Usage réservé au personnel de santé habilité — Ministère de la Santé du Cameroun
+## Notes importantes
+
+- `docs/RAPPORT_LIVRABLE.md` est un document de livrable historique, pas une specification d'execution exacte.
+- `AUDIT_ECARTS_DOC_CODE.md`, `PLAN_CORRECTION_PRIORISE.md` et `AUDIT_SECURITE.md` decrivent les ecarts et corrections en cours.
+- `evolution.md` suit l'avancement des corrections.

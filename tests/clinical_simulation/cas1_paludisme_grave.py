@@ -1,5 +1,5 @@
 """
-Simulation Cas 1 — Paludisme Grave Pédiatrique
+Simulation Cas 1  Paludisme Grave Pédiatrique
 Patient : Garçon, 3 ans, 13kg, Village Tibati, Adamaoua
 """
 
@@ -14,7 +14,7 @@ from src.decision_engine.recommendation import generate_recommendation
 def simulate_cas1():
     """Rejoue le Cas 1 et vérifie les assertions cliniques."""
     print("\n" + "="*60)
-    print("CAS 1 — PALUDISME GRAVE PÉDIATRIQUE")
+    print("CAS 1  PALUDISME GRAVE PÉDIATRIQUE")
     print("="*60)
     print("Patient : Garçon, 3 ans, 13 kg, Village Tibati, Adamaoua")
     print("Symptômes : Fièvre 40.1°C, vomissements x5/24h, convulsions, somnolent")

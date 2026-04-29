@@ -106,7 +106,7 @@ def decrypt_data(data: bytes, key: bytes) -> str:
     # Vérification HMAC avant déchiffrement (protection contre attaques padding)
     expected_hmac = hmac.new(key, iv + ciphertext, hashlib.sha256).digest()
     if not hmac.compare_digest(stored_hmac, expected_hmac):
-        raise ValueError("Vérification HMAC échouée — données potentiellement falsifiées")
+        raise ValueError("Vérification HMAC échouée  données potentiellement falsifiées")
 
     # Déchiffrement AES-256-CBC
     cipher = Cipher(
@@ -143,16 +143,27 @@ def encrypt_field(value: str, key: bytes) -> str:
 def decrypt_field(encrypted_value: str, key: bytes) -> str:
     """
     Déchiffre un champ base64 chiffré.
+    Si la valeur n'est pas au format attendu (Base64 invalide) ou si le déchiffrement
+    échoue, retourne la valeur d'origine (fallback pour données legacy).
 
     Args:
         encrypted_value: Chaîne base64 chiffrée
         key: Clé AES-256 de 32 bytes
 
     Returns:
-        Valeur déchiffrée en clair
+        Valeur déchiffrée ou valeur d'origine si échec
     """
-    encrypted_bytes = base64.b64decode(encrypted_value.encode('utf-8'))
-    return decrypt_data(encrypted_bytes, key)
+    if not encrypted_value:
+        return encrypted_value
+
+    try:
+        # Tentative de décodage Base64
+        encrypted_bytes = base64.b64decode(encrypted_value.encode('utf-8'))
+        # Tentative de déchiffrement
+        return decrypt_data(encrypted_bytes, key)
+    except Exception:
+        # Fallback : retourne la valeur d'origine si ce n'est pas du chiffré valide
+        return encrypted_value
 
 
 def hash_data(data: str) -> str:

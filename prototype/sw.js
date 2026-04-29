@@ -1,5 +1,6 @@
-const CACHE_NAME = 'healthguard-cache-v1';
+const CACHE_NAME = 'healthguard-cache-v2';
 const ASSETS_TO_CACHE = [
+  '/app/',
   '/app/screens/e1_login.html',
   '/app/screens/e2_dashboard.html',
   '/app/screens/e3_consultation.html',
@@ -9,7 +10,11 @@ const ASSETS_TO_CACHE = [
   '/app/screens/e7_settings.html',
   '/app/css/healthguard.css',
   '/app/js/nav.js',
-  '/app/manifest.json'
+  '/app/manifest.json',
+  '/app/assets/logo.png',
+  '/app/assets/favicon.png',
+  '/app/assets/icon-192.png',
+  '/app/assets/icon-512.png'
 ];
 
 // Installation du Service Worker et mise en cache des ressources

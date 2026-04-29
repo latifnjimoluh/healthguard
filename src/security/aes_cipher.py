@@ -104,7 +104,7 @@ class AESCipher:
         # Vérification HMAC avant déchiffrement
         expected_mac = hmac_module.new(self._key, iv + ciphertext, hashlib.sha256).digest()
         if not hmac_module.compare_digest(stored_mac, expected_mac):
-            raise ValueError("Vérification HMAC échouée — données potentiellement falsifiées")
+            raise ValueError("Vérification HMAC échouée  données potentiellement falsifiées")
 
         # Déchiffrement AES-256-CBC
         cipher = Cipher(
@@ -131,7 +131,7 @@ class AESCipher:
             salt: Sel de 32 bytes (généré si None)
 
         Returns:
-            Tuple (AESCipher, salt) — conserver le sel pour la dérivation future
+            Tuple (AESCipher, salt)  conserver le sel pour la dérivation future
         """
         if salt is None:
             salt = generate_salt()

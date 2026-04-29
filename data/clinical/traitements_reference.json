@@ -19,7 +19,7 @@
       "criteres_transfert": ["vomissements_incoercibles", "aggravation_J3", "enfant_moins_5kg"]
     },
     "paludisme_grave": {
-      "traitement_principal": "TRANSFERT IMMÉDIAT — Quinine IV en établissement",
+      "traitement_principal": "TRANSFERT IMMÉDIAT  Quinine IV en établissement",
       "pre_transfert": {
         "medicament": "Quinine en perfusion IV si disponible",
         "dose": "20mg/kg dans 500ml G5% en 4h (dose de charge)",
@@ -48,14 +48,14 @@
     },
     "malnutrition_mas": {
       "ambulatoire_sans_complication": {
-        "medicament_principal": "ATPE — Plumpy'Nut",
+        "medicament_principal": "ATPE  Plumpy'Nut",
         "dose": "92g/kg/semaine (diviser en prises journalières)",
         "exemple_10kg": "3 sachets/jour pour enfant 10kg",
         "duree_semaines": 8,
         "prophylaxie": "Amoxicilline 50mg/kg/jour × 7 jours + Vitamine A"
       },
       "hospitalise_complications": {
-        "phase_1": "Lait F75 — 100ml/kg/jour en 8 prises (phase stabilisation)",
+        "phase_1": "Lait F75  100ml/kg/jour en 8 prises (phase stabilisation)",
         "phase_2": "Lait F100 puis ATPE (phase réhabilitation)",
         "criteres_hospitalisation": ["oedemes_grade_3", "echec_test_appetit", "complications_medicales"]
       },
@@ -74,7 +74,7 @@
       "plan_B_deshydratation_moderee": {
         "traitement": "SRO supervisée en centre de santé",
         "dose": "75ml/kg sur 4 heures",
-        "reevaluation": "après 4h — reclasser plan A ou C"
+        "reevaluation": "après 4h  reclasser plan A ou C"
       },
       "plan_C_deshydratation_severe": {
         "traitement": "Ringer Lactate IV URGENT",
@@ -91,7 +91,7 @@
     },
     "tuberculose": {
       "protocole": "DOTS (Directly Observed Treatment Short-course)",
-      "reference_obligatoire": "CDTB le plus proche — PAS de traitement empirique",
+      "reference_obligatoire": "CDTB le plus proche  PAS de traitement empirique",
       "schema_standard": {
         "phase_intensive_2mois": "Rifampicine + Isoniazide + Pyrazinamide + Ethambutol",
         "phase_continuation_4mois": "Rifampicine + Isoniazide",
@@ -103,7 +103,7 @@
         "NE PAS traiter sans confirmation diagnostique"
       ],
       "mesures_immediates": ["isolement_respiratoire_conseille", "reference_CDTB", "notification_district"],
-      "depistage_entourage": "Obligatoire — contact étroits dans les 2 années précédentes"
+      "depistage_entourage": "Obligatoire  contact étroits dans les 2 années précédentes"
     }
   }
 }

@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <link rel="manifest" href="/app/manifest.json">
+  <link rel="icon" type="image/png" href="/app/assets/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>HealthGuard IA — Nouvelle Consultation</title>
+  <title>HealthGuard IA  Nouvelle Consultation</title>
   <link rel="stylesheet" href="../css/healthguard.css">
   <style>
     .form-section { background: white; margin: 8px 12px; border-radius: var(--border-radius); padding: 16px; box-shadow: var(--shadow-card); }
@@ -42,6 +43,7 @@
 
   <div class="screen-header">
     <a href="e2_dashboard.html" style="color:white;text-decoration:none;font-size:22px;padding:8px 12px 8px 4px;">‹</a>
+    <img src="../assets/logo.png" alt="Logo HealthGuard IA" style="width:34px;height:34px;border-radius:10px;object-fit:cover;background:#ffffff;padding:4px;">
     <div style="flex:1">
       <div style="font-size:16px;font-weight:700;">Nouvelle Consultation</div>
       <div style="font-size:12px;opacity:0.8;" id="patient-name-header">Nouveau patient</div>
@@ -70,10 +72,14 @@
     <div class="form-row">
       <label class="form-label">Sexe</label>
       <select class="form-select" id="sexe">
-        <option value="">— Sélectionner —</option>
+        <option value=""> Sélectionner </option>
         <option value="M">Masculin</option>
         <option value="F">Féminin</option>
       </select>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Village / code local</label>
+      <input type="text" class="form-input" id="village-code" placeholder="ex: NGD_001 ou nom du village" autocomplete="off">
     </div>
     <div class="form-row" id="grossesse-row" style="display:none;">
       <label class="symptom-toggle" id="grossesse-toggle" onclick="toggleGrossesse()">
@@ -93,7 +99,7 @@
         <input type="number" class="form-input" id="temperature" placeholder="37.0" min="35" max="43" step="0.1" oninput="checkTemperature(this)">
         <span class="mesure-unit">°C</span>
       </div>
-      <div class="vital-alert" id="temp-alert">⚠️ Température critique — hyperthermie sévère</div>
+      <div class="vital-alert" id="temp-alert">⚠️ Température critique  hyperthermie sévère</div>
     </div>
     <div class="form-row">
       <label class="form-label">Fréquence respiratoire</label>
@@ -108,7 +114,7 @@
         <input type="number" class="form-input" id="spo2" placeholder="98" min="70" max="100" oninput="checkSpo2(this)">
         <span class="mesure-unit">%</span>
       </div>
-      <div class="vital-alert" id="spo2-alert">⚠️ SpO₂ critique — oxygène immédiat requis</div>
+      <div class="vital-alert" id="spo2-alert">⚠️ SpO₂ critique  oxygène immédiat requis</div>
     </div>
     <div class="form-row">
       <label class="form-label">Poids</label>
@@ -124,7 +130,7 @@
         <span class="mesure-unit">mm</span>
       </div>
       <div class="pb-gauge"><div class="pb-fill" id="pb-fill"></div></div>
-      <div class="vital-alert" id="pb-alert">⚠️ PB critique — malnutrition aiguë sévère suspectée</div>
+      <div class="vital-alert" id="pb-alert">⚠️ PB critique  malnutrition aiguë sévère suspectée</div>
     </div>
   </div>
 
@@ -227,7 +233,7 @@
   <!-- Bouton soumettre -->
   <div class="btn-submit">
     <button class="btn btn-primary btn-full" onclick="submitConsultation()" style="font-size:16px;padding:16px;">
-      🔍 Analyser — Obtenir Diagnostic IA
+      🔍 Analyser  Obtenir Diagnostic IA
     </button>
   </div>
 
@@ -237,6 +243,7 @@
 <script>
   let selectedAge = null;
   const symptoms = {};
+  let preloadedPatientId = null;
 
   // Horloge
   function updateClock() {
@@ -258,6 +265,24 @@
 
   // ID consultation
   document.getElementById('consult-id').textContent = Date.now().toString().slice(-6);
+
+  function loadExistingPatientContext() {
+    try {
+      const current = JSON.parse(localStorage.getItem('hg_current_consultation') || '{}');
+      if (!current || Object.keys(current).length === 0) return;
+      if (current.patient_nom) document.getElementById('patient-nom').value = current.patient_nom;
+      if (current.village_code) document.getElementById('village-code').value = current.village_code;
+      if (current.sexe) document.getElementById('sexe').value = current.sexe;
+      if (current.patient_id) preloadedPatientId = current.patient_id;
+      if (current.age_ans != null) {
+        document.getElementById('age-exact').value = current.age_ans;
+        selectedAge = parseFloat(current.age_ans);
+      }
+      updateGrossesseVisibility();
+    } catch (e) {
+      console.warn('Prefill patient impossible', e);
+    }
+  }
 
   function selectAge(btn) {
     document.querySelectorAll('.age-btn').forEach(b => b.classList.remove('selected'));
@@ -338,9 +363,11 @@
 
     // Collecte de tous les symptômes
     const data = {
+      patient_id: preloadedPatientId,
       patient_nom: nom,
       age_ans: age,
       sexe: sexe,
+      village_code: document.getElementById('village-code').value.trim() || null,
       grossesse: document.getElementById('grossesse')?.checked ? 1 : 0,
       temperature_celsius: parseFloat(document.getElementById('temperature').value) || null,
       frequence_respiratoire: parseFloat(document.getElementById('frequence-resp').value) || null,
@@ -356,6 +383,8 @@
     localStorage.setItem('hg_current_consultation', JSON.stringify(data));
     window.location.href = 'e4_decision_tree.html';
   }
+
+  loadExistingPatientContext();
 </script>
 <script src="../js/nav.js"></script>
 </body>

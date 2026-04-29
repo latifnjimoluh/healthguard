@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <link rel="manifest" href="/app/manifest.json">
+  <link rel="icon" type="image/png" href="/app/assets/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>HealthGuard IA — Arbre Décisionnel</title>
+  <title>HealthGuard IA  Arbre Décisionnel</title>
   <link rel="stylesheet" href="../css/healthguard.css">
   <style>
     .tree-progress { padding: 12px 16px; background: white; border-bottom: 1px solid var(--color-border); }
@@ -45,6 +46,7 @@
 
   <div class="screen-header">
     <button onclick="goBack()" style="background:none;border:none;color:white;font-size:22px;padding:8px 12px 8px 4px;cursor:pointer;">‹</button>
+    <img src="../assets/logo.png" alt="Logo HealthGuard IA" style="width:34px;height:34px;border-radius:10px;object-fit:cover;background:#ffffff;padding:4px;">
     <div style="flex:1">
       <div style="font-size:16px;font-weight:700;">Diagnostic guidé</div>
       <div style="font-size:12px;opacity:0.8;" id="arbre-actif">Analyse en cours…</div>
@@ -78,7 +80,7 @@
     <div id="numeric-section" style="display:none;">
       <div class="numeric-input-card">
         <div class="numeric-row">
-          <input type="number" class="numeric-input" id="numeric-val" placeholder="—" step="0.1">
+          <input type="number" class="numeric-input" id="numeric-val" placeholder="" step="0.1">
           <span class="numeric-unit" id="numeric-unit">°C</span>
         </div>
       </div>
@@ -134,10 +136,10 @@
       id: 'Q_GRAVITE', maladie: 'Signes de gravité', type: 'bool',
       text: 'Signes de gravité présents ?',
       subtitle: 'Convulsions, trouble de conscience, prostration, vomissements incoercibles',
-      icon_oui: '⚡', label_oui: 'Oui — signes de gravité présents',
-      icon_non: '✅', label_non: 'Non — état général conservé',
+      icon_oui: '⚡', label_oui: 'Oui  signes de gravité présents',
+      icon_non: '✅', label_non: 'Non  état général conservé',
       pre_fill: () => consultation.convulsions === 1 || consultation.trouble_conscience === 1,
-      alert_if_yes: { type: 'rouge', text: 'Signes de gravité détectés — orientation ROUGE probable' },
+      alert_if_yes: { type: 'rouge', text: 'Signes de gravité détectés  orientation ROUGE probable' },
       show_if: () => answers['Q_FIEVRE'] === true
     },
     {
@@ -172,7 +174,7 @@
       text: 'Épidémie de choléra active dans la zone de résidence ?',
       subtitle: 'Alerte district ou signalement d\'autres cas similaires',
       pre_fill: () => consultation.epidemie_cholera_active === 1,
-      alert_if_yes: { type: 'orange', text: 'Contexte épidémique — protocole choléra à appliquer' },
+      alert_if_yes: { type: 'orange', text: 'Contexte épidémique  protocole choléra à appliquer' },
       show_if: () => answers['Q_DIARRHEE'] === true
     }
   ];
@@ -262,7 +264,7 @@
   }
 
   // Surligne visuellement la réponse issue des données E3,
-  // mais n'avance pas — l'agent confirme ou corrige manuellement.
+  // mais n'avance pas  l'agent confirme ou corrige manuellement.
   function preHighlight(val) {
     const btns = document.querySelectorAll('.answer-btn');
     const suggested = val ? btns[0] : btns[1];
@@ -278,7 +280,7 @@
         badge.className = 'pre-badge';
         badge.textContent = '★ Pré-rempli';
         badge.style.cssText = 'font-size:10px;font-weight:600;background:rgba(0,0,0,0.08);' +
-          'padding:2px 6px;border-radius:10px;margin-left:auto;opacity:0.75;white-space:nowrap;';
+          'padding:4px 6px;border-radius:10px;margin-left:auto;opacity:0.75;white-space:nowrap;';
         suggested.appendChild(badge);
       }
     }

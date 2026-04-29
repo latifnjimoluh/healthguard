@@ -35,7 +35,7 @@ MEDICAMENTS_DB = {
         "notes": "Prendre avec nourriture ou lait pour améliorer absorption"
     },
     "artemether_lumefantrine_selon_poids": {
-        "nom": "Artéméther-Luméfantrine (AL) — dose poids-dépendante",
+        "nom": "Artéméther-Luméfantrine (AL)  dose poids-dépendante",
         "dose_adulte": "4 comprimés × 2/jour × 3 jours",
         "dose_enfant": "5-14kg: 1cp; 15-24kg: 2cp; 25-34kg: 3cp; >34kg: 4cp",
         "voie": "orale",
@@ -83,7 +83,7 @@ MEDICAMENTS_DB = {
         "notes": "Grossesse : adapter la vitesse selon surveillance foetale"
     },
     "ATPE_Plumpy_Nut": {
-        "nom": "ATPE — Plumpy'Nut (Aliment Thérapeutique Prêt à l'Emploi)",
+        "nom": "ATPE  Plumpy'Nut (Aliment Thérapeutique Prêt à l'Emploi)",
         "dose_adulte": "N/A (produit pédiatrique)",
         "dose_enfant": "92g/kg/semaine (environ 3-4 sachets/jour selon poids)",
         "voie": "orale",
@@ -141,34 +141,34 @@ def _build_resume_3_points(resultat: ResultatFinal) -> list:
 
     # Point 1 : Action immédiate
     if resultat.gravite == 3:
-        points.append(f"🔴 TRANSFERT IMMÉDIAT — {resultat.structure_reference or 'CMA district'}")
+        points.append(f"🔴 TRANSFERT IMMÉDIAT  {resultat.structure_reference or 'CMA district'}")
     elif resultat.gravite == 2:
         points.append(f"🟠 Traitement local + surveillance rapprochée")
     else:
-        points.append(f"🟢 Traitement ambulatoire — Revenir si aggravation")
+        points.append(f"🟢 Traitement ambulatoire  Revenir si aggravation")
 
     # Point 2 : Action médicale principale
     diag = resultat.diagnostic_principal
     if "paludisme_grave" in diag:
-        points.append("Quinine IV si disponible — NE PAS donner AL oral")
+        points.append("Quinine IV si disponible  NE PAS donner AL oral")
     elif "paludisme" in diag:
-        points.append("Artéméther-Luméfantrine (AL) — dose selon poids")
+        points.append("Artéméther-Luméfantrine (AL)  dose selon poids")
     elif "ira" in diag or "pneumonie" in diag:
         if resultat.gravite >= 3:
             points.append("Amoxicilline IM + position semi-assise + O2 si dispo")
         else:
-            points.append("Amoxicilline orale 5 jours — surveiller FR")
+            points.append("Amoxicilline orale 5 jours  surveiller FR")
     elif "malnutrition" in diag:
-        points.append("ATPE Plumpy'Nut selon poids — Test appétit obligatoire")
+        points.append("ATPE Plumpy'Nut selon poids  Test appétit obligatoire")
     elif "diarrhee" in diag or "cholera" in diag:
         if resultat.gravite >= 3:
-            points.append("Ringer Lactate IV — NOTIFICATION district si choléra")
+            points.append("Ringer Lactate IV  NOTIFICATION district si choléra")
         else:
-            points.append("SRO plan B (75ml/kg/4h) — Surveiller diurèse")
+            points.append("SRO plan B (75ml/kg/4h)  Surveiller diurèse")
     elif "tuberculose" in diag:
-        points.append("NE PAS donner antibiotiques — Référence CDTB obligatoire")
+        points.append("NE PAS donner antibiotiques  Référence CDTB obligatoire")
     else:
-        points.append("Évaluation clinique complète — Traitement symptomatique")
+        points.append("Évaluation clinique complète  Traitement symptomatique")
 
     # Point 3 : Surveillance ou contre-indication critique
     if resultat.contre_indications:

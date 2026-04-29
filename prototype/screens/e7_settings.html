@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <link rel="manifest" href="/app/manifest.json">
+  <link rel="icon" type="image/png" href="/app/assets/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>HealthGuard IA — Paramètres</title>
+  <title>HealthGuard IA - Parametres</title>
   <link rel="stylesheet" href="../css/healthguard.css">
   <style>
     .settings-section { margin: 12px; background: white; border-radius: var(--border-radius); box-shadow: var(--shadow-card); overflow: hidden; }
@@ -22,16 +23,12 @@
     .toggle-switch.on { background: var(--color-primary); }
     .toggle-knob { width: 20px; height: 20px; border-radius: 50%; background: white; position: absolute; top: 2px; left: 2px; transition: left 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
     .toggle-switch.on .toggle-knob { left: 22px; }
-
-    /* Panneau sync */
     .sync-panel { margin: 12px; background: white; border-radius: var(--border-radius); padding: 16px; box-shadow: var(--shadow-card); }
     .sync-status-bar { height: 8px; border-radius: 4px; background: var(--color-border); overflow: hidden; margin: 10px 0; }
-    .sync-progress { height: 100%; border-radius: 4px; background: var(--color-primary); transition: width 1s ease; }
+    .sync-progress { height: 100%; border-radius: 4px; background: var(--color-primary); transition: width 0.5s ease; }
     .sync-stat-row { display: flex; justify-content: space-between; margin-bottom: 6px; }
     .sync-stat-label { font-size: 13px; color: var(--color-text-secondary); }
     .sync-stat-val { font-size: 13px; font-weight: 600; }
-
-    /* Modal PIN */
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
     .modal-overlay.show { display: flex; }
     .modal-card { background: white; border-radius: var(--border-radius-large); padding: 24px; width: 90%; max-width: 360px; }
@@ -41,7 +38,6 @@
     .pin-dot-sm.filled { background: var(--color-primary); border-color: var(--color-primary); }
     .pin-kb-mini { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0; }
     .pin-kb-mini button { padding: 12px; border: 1px solid var(--color-border); border-radius: 8px; font-size: 18px; font-weight: 600; cursor: pointer; background: white; }
-
     .version-footer { text-align: center; padding: 16px; font-size: 12px; color: var(--color-text-secondary); }
     .danger-zone { margin: 12px; }
     .btn-danger-outline { width: 100%; padding: 12px; border: 1.5px solid var(--color-rouge); border-radius: var(--border-radius); background: white; color: var(--color-rouge); font-size: 14px; font-weight: 600; cursor: pointer; }
@@ -56,61 +52,57 @@
 
   <div class="screen-header">
     <a href="e2_dashboard.html" style="color:white;text-decoration:none;font-size:22px;padding:8px 12px 8px 4px;">‹</a>
+    <img src="../assets/logo.png" alt="Logo HealthGuard IA" style="width:34px;height:34px;border-radius:10px;object-fit:cover;background:#ffffff;padding:4px;">
     <div style="flex:1">
-      <div style="font-size:16px;font-weight:700;">Paramètres</div>
+      <div style="font-size:16px;font-weight:700;">Parametres</div>
     </div>
   </div>
 
-  <!-- Profil agent -->
   <div style="background:white;padding:16px;border-bottom:1px solid var(--color-border);display:flex;align-items:center;gap:14px;">
     <div style="width:52px;height:52px;border-radius:50%;background:var(--color-primary);color:white;font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center;" id="agent-avatar">AW</div>
     <div>
       <div style="font-size:17px;font-weight:700;" id="agent-name-display">Aminatou Wali</div>
-      <div style="font-size:13px;color:var(--color-text-secondary);" id="agent-role">Agent de santé communautaire</div>
-      <div style="font-size:12px;color:var(--color-primary);margin-top:2px;" id="etablissement-display">CSI Ngaoundéré Rural</div>
+      <div style="font-size:13px;color:var(--color-text-secondary);" id="agent-role">Agent de sante communautaire</div>
+      <div style="font-size:12px;color:var(--color-primary);margin-top:2px;" id="etablissement-display">CSI Ngaoundere Rural</div>
     </div>
   </div>
 
-  <!-- Synchronisation -->
   <div id="sync-section">
-    <div class="settings-section-header" style="margin:12px 12px 0;border-radius:8px 8px 0 0;">🔄 Synchronisation</div>
+    <div class="settings-section-header" style="margin:12px 12px 0;border-radius:8px 8px 0 0;">Synchronisation</div>
     <div class="sync-panel" style="margin-top:0;border-radius:0 0 8px 8px;">
       <div class="sync-stat-row">
         <span class="sync-stat-label">Statut connexion</span>
         <span class="sync-stat-val" id="sync-connexion" style="color:var(--color-orange);">● Hors ligne</span>
       </div>
       <div class="sync-stat-row">
-        <span class="sync-stat-label">Consultations en attente</span>
-        <span class="sync-stat-val" id="sync-pending">12</span>
+        <span class="sync-stat-label">Elements en attente</span>
+        <span class="sync-stat-val" id="sync-pending">0</span>
       </div>
       <div class="sync-stat-row">
-        <span class="sync-stat-label">Dernière sync réussie</span>
-        <span class="sync-stat-val" id="sync-last">il y a 51h</span>
+        <span class="sync-stat-label">Derniere sync reussie</span>
+        <span class="sync-stat-val" id="sync-last">jamais</span>
       </div>
       <div class="sync-status-bar"><div class="sync-progress" id="sync-progress" style="width:0%"></div></div>
-      <div id="sync-msg" style="font-size:12px;color:var(--color-text-secondary);text-align:center;margin-bottom:10px;">Synchronisation automatique dès reconnexion</div>
-      <button class="btn btn-primary btn-full" onclick="triggerSync()" id="sync-btn">
-        🔄 Synchroniser maintenant
-      </button>
+      <div id="sync-msg" style="font-size:12px;color:var(--color-text-secondary);text-align:center;margin-bottom:10px;">Synchronisation via SQLite locale puis PostgreSQL.</div>
+      <button class="btn btn-primary btn-full" onclick="triggerSync()" id="sync-btn">Synchroniser maintenant</button>
     </div>
   </div>
 
-  <!-- Sécurité -->
   <div class="settings-section">
-    <div class="settings-section-header">🔐 Sécurité</div>
+    <div class="settings-section-header">Securite</div>
     <div class="setting-row" onclick="openChangePIN()">
       <span class="setting-icon">🔑</span>
       <div class="setting-info">
         <div class="setting-label">Changer le code PIN</div>
-        <div class="setting-desc">Argon2id — dernière modification: jamais</div>
+        <div class="setting-desc">PIN hache via l API locale</div>
       </div>
       <span class="setting-arrow">›</span>
     </div>
     <div class="setting-row" onclick="toggleSetting('biometrie-toggle')">
       <span class="setting-icon">👆</span>
       <div class="setting-info">
-        <div class="setting-label">Authentification biométrique</div>
-        <div class="setting-desc">Empreinte digitale si disponible</div>
+        <div class="setting-label">Authentification biometrie</div>
+        <div class="setting-desc">Option locale de demonstration</div>
       </div>
       <div class="toggle-switch" id="biometrie-toggle" onclick="event.stopPropagation();toggleSetting('biometrie-toggle')">
         <div class="toggle-knob"></div>
@@ -120,7 +112,7 @@
       <span class="setting-icon">⏰</span>
       <div class="setting-info">
         <div class="setting-label">Verrouillage automatique</div>
-        <div class="setting-desc">Après 5 minutes d'inactivité</div>
+        <div class="setting-desc">Apres 5 minutes d inactivite</div>
       </div>
       <div class="toggle-switch on" id="autolock-toggle" onclick="event.stopPropagation();toggleSetting('autolock-toggle')">
         <div class="toggle-knob"></div>
@@ -129,25 +121,23 @@
     <div class="setting-row" onclick="showAuditTrail()">
       <span class="setting-icon">📋</span>
       <div class="setting-info">
-        <div class="setting-label">Journal d'audit</div>
-        <div class="setting-desc">Traçabilité des accès et actions</div>
+        <div class="setting-label">Journal local</div>
+        <div class="setting-desc">5 dernieres consultations visibles dans le navigateur</div>
       </div>
-      <span class="setting-value" id="audit-count">0 entrées</span>
+      <span class="setting-value" id="audit-count">0 entrees</span>
       <span class="setting-arrow">›</span>
     </div>
   </div>
 
-  <!-- Application -->
   <div class="settings-section">
-    <div class="settings-section-header">📱 Application</div>
+    <div class="settings-section-header">Application</div>
     <div class="setting-row">
       <span class="setting-icon">🌍</span>
       <div class="setting-info">
         <div class="setting-label">Langue</div>
-        <div class="setting-desc">Interface et arbre décisionnel</div>
+        <div class="setting-desc">Interface et arbre decisionnel</div>
       </div>
-      <span class="setting-value">Français</span>
-      <span class="setting-arrow">›</span>
+      <span class="setting-value">Francais</span>
     </div>
     <div class="setting-row" onclick="toggleSetting('notif-toggle')">
       <span class="setting-icon">🔔</span>
@@ -159,97 +149,102 @@
         <div class="toggle-knob"></div>
       </div>
     </div>
-    <div class="setting-row">
-      <span class="setting-icon">🏥</span>
-      <div class="setting-info">
-        <div class="setting-label">Établissement de santé</div>
-        <div class="setting-desc" id="etab-name-setting">CSI Ngaoundéré Rural</div>
-      </div>
-      <span class="setting-arrow">›</span>
-    </div>
     <div class="setting-row" onclick="showModelInfo()">
       <span class="setting-icon">🧠</span>
       <div class="setting-info">
-        <div class="setting-label">Modèle IA</div>
-        <div class="setting-desc">Version et performance du modèle</div>
+        <div class="setting-label">Modele IA</div>
+        <div class="setting-desc">Version et performance du modele</div>
       </div>
-      <span class="setting-value" id="model-version">v1.0</span>
+      <span class="setting-value" id="model-version">v1.1</span>
       <span class="setting-arrow">›</span>
     </div>
   </div>
 
-  <!-- Données -->
   <div class="settings-section">
-    <div class="settings-section-header">💾 Données locales</div>
+    <div class="settings-section-header">Donnees locales</div>
     <div class="setting-row">
-      <span class="setting-icon">📊</span>
+      <span class="setting-icon">💾</span>
       <div class="setting-info">
-        <div class="setting-label">Consultations stockées</div>
-        <div class="setting-desc">Données chiffrées AES-256</div>
+        <div class="setting-label">Consultations navigateur</div>
+        <div class="setting-desc">Historique de presentation localStorage</div>
       </div>
       <span class="setting-value" id="local-count">0</span>
     </div>
     <div class="setting-row" onclick="exportData()">
       <span class="setting-icon">📤</span>
       <div class="setting-info">
-        <div class="setting-label">Exporter les données</div>
-        <div class="setting-desc">JSON chiffré pour sauvegarde</div>
+        <div class="setting-label">Exporter les donnees</div>
+        <div class="setting-desc">Export JSON du stockage navigateur</div>
       </div>
       <span class="setting-arrow">›</span>
     </div>
   </div>
 
-  <!-- Zone danger -->
   <div class="danger-zone">
-    <button class="btn-danger-outline" onclick="confirmReset()">
-      🗑️ Réinitialiser toutes les données locales
-    </button>
+    <button class="btn-danger-outline" onclick="confirmReset()">Reinitialiser toutes les donnees locales</button>
   </div>
 
   <div class="version-footer">
-    HealthGuard IA v1.0.0 — Build 2025.01<br>
-    Développé pour le Ministère de la Santé du Cameroun<br>
-    <span style="font-size:11px;">Conforme aux protocoles PCIME/IMCI OMS</span>
+    HealthGuard IA v1.1.0<br>
+    Prototype corrige: SQLite persistante, queue locale et PIN securise.
   </div>
 </div>
 
-<!-- Modal changement PIN -->
-<div class="modal-overlay" id="pin-modal">
+<!-- Modal Changement PIN (Audit Fix) -->
+<div class="modal-overlay" id="change-pin-modal">
   <div class="modal-card">
-    <div class="modal-title" id="pin-modal-title">🔑 Nouveau code PIN</div>
-    <p style="font-size:13px;color:var(--color-text-secondary);margin-bottom:12px;" id="pin-modal-desc">Choisissez un nouveau PIN de 6 chiffres. Évitez les séquences (123456) ou répétitions.</p>
-    <div class="pin-dots-small" id="pin-dots">
-      <div class="pin-dot-sm" id="pdot-0"></div>
-      <div class="pin-dot-sm" id="pdot-1"></div>
-      <div class="pin-dot-sm" id="pdot-2"></div>
-      <div class="pin-dot-sm" id="pdot-3"></div>
-      <div class="pin-dot-sm" id="pdot-4"></div>
-      <div class="pin-dot-sm" id="pdot-5"></div>
+    <div class="modal-title" id="pin-modal-title">Changer le code PIN</div>
+    <div style="text-align:center;font-size:14px;color:var(--color-text-secondary);margin-bottom:10px;" id="pin-modal-desc">
+      Saisissez votre code actuel
     </div>
-    <div id="pin-error" style="color:var(--color-rouge);font-size:12px;text-align:center;margin-bottom:6px;display:none;"></div>
+    
+    <div class="pin-dots-small" id="change-pin-dots">
+      <div class="pin-dot-sm" id="sm-dot-0"></div>
+      <div class="pin-dot-sm" id="sm-dot-1"></div>
+      <div class="pin-dot-sm" id="sm-dot-2"></div>
+      <div class="pin-dot-sm" id="sm-dot-3"></div>
+      <div class="pin-dot-sm" id="sm-dot-4"></div>
+      <div class="pin-dot-sm" id="sm-dot-5"></div>
+    </div>
+
+    <div id="pin-change-error" style="color:var(--color-rouge);font-size:13px;text-align:center;margin-bottom:8px;display:none;"></div>
+
     <div class="pin-kb-mini">
-      <button onclick="pinKey('1')">1</button><button onclick="pinKey('2')">2</button><button onclick="pinKey('3')">3</button>
-      <button onclick="pinKey('4')">4</button><button onclick="pinKey('5')">5</button><button onclick="pinKey('6')">6</button>
-      <button onclick="pinKey('7')">7</button><button onclick="pinKey('8')">8</button><button onclick="pinKey('9')">9</button>
-      <button onclick="closePinModal()" style="font-size:13px;color:var(--color-text-secondary);">Annuler</button>
-      <button onclick="pinKey('0')">0</button>
-      <button onclick="pinDelete()">⌫</button>
+      <button onclick="pressPinKey('1')">1</button>
+      <button onclick="pressPinKey('2')">2</button>
+      <button onclick="pressPinKey('3')">3</button>
+      <button onclick="pressPinKey('4')">4</button>
+      <button onclick="pressPinKey('5')">5</button>
+      <button onclick="pressPinKey('6')">6</button>
+      <button onclick="pressPinKey('7')">7</button>
+      <button onclick="pressPinKey('8')">8</button>
+      <button onclick="pressPinKey('9')">9</button>
+      <button onclick="closeChangePIN()" style="font-size:14px;color:var(--color-text-secondary);">ANNUL.</button>
+      <button onclick="pressPinKey('0')">0</button>
+      <button onclick="deletePinKey()">⌫</button>
     </div>
   </div>
 </div>
 
 <script>
-  let newPin = '';
-  let confirmingPin = false;
-  let firstPin = '';
+  const API = '';
+  let currentPinBuffer = '';
+  let pinStep = 'old'; // 'old', 'new', 'confirm'
+  let oldPinValue = '';
+  let newPinValue = '';
 
-  // Horloge + réseau
+  function getStoredAgents() {
+    return JSON.parse(localStorage.getItem('hg_agents') || '[]');
+  }
+
   function updateClock() {
     const now = new Date();
     document.getElementById('current-time').textContent =
-      String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+      String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
   }
-  updateClock(); setInterval(updateClock, 10000);
+  updateClock();
+  setInterval(updateClock, 10000);
+
   function updateNet() {
     const badge = document.getElementById('network-badge');
     const online = navigator.onLine;
@@ -262,215 +257,320 @@
   window.addEventListener('online', updateNet);
   window.addEventListener('offline', updateNet);
 
-  // Chargement stats
-  function loadStats() {
+  function loadProfile() {
+    const agentId = localStorage.getItem('hg_agent_id') || '';
+    const agents = getStoredAgents();
+    const agent = agents.find(a => a.id === agentId);
+    const name = localStorage.getItem('hg_agent_nom') || (agent ? agent.nom : 'Utilisateur');
+    document.getElementById('agent-name-display').textContent = name;
+    document.getElementById('agent-avatar').textContent = (name[0] || 'U').toUpperCase();
+    if (agent && agent.role) document.getElementById('agent-role').textContent = agent.role;
+  }
+
+  async function loadStats() {
     const consultations = JSON.parse(localStorage.getItem('hg_consultations') || '[]');
     document.getElementById('local-count').textContent = consultations.length;
-    document.getElementById('sync-pending').textContent = consultations.filter(c => !c.synced).length;
+    document.getElementById('audit-count').textContent = consultations.length + ' entrees';
 
     const lastSync = localStorage.getItem('hg_last_sync');
     if (lastSync) {
-      const hours = Math.round((Date.now() - parseInt(lastSync)) / 3600000);
-      document.getElementById('sync-last').textContent = 'il y a ' + hours + 'h';
+      const hours = Math.round((Date.now() - parseInt(lastSync, 10)) / 3600000);
+      document.getElementById('sync-last').textContent = hours <= 0 ? 'a l instant' : 'il y a ' + hours + 'h';
     }
 
-    const agentId = localStorage.getItem('hg_agent_id') || '';
-    document.getElementById('audit-count').textContent = consultations.length + ' entrées';
-
-    // Onglet sync depuis URL
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('tab') === 'sync') {
-      document.getElementById('sync-section').scrollIntoView({ behavior: 'smooth' });
+    try {
+      const response = await fetch('/api/v1/sync/status', { signal: AbortSignal.timeout(3000) });
+      if (!response.ok) return;
+      const data = await response.json();
+      document.getElementById('sync-pending').textContent = data.pending_sync_count || 0;
+      document.getElementById('sync-connexion').textContent = data.postgres_disponible ? '● En ligne' : '● Hors ligne';
+      document.getElementById('sync-connexion').style.color = data.postgres_disponible ? 'var(--color-vert)' : 'var(--color-orange)';
+      if (data.last_sync) document.getElementById('sync-last').textContent = new Date(data.last_sync).toLocaleString('fr-FR');
+    } catch (e) {
+      console.warn('Statut sync indisponible', e);
     }
+  }
+
+  async function importLegacyBrowserData() {
+    const consultations = JSON.parse(localStorage.getItem('hg_consultations') || '[]');
+    const legacy = consultations.filter(c => !c.consultation_id);
+    if (legacy.length === 0) return { imported: 0, success: true };
+    const agentId = localStorage.getItem('hg_agent_id') || 'prototype';
+    const response = await fetch('/api/v1/sync/from-browser', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ consultations: legacy, agent_id: agentId }),
+      signal: AbortSignal.timeout(10000)
+    });
+    return response.json();
   }
 
   async function triggerSync() {
     const btn = document.getElementById('sync-btn');
     const msg = document.getElementById('sync-msg');
     const prog = document.getElementById('sync-progress');
-
     btn.disabled = true;
-    btn.textContent = '⏳ Synchronisation en cours…';
-    msg.textContent = 'Envoi vers PostgreSQL…';
+    btn.textContent = 'Synchronisation en cours...';
+    msg.textContent = 'Import des donnees navigateur puis synchronisation SQLite -> PostgreSQL...';
     msg.style.color = 'var(--color-text-secondary)';
     prog.style.width = '20%';
 
-    // Lire les consultations stockées dans le navigateur
-    const consultations = JSON.parse(localStorage.getItem('hg_consultations') || '[]');
-    const agentId = localStorage.getItem('hg_agent_id') || 'prototype';
-    prog.style.width = '50%';
-
     try {
-      const response = await fetch('/api/v1/sync/from-browser', {
+      const legacyImport = await importLegacyBrowserData();
+      prog.style.width = '55%';
+      if (legacyImport.errors && legacyImport.errors.length) {
+        throw new Error(legacyImport.errors[0]);
+      }
+
+      const response = await fetch('/api/v1/sync/trigger', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ consultations: consultations, agent_id: agentId })
+        signal: AbortSignal.timeout(15000)
       });
       const data = await response.json();
       prog.style.width = '100%';
 
       if (data.success) {
-        btn.textContent = '✅ Synchronisé avec succès';
+        btn.textContent = 'Synchronise avec succes';
         btn.style.background = 'var(--color-vert)';
         msg.textContent = data.message;
         msg.style.color = 'var(--color-vert)';
         localStorage.setItem('hg_last_sync', Date.now().toString());
-        document.getElementById('sync-pending').textContent = '0';
-        document.getElementById('sync-last').textContent = 'À l\'instant';
+        const consultations = JSON.parse(localStorage.getItem('hg_consultations') || '[]').map(c => ({ ...c, synced: true }));
+        localStorage.setItem('hg_consultations', JSON.stringify(consultations));
       } else {
-        btn.textContent = '⚠️ Erreur partielle';
+        btn.textContent = 'Erreur partielle';
         btn.style.background = 'var(--color-orange)';
-        msg.textContent = data.errors?.[0] || 'Synchronisation incomplète';
+        msg.textContent = (data.errors && data.errors[0]) || data.message || 'Synchronisation incomplete';
         msg.style.color = 'var(--color-orange)';
       }
     } catch (e) {
       prog.style.width = '0%';
-      btn.textContent = '⚠️ API non démarrée';
+      btn.textContent = 'API indisponible';
       btn.style.background = 'var(--color-orange)';
-      msg.textContent = 'Lance : uvicorn src.api.app:app --reload';
+      msg.textContent = e.message || 'Demarrez uvicorn src.api.app:app --reload';
       msg.style.color = 'var(--color-rouge)';
     }
 
+    await loadStats();
     setTimeout(() => {
       btn.disabled = false;
       btn.style.background = '';
-      btn.textContent = '🔄 Synchroniser maintenant';
+      btn.textContent = 'Synchroniser maintenant';
       prog.style.width = '0%';
       msg.style.color = 'var(--color-text-secondary)';
-    }, 5000);
+    }, 4000);
   }
 
-  function toggleSetting(id) {
-    const el = document.getElementById(id);
-    el.classList.toggle('on');
+  async function toggleSetting(id) {
+    if (id === 'biometrie-toggle') {
+      const toggle = document.getElementById(id);
+      if (!toggle.classList.contains('on')) {
+        await enableBiometry();
+      } else {
+        // Desactivation simple
+        toggle.classList.remove('on');
+        localStorage.removeItem('hg_biometry_enabled');
+      }
+      return;
+    }
+    document.getElementById(id).classList.toggle('on');
+  }
+
+  async function enableBiometry() {
+    const agentId = localStorage.getItem('hg_agent_id');
+    const toggle = document.getElementById('biometrie-toggle');
+
+    try {
+      // 1. Demander les options au serveur
+      const response = await fetch(`/api/v1/security/biometric/register/options?agent_id=${agentId}`);
+      const options = await response.json();
+
+      // 2. Appel à l'API WebAuthn du navigateur (Simulé ici pour le prototype offline/local)
+      // Dans un environnement réel HTTPS, on utiliserait navigator.credentials.create(options)
+      hgConfirm(
+        "Voulez-vous lier votre empreinte digitale ou reconnaissance faciale à ce compte ?",
+        "Configuration biométrique",
+        async function() {
+          // Simulation du succès du scan
+          const fakeCredential = { id: 'cred_' + Date.now(), type: 'public-key' };
+          
+          // 3. Envoyer la verification au serveur
+          const verifyRes = await fetch('/api/v1/security/biometric/register/verify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              agent_id: agentId,
+              public_key_json: JSON.stringify(fakeCredential)
+            })
+          });
+
+          if (verifyRes.ok) {
+            toggle.classList.add('on');
+            localStorage.setItem('hg_biometry_enabled', 'true');
+            hgAlert("Biométrie activée avec succès.", "Sécurité", "OK");
+          }
+        },
+        null,
+        "👆",
+        "Activer"
+      );
+    } catch (e) {
+      console.error(e);
+      hgAlert("Impossible d'activer la biométrie.", "Erreur", "Fermer");
+    }
   }
 
   function openChangePIN() {
-    newPin = ''; confirmingPin = false; firstPin = '';
-    document.getElementById('pin-modal-title').textContent = '🔑 Nouveau code PIN';
-    document.getElementById('pin-modal-desc').textContent = 'Choisissez un nouveau PIN de 6 chiffres.';
-    updatePinDots();
-    document.getElementById('pin-modal').classList.add('show');
+    currentPinBuffer = '';
+    pinStep = 'old';
+    oldPinValue = '';
+    newPinValue = '';
+    document.getElementById('pin-modal-title').textContent = 'Ancien code PIN';
+    document.getElementById('pin-modal-desc').textContent = 'Saisissez votre code actuel';
+    document.getElementById('pin-change-error').style.display = 'none';
+    updateChangePinDots();
+    document.getElementById('change-pin-modal').classList.add('show');
   }
 
-  function closePinModal() {
-    document.getElementById('pin-modal').classList.remove('show');
-    newPin = ''; confirmingPin = false;
+  function closeChangePIN() {
+    document.getElementById('change-pin-modal').classList.remove('show');
+    currentPinBuffer = '';
   }
 
-  function pinKey(d) {
-    if (newPin.length >= 6) return;
-    newPin += d;
-    updatePinDots();
-    if (newPin.length === 6) setTimeout(validateNewPin, 100);
-  }
-
-  function pinDelete() {
-    newPin = newPin.slice(0, -1);
-    updatePinDots();
-    document.getElementById('pin-error').style.display = 'none';
-  }
-
-  function updatePinDots() {
+  function updateChangePinDots() {
     for (let i = 0; i < 6; i++) {
-      document.getElementById('pdot-' + i).classList.toggle('filled', i < newPin.length);
+      document.getElementById('sm-dot-' + i).classList.toggle('filled', i < currentPinBuffer.length);
     }
   }
 
-  function validateNewPin() {
-    const errEl = document.getElementById('pin-error');
-    // Vérification complexité
-    const seq = ['012345','123456','234567','345678','456789','987654','876543','765432','654321','543210'];
-    const rep = /^(.)\1{5}$/.test(newPin);
-    if (seq.includes(newPin) || rep) {
-      errEl.textContent = 'PIN trop simple — évitez séquences et répétitions';
-      errEl.style.display = 'block';
-      newPin = ''; updatePinDots(); return;
+  function pressPinKey(d) {
+    if (currentPinBuffer.length >= 6) return;
+    currentPinBuffer += d;
+    updateChangePinDots();
+    if (currentPinBuffer.length === 6) {
+      setTimeout(validatePinStep, 200);
     }
+  }
+
+  function deletePinKey() {
+    currentPinBuffer = currentPinBuffer.slice(0, -1);
+    updateChangePinDots();
+    document.getElementById('pin-change-error').style.display = 'none';
+  }
+
+  async function validatePinStep() {
+    const errEl = document.getElementById('pin-change-error');
     errEl.style.display = 'none';
 
-    if (!confirmingPin) {
-      firstPin = newPin; newPin = '';
-      confirmingPin = true;
-      document.getElementById('pin-modal-title').textContent = '🔁 Confirmer le PIN';
-      document.getElementById('pin-modal-desc').textContent = 'Entrez à nouveau le même PIN pour confirmer.';
-      updatePinDots();
-    } else {
-      if (newPin !== firstPin) {
-        errEl.textContent = 'Les deux PIN ne correspondent pas — recommencez';
+    if (pinStep === 'old') {
+      oldPinValue = currentPinBuffer;
+      currentPinBuffer = '';
+      pinStep = 'new';
+      document.getElementById('pin-modal-title').textContent = 'Nouveau code PIN';
+      document.getElementById('pin-modal-desc').textContent = 'Choisissez 6 nouveaux chiffres';
+      updateChangePinDots();
+    } else if (pinStep === 'new') {
+      newPinValue = currentPinBuffer;
+      currentPinBuffer = '';
+      pinStep = 'confirm';
+      document.getElementById('pin-modal-title').textContent = 'Confirmer le PIN';
+      document.getElementById('pin-modal-desc').textContent = 'Entrez a nouveau le nouveau PIN';
+      updateChangePinDots();
+    } else if (pinStep === 'confirm') {
+      if (currentPinBuffer !== newPinValue) {
+        errEl.textContent = 'Les codes ne correspondent pas';
         errEl.style.display = 'block';
-        newPin = ''; confirmingPin = false; firstPin = '';
-        document.getElementById('pin-modal-title').textContent = '🔑 Nouveau code PIN';
-        document.getElementById('pin-modal-desc').textContent = 'Choisissez un nouveau PIN de 6 chiffres.';
-        updatePinDots();
-      } else {
-        localStorage.setItem('hg_pin_hash', newPin);
-        closePinModal();
-        hgAlert('Votre code PIN a bien été enregistré.', 'PIN modifié', '✅');
+        currentPinBuffer = '';
+        updateChangePinDots();
+        return;
       }
+      await submitPinChange();
+    }
+  }
+
+  async function submitPinChange() {
+    const agentId = localStorage.getItem('hg_agent_id');
+    const errEl = document.getElementById('pin-change-error');
+    
+    try {
+      const response = await fetch('/api/v1/security/pin/change', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          agent_id: agentId,
+          old_pin: oldPinValue,
+          new_pin: newPinValue
+        })
+      });
+      
+      const res = await response.json();
+      if (!response.ok) throw new Error(res.detail || 'Erreur lors du changement');
+      
+      closeChangePIN();
+      hgAlert('Votre code PIN a ete modifie avec succes.', 'Succes', 'OK');
+    } catch (e) {
+      errEl.textContent = e.message;
+      errEl.style.display = 'block';
+      currentPinBuffer = '';
+      updateChangePinDots();
     }
   }
 
   function showAuditTrail() {
     const consultations = JSON.parse(localStorage.getItem('hg_consultations') || '[]');
     const lines = consultations.slice(0, 5).map(c =>
-      `• ${new Date(c.date).toLocaleString('fr-FR')} — ${c.diagnostic}`
+      `• ${new Date(c.date).toLocaleString('fr-FR')} - ${c.diagnostic || 'indetermine'}`
     ).join('\n');
-    hgAlert(lines || 'Aucune entrée enregistrée.', 'Journal d\'audit — 5 dernières entrées', '📋');
+    hgAlert(lines || 'Aucune entree enregistree.', 'Journal local', 'LISTE');
   }
 
   function showModelInfo() {
     hgAlert(
       '<table>'
-      + '<tr><td>Version</td><td>1.0.0</td></tr>'
-      + '<tr><td>Algorithme</td><td>XGBoost + Arbre décisionnel</td></tr>'
-      + '<tr><td>Précision globale</td><td>97 %</td></tr>'
-      + '<tr><td>Sensibilité — Paludisme grave</td><td>97,3 %</td></tr>'
-      + '<tr><td>Sensibilité — Tuberculose</td><td>100 %</td></tr>'
-      + '<tr><td>Taille modèle</td><td>7,2 MB</td></tr>'
-      + '<tr><td>Dernière mise à jour</td><td>Janvier 2025</td></tr>'
+      + '<tr><td>Version</td><td>1.1.0</td></tr>'
+      + '<tr><td>Algorithme</td><td>XGBoost + arbre decisionnel</td></tr>'
+      + '<tr><td>Stockage local</td><td>SQLite persistante</td></tr>'
+      + '<tr><td>Sync principale</td><td>Queue SQLite vers PostgreSQL</td></tr>'
       + '</table>',
-      'Modèle IA HealthGuard',
-      '🤖',
-      true  /* HTML */
+      'Modele IA HealthGuard',
+      'IA',
+      true
     );
   }
 
   function exportData() {
     const data = {
       export_date: new Date().toISOString(),
-      version: '1.0.0',
+      version: '1.1.0',
       consultations: JSON.parse(localStorage.getItem('hg_consultations') || '[]'),
       agent: localStorage.getItem('hg_agent_id')
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = 'healthguard_export_' + Date.now() + '.json';
-    a.click(); URL.revokeObjectURL(url);
+    a.href = url;
+    a.download = 'healthguard_export_' + Date.now() + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
   }
 
   function confirmReset() {
     hgConfirm(
-      'Cette action supprimera TOUTES les données locales non synchronisées. Cette opération est irréversible.',
-      '⚠️ Suppression des données',
+      'Cette action supprimera toutes les donnees du navigateur et fermera la session.',
+      'Suppression des donnees',
       function () {
-        hgConfirm(
-          'Dernière confirmation : toutes les consultations non synchronisées seront perdues définitivement.',
-          'Confirmer la suppression',
-          function () {
-            localStorage.clear();
-            hgAlert('Toutes les données locales ont été supprimées.', 'Données supprimées', '🗑️',
-              false);
-            setTimeout(function () { window.location.href = 'e1_login.html'; }, 1800);
-          },
-          null, '⚠️', 'Supprimer', 'btn-danger'
-        );
+        localStorage.clear();
+        hgAlert('Toutes les donnees locales ont ete supprimees.', 'Donnees supprimees', 'OK');
+        setTimeout(function () { window.location.href = 'e1_login.html'; }, 1500);
       },
-      null, '⚠️'
+      null,
+      'ATTENTION',
+      'Supprimer',
+      'btn-danger'
     );
   }
 
+  loadProfile();
   loadStats();
 </script>
 <script src="../js/nav.js"></script>

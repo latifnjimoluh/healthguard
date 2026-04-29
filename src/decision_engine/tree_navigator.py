@@ -109,13 +109,13 @@ def navigate(tree: dict, reponses: dict) -> ResultatDiagnostic:
         iteration += 1
 
         if noeud_courant_id not in noeuds:
-            # Noeud non trouvé — retourner résultat d'erreur
+            # Noeud non trouvé  retourner résultat d'erreur
             break
 
         noeud = noeuds[noeud_courant_id]
         chemin.append(noeud_courant_id)
 
-        # Noeud de résultat final — on s'arrête
+        # Noeud de résultat final  on s'arrête
         if noeud["type"] == "resultat":
             return ResultatDiagnostic(
                 diagnostic=noeud.get("diagnostic", "inconnu"),
@@ -138,7 +138,7 @@ def navigate(tree: dict, reponses: dict) -> ResultatDiagnostic:
         noeud_suivant = _determine_next_node(noeud, reponses, noeud_courant_id)
 
         if noeud_suivant is None:
-            # Aucune réponse disponible — résultat indéterminé
+            # Aucune réponse disponible  résultat indéterminé
             break
 
         noeud_courant_id = noeud_suivant
@@ -149,7 +149,7 @@ def navigate(tree: dict, reponses: dict) -> ResultatDiagnostic:
         gravite=1,
         couleur_alerte="ORANGE",
         action_immediate="EVALUATION_CLINIQUE",
-        recommandation_courte="Données insuffisantes — Évaluation clinique complète nécessaire",
+        recommandation_courte="Données insuffisantes  Évaluation clinique complète nécessaire",
         recommandation_complete="Le système n'a pas pu atteindre un diagnostic avec les données fournies. Procéder à une évaluation clinique complète.",
         chemin_parcouru=chemin,
         maladie_testee=maladie
@@ -420,8 +420,8 @@ def _reponses_tuberculose(s: dict) -> dict:
     return {
         "N1": duree_semaines,
         "N1B": bool(s.get("hemoptysie", 0)),
-        "N2": True,  # Amaigrissement — supposé si durée longue
-        "N3": True,  # Sueurs nocturnes — supposé si toux prolongée
+        "N2": True,  # Amaigrissement  supposé si durée longue
+        "N3": True,  # Sueurs nocturnes  supposé si toux prolongée
         "N4": bool(s.get("contact_tb_connu", 0)),
         "N4_SANS_SUEURS": bool(s.get("contact_tb_connu", 0)),
         "N4_MODERE": bool(s.get("contact_tb_connu", 0)) or bool(s.get("zone_endemie_tb", 0)),
@@ -517,7 +517,7 @@ def _symptomes_to_reponses(symptomes: dict) -> dict:
     reponses["N1_TB"] = duree_semaines
     reponses["N1B"] = bool(symptomes.get("hemoptysie", 0))
     reponses["N2_TB"] = True  # Amaigrissement approximé
-    reponses["N3_TB"] = True  # Sueurs nocturnes — défaut à vrai si toux prolongée
+    reponses["N3_TB"] = True  # Sueurs nocturnes  défaut à vrai si toux prolongée
     reponses["N4_TB"] = bool(symptomes.get("contact_tb_connu", 0))
     reponses["N4_SANS_SUEURS"] = bool(symptomes.get("contact_tb_connu", 0))
     reponses["N5_SANS_CONTACT"] = bool(symptomes.get("zone_endemie_tb", 0))

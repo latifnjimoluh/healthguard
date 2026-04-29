@@ -1,5 +1,5 @@
 """
-Simulation Cas 2 — Malnutrition Aiguë Sévère
+Simulation Cas 2  Malnutrition Aiguë Sévère
 Patient : Fille, 18 mois, Village Batouri, Est-Cameroun
 """
 
@@ -13,7 +13,7 @@ from src.decision_engine.recommendation import generate_recommendation
 
 def simulate_cas2():
     print("\n" + "="*60)
-    print("CAS 2 — MALNUTRITION AIGUË SÉVÈRE")
+    print("CAS 2  MALNUTRITION AIGUË SÉVÈRE")
     print("="*60)
     print("Patient : Fille, 18 mois, Village Batouri, Est-Cameroun")
     print("Symptômes : PB 108mm, oedèmes aux pieds, appétit réduit 3 semaines")

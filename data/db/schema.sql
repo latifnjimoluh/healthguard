@@ -1,6 +1,16 @@
--- HealthGuard IA — Schéma de Base de Données SQLite
+-- HealthGuard IA  Schéma de Base de Données SQLite
 -- Version : 1.0 | Date : 2026-04-26
 -- Toutes les données patients sont chiffrées en AES-256-CBC
+
+CREATE TABLE IF NOT EXISTS agents (
+    id_agent        TEXT PRIMARY KEY,
+    nom             TEXT NOT NULL,
+    role            TEXT,
+    pin_hash        TEXT,                       -- Hash Argon2id du PIN
+    biometric_key   TEXT,                       -- Clé publique WebAuthn (JSON)
+    created_at      TEXT NOT NULL,
+    updated_at      TEXT NOT NULL
+);
 
 -- Table des patients (données identifiantes chiffrées)
 CREATE TABLE IF NOT EXISTS patients (

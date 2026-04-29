@@ -1,5 +1,5 @@
 """
-Tests unitaires — Module Base de Données HealthGuard IA.
+Tests unitaires  Module Base de Données HealthGuard IA.
 Couvre : création BDD, chiffrement, audit trail.
 """
 
@@ -42,7 +42,7 @@ class TestEncryption:
         """Chiffrement puis déchiffrement donne les données originales."""
         salt = generate_salt()
         key = generate_key("123456", salt)
-        original = "Données patient confidentielles — Test HealthGuard"
+        original = "Données patient confidentielles  Test HealthGuard"
         encrypted = encrypt_data(original, key)
         decrypted = decrypt_data(encrypted, key)
         assert decrypted == original
@@ -54,7 +54,7 @@ class TestEncryption:
         data = "test données"
         enc1 = encrypt_data(data, key)
         enc2 = encrypt_data(data, key)
-        assert enc1 != enc2, "IV doit être aléatoire — ciphertexts doivent être différents"
+        assert enc1 != enc2, "IV doit être aléatoire  ciphertexts doivent être différents"
 
     def test_decrypt_with_wrong_key_fails(self):
         """Déchiffrement avec mauvaise clé lève ValueError."""

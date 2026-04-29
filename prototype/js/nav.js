@@ -1,8 +1,8 @@
 /**
- * HealthGuard IA — nav.js
+ * HealthGuard IA  nav.js
  * Ce fichier gère deux responsabilités :
- *  1. MODAL SYSTEM  — remplace alert() et confirm() par des popups Material Design
- *  2. NAVIGATION    — sidebar desktop (fixe) + sidebar mobile (hamburger off-canvas)
+ *  1. MODAL SYSTEM   remplace alert() et confirm() par des popups Material Design
+ *  2. NAVIGATION     sidebar desktop (fixe) + sidebar mobile (hamburger off-canvas)
  *
  * Inclure dans tous les écrans sauf si SKIP_NAV est configuré.
  */
@@ -14,7 +14,7 @@
   var SKIP_NAV_PAGES = ['e1_login.html'];
 
   /* ================================================================
-     SECTION 1 — MODAL SYSTÈME
+     SECTION 1  MODAL SYSTÈME
      Expose window.hgAlert et window.hgConfirm
      ================================================================ */
 
@@ -129,7 +129,7 @@
   };
 
   /* ================================================================
-     SECTION 2 — NAVIGATION / SIDEBAR
+     SECTION 2  NAVIGATION / SIDEBAR
      ================================================================ */
 
   function _getAgentNom() {
@@ -176,7 +176,7 @@
     el.setAttribute('aria-label', 'Navigation principale');
     el.innerHTML =
       '<div class="hg-sidebar-brand">'
-      +   '<div class="hg-sidebar-logo">🏥</div>'
+      +   '<div class="hg-sidebar-logo"><img src="../assets/logo.png" alt="Logo HealthGuard IA"></div>'
       +   '<div class="hg-sidebar-brand-text">'
       +     '<div class="hg-sidebar-brand-title">HealthGuard IA</div>'
       +     '<div class="hg-sidebar-agent">' + _getAgentNom() + '</div>'

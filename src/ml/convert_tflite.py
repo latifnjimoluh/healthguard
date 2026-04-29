@@ -30,7 +30,7 @@ def convert_to_tflite() -> dict:
         HAS_TF = True
     except ImportError:
         HAS_TF = False
-        print("TensorFlow non disponible — simulation de la conversion TFLite")
+        print("TensorFlow non disponible  simulation de la conversion TFLite")
         return _simulate_tflite_conversion()
 
     # Chargement du modèle XGBoost

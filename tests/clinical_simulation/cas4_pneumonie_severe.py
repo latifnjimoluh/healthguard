@@ -1,5 +1,5 @@
 """
-Simulation Cas 4 — Pneumonie Sévère Enfant
+Simulation Cas 4  Pneumonie Sévère Enfant
 Patient : Garçon, 7 ans, 22 kg, Ngaoundéré Rural
 """
 
@@ -13,7 +13,7 @@ from src.decision_engine.recommendation import generate_recommendation
 
 def simulate_cas4():
     print("\n" + "="*60)
-    print("CAS 4 — PNEUMONIE SÉVÈRE ENFANT")
+    print("CAS 4  PNEUMONIE SÉVÈRE ENFANT")
     print("="*60)
     print("Patient : Garçon, 7 ans, 22 kg, Ngaoundéré Rural")
     print("Symptômes : Toux 4j, fièvre 38.9°C, tirage, FR=48/min, SpO2=91%")

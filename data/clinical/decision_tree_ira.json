@@ -3,7 +3,7 @@
   "version": "1.0",
   "source": "OMS IMCI/PCIME + MSF Cameroun 2024",
   "noeud_entree": "N1",
-  "description": "Arbre décisionnel IRA/Pneumonie — Tachypnée et signes de détresse respiratoire",
+  "description": "Arbre décisionnel IRA/Pneumonie  Tachypnée et signes de détresse respiratoire",
   "noeuds": {
     "N1": {
       "id": "N1",
@@ -40,7 +40,7 @@
     "N4": {
       "id": "N4",
       "type": "question",
-      "question_fr": "SpO2 disponible — Saturation en oxygène < 95% ?",
+      "question_fr": "SpO2 disponible  Saturation en oxygène < 95% ?",
       "aide": "SpO2 est OPTIONNELLE. Si oxymètre non disponible, répondre NON et continuer.",
       "reponse_oui": "N4B_SPO2",
       "reponse_non": "N5_FREQUENCE"
@@ -60,7 +60,7 @@
     "N4_SANS_FIEVRE": {
       "id": "N4_SANS_FIEVRE",
       "type": "question",
-      "question_fr": "SpO2 disponible — Saturation < 95% ?",
+      "question_fr": "SpO2 disponible  Saturation < 95% ?",
       "aide": "Sans fièvre mais SpO2 basse → bronchiolite ou asthme possible",
       "reponse_oui": "FIN_PNEUMONIE_SEVERE",
       "reponse_non": "N5_FREQUENCE_SANS_FIEVRE"
@@ -156,7 +156,7 @@
       "gravite": 3,
       "couleur_alerte": "ROUGE",
       "action_immediate": "TRANSFERT_URGENT",
-      "recommandation_courte": "PNEUMONIE SÉVÈRE — Transfert urgent + traitement pré-transfert",
+      "recommandation_courte": "PNEUMONIE SÉVÈRE  Transfert urgent + traitement pré-transfert",
       "recommandation_complete": "Pneumonie sévère confirmée. TRANSFERT URGENT. Pré-transfert : (1) Amoxicilline IM si disponible (enfant : 50mg/kg; adulte : 1g IM). (2) Position semi-assise (45°). (3) Oxygène si disponible (cible SpO2 ≥ 95%). (4) Surveiller fréquence respiratoire toutes les 15 min. (5) Hydratation par voie orale si tolérée (pas de perfusion qui surchargrait le cœur). NE PAS allonger à plat.",
       "traitement_pretransfert": ["amoxicilline_im", "position_semi_assise", "oxygene_si_disponible"],
       "contre_indications": ["position_allongee_plate", "perfusion_abondante"],
@@ -170,7 +170,7 @@
       "gravite": 2,
       "couleur_alerte": "ORANGE",
       "action_immediate": "TRAITEMENT_LOCAL",
-      "recommandation_courte": "Pneumonie modérée — Amoxicilline orale 5 jours + surveillance",
+      "recommandation_courte": "Pneumonie modérée  Amoxicilline orale 5 jours + surveillance",
       "recommandation_complete": "Pneumonie modérée. Traitement ambulatoire : Amoxicilline orale 40-45mg/kg/jour en 2 prises × 5 jours (enfant). Adulte : 1g × 3/jour × 7 jours. Paracétamol si fièvre. Hydratation. Retour consultation si : aggravation, incapacité à boire, fréquence respiratoire augmente.",
       "traitement": ["amoxicilline_orale_5j"],
       "suivi": "J2_si_aggravation",
@@ -184,7 +184,7 @@
       "gravite": 1,
       "couleur_alerte": "VERT",
       "action_immediate": "TRAITEMENT_SYMPTOMATIQUE",
-      "recommandation_courte": "IRA légère — Traitement symptomatique, surveiller évolution",
+      "recommandation_courte": "IRA légère  Traitement symptomatique, surveiller évolution",
       "recommandation_complete": "Infection respiratoire aiguë légère. Traitement symptomatique : paracétamol si fièvre, hydratation, position semi-assise pour dormir. Pas d'antibiotique systématique (viral probable). Consulter si : fièvre > 3 jours, aggravation respiratoire, refus d'alimentation.",
       "traitement": ["paracetamol_si_fievre", "hydratation"],
       "suivi": "J3_si_persistance",
@@ -198,7 +198,7 @@
       "gravite": 1,
       "couleur_alerte": "ORANGE",
       "action_immediate": "TRAITEMENT_LOCAL_SURVEILLANCE",
-      "recommandation_courte": "IRA prolongée — Traitement antibiotique + surveillance renforcée",
+      "recommandation_courte": "IRA prolongée  Traitement antibiotique + surveillance renforcée",
       "recommandation_complete": "Symptômes persistants > 5 jours. Traitement antibiotique justifié : Amoxicilline 5 jours. Surveillance rapprochée. Si pas d'amélioration à J3 → référence.",
       "traitement": ["amoxicilline_orale"],
       "suivi": "J3_strict",

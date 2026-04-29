@@ -34,7 +34,7 @@ def load_or_generate_dataset() -> pd.DataFrame:
     if OUTPUT_PATH.exists():
         return pd.read_csv(OUTPUT_PATH)
     else:
-        print("Dataset non trouvé — génération en cours...")
+        print("Dataset non trouvé  génération en cours...")
         df = generate_dataset()
         df.to_csv(OUTPUT_PATH, index=False)
         return df
@@ -129,7 +129,7 @@ def train_model(df: pd.DataFrame = None) -> dict:
             verbose=False
         )
     else:
-        print("XGBoost non disponible — utilisation RandomForest...")
+        print("XGBoost non disponible  utilisation RandomForest...")
         from sklearn.ensemble import RandomForestClassifier
         model = RandomForestClassifier(
             n_estimators=200,

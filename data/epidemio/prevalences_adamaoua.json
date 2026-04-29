@@ -7,12 +7,12 @@
   "densite_infirmiers": "1 pour 4800 habitants (moyenne rurale)",
   "prevalences": {
     "paludisme": {
-      "description": "Paludisme à Plasmodium falciparum — endémie stable",
+      "description": "Paludisme à Plasmodium falciparum  endémie stable",
       "incidence_annuelle_pour_1000": 285,
       "par_saison": {
         "saison_pluies_avril_octobre": {
           "prevalence_pct": 45,
-          "note": "Pic de transmission — saison des moustiques"
+          "note": "Pic de transmission  saison des moustiques"
         },
         "saison_seche_novembre_mars": {
           "prevalence_pct": 20,
@@ -23,7 +23,7 @@
         "moins_5_ans": {
           "prevalence_pct": 52,
           "mortalite_pour_100000": 48,
-          "note": "Groupe le plus vulnérable — paludisme grave fréquent"
+          "note": "Groupe le plus vulnérable  paludisme grave fréquent"
         },
         "5_15_ans": {
           "prevalence_pct": 35,
@@ -50,12 +50,12 @@
       }
     },
     "ira_pneumonie": {
-      "description": "Infections Respiratoires Aiguës — 2ème cause consultation pédiatrique",
+      "description": "Infections Respiratoires Aiguës  2ème cause consultation pédiatrique",
       "incidence_annuelle_pour_1000": 145,
       "par_saison": {
         "saison_seche_harmattan": {
           "prevalence_pct": 28,
-          "note": "Harmattan aggrave les IRA — poussières et froid nocturne"
+          "note": "Harmattan aggrave les IRA  poussières et froid nocturne"
         },
         "saison_pluies": {
           "prevalence_pct": 18
@@ -74,7 +74,7 @@
       "frequence_pneumonie_severe": 0.25
     },
     "malnutrition_mas": {
-      "description": "Malnutrition Aiguë Sévère — prévalence critique en zone rurale",
+      "description": "Malnutrition Aiguë Sévère  prévalence critique en zone rurale",
       "prevalence_enfants_moins_5_ans_pct": 10.2,
       "prevalence_mam_pct": 18.5,
       "par_saison": {
@@ -89,7 +89,7 @@
       "par_zone": {
         "rural_elevage": {
           "prevalence_pct": 12,
-          "note": "Populations Mbororo — malnutrition chronique fréquente"
+          "note": "Populations Mbororo  malnutrition chronique fréquente"
         },
         "rural_agricole": { "prevalence_pct": 9 }
       },
@@ -97,14 +97,14 @@
       "stocks_atpe_disponibilite": "irregulier"
     },
     "diarrhee_cholera": {
-      "description": "Diarrhées aiguës et choléra — épidémies saisonnières",
+      "description": "Diarrhées aiguës et choléra  épidémies saisonnières",
       "incidence_diarrhee_pour_1000": 186,
       "alertes_cholera_5_ans": 2,
-      "dernier_foyer_cholera": "2022 — fleuve Vina",
+      "dernier_foyer_cholera": "2022  fleuve Vina",
       "par_saison": {
         "debut_pluies_mars_mai": {
           "prevalence_pct": 32,
-          "note": "Contamination eau de surface — risque choléra accru"
+          "note": "Contamination eau de surface  risque choléra accru"
         },
         "saison_seche": { "prevalence_pct": 12 }
       },
@@ -112,7 +112,7 @@
       "latrinisation_pct": 24
     },
     "tuberculose": {
-      "description": "Tuberculose — incidence modérée Adamaoua",
+      "description": "Tuberculose  incidence modérée Adamaoua",
       "incidence_pour_100000": 142,
       "taux_detection_pct": 58,
       "par_zone": {

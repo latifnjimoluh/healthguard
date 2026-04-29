@@ -1,5 +1,5 @@
 """
-Tests unitaires — Modèle ML HealthGuard IA.
+Tests unitaires  Modèle ML HealthGuard IA.
 Couvre : inférence, performances (sensibilité), temps de réponse.
 """
 

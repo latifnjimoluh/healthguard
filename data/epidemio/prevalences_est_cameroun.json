@@ -8,9 +8,9 @@
   "contexte_particulier": "Présence réfugiés RCA + populations Baka vulnérables + forêt équatoriale",
   "prevalences": {
     "paludisme": {
-      "description": "Paludisme — endémie hyperendémique en zone forestière",
+      "description": "Paludisme  endémie hyperendémique en zone forestière",
       "incidence_annuelle_pour_1000": 342,
-      "note": "Incidence plus élevée qu'Adamaoua — forêt = plus de moustiques",
+      "note": "Incidence plus élevée qu'Adamaoua  forêt = plus de moustiques",
       "par_saison": {
         "grande_saison_pluies_mars_juin": {
           "prevalence_pct": 55,
@@ -35,17 +35,17 @@
         "zone_forestiere": { "prevalence_pct": 55 },
         "camps_refugies_rca": {
           "prevalence_pct": 68,
-          "note": "Camps réfugiés Gado-Badzere et Mbilé — conditions précaires"
+          "note": "Camps réfugiés Gado-Badzere et Mbilé  conditions précaires"
         },
         "village_baka": {
           "prevalence_pct": 72,
-          "note": "Populations Baka — accès aux soins très limité, mobilité"
+          "note": "Populations Baka  accès aux soins très limité, mobilité"
         }
       },
       "taux_paludisme_grave": 0.18
     },
     "ira_pneumonie": {
-      "description": "IRA — 1ère cause mortalité infantile Est-Cameroun",
+      "description": "IRA  1ère cause mortalité infantile Est-Cameroun",
       "incidence_annuelle_pour_1000": 178,
       "note": "Incidence élevée liée à la densité forestière et humidité",
       "par_groupe_age": {
@@ -57,30 +57,30 @@
       "frequence_pneumonie_severe": 0.30
     },
     "malnutrition_mas": {
-      "description": "Malnutrition — crise humanitaire prolongée",
+      "description": "Malnutrition  crise humanitaire prolongée",
       "prevalence_enfants_moins_5_ans_pct": 14.8,
-      "note": "Crise humanitaire — réfugiés + déplacés internes",
+      "note": "Crise humanitaire  réfugiés + déplacés internes",
       "par_population": {
         "population_hote": { "prevalence_pct": 11 },
         "refugies_rca": { "prevalence_pct": 22 },
         "population_baka": {
           "prevalence_pct": 28,
-          "note": "Malnutrition chronique et aiguë combinées — mode vie nomade"
+          "note": "Malnutrition chronique et aiguë combinées  mode vie nomade"
         }
       },
       "couverture_crenas_pct": 35,
       "acces_crenas_km_moyen": 45
     },
     "diarrhee_cholera": {
-      "description": "Diarrhées — risque choléra élevé via corridor RCA",
+      "description": "Diarrhées  risque choléra élevé via corridor RCA",
       "incidence_pour_1000": 198,
       "alertes_cholera_5_ans": 4,
       "note": "Corridor de transmission choléra via réfugiés RCA",
-      "derniere_epidemie_cholera": "2023 — triangle Bertoua/Batouri/Yokadouma",
+      "derniere_epidemie_cholera": "2023  triangle Bertoua/Batouri/Yokadouma",
       "acces_eau_potable_pct": 28
     },
     "tuberculose": {
-      "description": "Tuberculose — incidence la plus élevée du Cameroun",
+      "description": "Tuberculose  incidence la plus élevée du Cameroun",
       "incidence_pour_100000": 285,
       "note": "Est-Cameroun = région à plus forte incidence TB nationale (2023)",
       "taux_detection_pct": 48,

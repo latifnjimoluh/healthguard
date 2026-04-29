@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HealthGuard IA — Rapport Final de Simulation</title>
+  <title>HealthGuard IA  Rapport Final de Simulation</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Segoe UI', Arial, sans-serif; background: #F5F5F5; color: #212121; line-height: 1.6; }
@@ -97,8 +97,8 @@
   <div class="cover">
     <div style="font-size:64px;margin-bottom:16px;">🏥</div>
     <div class="cover-title">HealthGuard IA</div>
-    <div class="cover-subtitle">Application de Diagnostic Médical Assisté par IA — Zones Rurales Cameroun</div>
-    <div style="font-size:15px;opacity:0.85;margin-top:8px;">Rapport Final de Simulation — Design Thinking · 7 Étapes</div>
+    <div class="cover-subtitle">Application de Diagnostic Médical Assisté par IA  Zones Rurales Cameroun</div>
+    <div style="font-size:15px;opacity:0.85;margin-top:8px;">Rapport Final de Simulation  Design Thinking · 7 Étapes</div>
     <div class="cover-meta">
       <div class="cover-badge">📅 Janvier 2025</div>
       <div class="cover-badge">🗺️ Adamaoua · Est Cameroun</div>
@@ -145,13 +145,13 @@
 
   <!-- Design Thinking: 7 étapes -->
   <div class="section">
-    <div class="section-title">🎨 Processus Design Thinking — 7 Étapes</div>
+    <div class="section-title">🎨 Processus Design Thinking  7 Étapes</div>
     <div class="section-subtitle">Méthodologie appliquée pour concevoir HealthGuard IA centré sur l'utilisateur en contexte contraint</div>
 
     <div class="dt-step">
       <div class="dt-number">1</div>
       <div class="dt-content">
-        <h3>Empathize — Immersion terrain</h3>
+        <h3>Empathize  Immersion terrain</h3>
         <p>Interviews avec 8 agents de santé communautaires (ASC) dans les districts de Ngaoundéré Rural (Adamaoua) et Bertoua (Est). Observation directe sur 3 semaines.</p>
         <ul>
           <li>Connectivité réseau disponible < 30% du temps dans les zones cibles</li>
@@ -166,13 +166,13 @@
     <div class="dt-step">
       <div class="dt-number">2</div>
       <div class="dt-content">
-        <h3>Define — Définition du problème</h3>
+        <h3>Define  Définition du problème</h3>
         <p><strong>HMW (How Might We) retenu :</strong> "Comment pourrions-nous aider un ASC peu expérimenté à prendre des décisions cliniques sûres pour des patients vulnérables, sans connexion internet, avec un téléphone Android d'entrée de gamme ?"</p>
         <ul>
-          <li><strong>Contrainte critique #1 :</strong> Offline-first absolu — aucune décision ne doit dépendre du réseau</li>
-          <li><strong>Contrainte critique #2 :</strong> Faux négatifs à coût élevé — paludisme grave non détecté = décès potentiel</li>
-          <li><strong>Contrainte critique #3 :</strong> Interface simple — max 3 taps pour démarrer une consultation</li>
-          <li><strong>Contrainte réglementaire :</strong> Conformité Loi N°96/03 Cameroun — secret médical, données personnelles</li>
+          <li><strong>Contrainte critique #1 :</strong> Offline-first absolu  aucune décision ne doit dépendre du réseau</li>
+          <li><strong>Contrainte critique #2 :</strong> Faux négatifs à coût élevé  paludisme grave non détecté = décès potentiel</li>
+          <li><strong>Contrainte critique #3 :</strong> Interface simple  max 3 taps pour démarrer une consultation</li>
+          <li><strong>Contrainte réglementaire :</strong> Conformité Loi N°96/03 Cameroun  secret médical, données personnelles</li>
         </ul>
       </div>
     </div>
@@ -180,13 +180,13 @@
     <div class="dt-step">
       <div class="dt-number">3</div>
       <div class="dt-content">
-        <h3>Ideate — Génération d'idées</h3>
+        <h3>Ideate  Génération d'idées</h3>
         <p>Session de co-création (3h) avec 4 ASC, 2 médecins superviseurs, 1 épidémiologiste district.</p>
         <ul>
-          <li><strong>Idée retenue :</strong> Arbre décisionnel interactif + validation ML — "L'arbre pose les bonnes questions, le ML confirme"</li>
+          <li><strong>Idée retenue :</strong> Arbre décisionnel interactif + validation ML  "L'arbre pose les bonnes questions, le ML confirme"</li>
           <li><strong>Rejetée :</strong> Chatbot vocal (coût infrastructure, latence)</li>
           <li><strong>Rejetée :</strong> Formulaire libre (trop d'erreurs de saisie sans guidage)</li>
-          <li><strong>Innovation :</strong> Code couleur ROUGE/ORANGE/VERT — immédiatement compréhensible sans lecture</li>
+          <li><strong>Innovation :</strong> Code couleur ROUGE/ORANGE/VERT  immédiatement compréhensible sans lecture</li>
           <li><strong>Innovation :</strong> PIN 6 chiffres + accès urgence anonyme pour les situations critiques</li>
         </ul>
       </div>
@@ -195,16 +195,16 @@
     <div class="dt-step">
       <div class="dt-number">4</div>
       <div class="dt-content">
-        <h3>Prototype — Construction du prototype</h3>
+        <h3>Prototype  Construction du prototype</h3>
         <p>7 écrans HTML Mobile First (720×1560px, simulateur Android) créés en 3 itérations.</p>
         <ul>
-          <li><strong>E1 — Connexion :</strong> Clavier PIN 6 chiffres, accès urgence, biométrie désactivable</li>
-          <li><strong>E2 — Tableau de bord :</strong> Stats du jour, actions rapides, alerte sync > 48h</li>
-          <li><strong>E3 — Consultation :</strong> Formulaire sympto + constantes vitales avec alertes visuelles</li>
-          <li><strong>E4 — Arbre décisionnel :</strong> Questions guidées avec pré-remplissage automatique</li>
-          <li><strong>E5 — Résultat :</strong> Diagnostic + résumé 3 points + traitement + contre-indications</li>
-          <li><strong>E6 — Dossier patient :</strong> Recherche, historique, suivi longitudinal</li>
-          <li><strong>E7 — Paramètres :</strong> Sync, sécurité PIN, export données, version modèle</li>
+          <li><strong>E1  Connexion :</strong> Clavier PIN 6 chiffres, accès urgence, biométrie désactivable</li>
+          <li><strong>E2  Tableau de bord :</strong> Stats du jour, actions rapides, alerte sync > 48h</li>
+          <li><strong>E3  Consultation :</strong> Formulaire sympto + constantes vitales avec alertes visuelles</li>
+          <li><strong>E4  Arbre décisionnel :</strong> Questions guidées avec pré-remplissage automatique</li>
+          <li><strong>E5  Résultat :</strong> Diagnostic + résumé 3 points + traitement + contre-indications</li>
+          <li><strong>E6  Dossier patient :</strong> Recherche, historique, suivi longitudinal</li>
+          <li><strong>E7  Paramètres :</strong> Sync, sécurité PIN, export données, version modèle</li>
         </ul>
       </div>
     </div>
@@ -212,7 +212,7 @@
     <div class="dt-step">
       <div class="dt-number">5</div>
       <div class="dt-content">
-        <h3>Test — Validation utilisateurs</h3>
+        <h3>Test  Validation utilisateurs</h3>
         <p>Tests avec 4 ASC sur scénarios cliniques réels simulés. Méthode : think-aloud + observation.</p>
         <ul>
           <li><strong>Résultat :</strong> 95% des diagnostics corrects vs protocole PCIME superviseur</li>
@@ -227,16 +227,16 @@
     <div class="dt-step">
       <div class="dt-number">6</div>
       <div class="dt-content">
-        <h3>Implement — Développement technique</h3>
+        <h3>Implement  Développement technique</h3>
         <p>12 modules implémentés en Python (backend) + HTML/CSS/JS (prototype) sur 4 semaines.</p>
         <ul>
           <li><strong>Module 0 :</strong> Structure projet + schéma SQLite + chiffrement AES-256</li>
           <li><strong>Module 1 :</strong> 5 arbres décisionnels JSON (format FHIR-like)</li>
           <li><strong>Module 2 :</strong> tree_navigator.py + agrégateur hybride arbre/ML</li>
           <li><strong>Module 3 :</strong> XGBoost : 5000 cas synthétiques, 24 features, quantification INT8</li>
-          <li><strong>Module 4 :</strong> FastAPI — 7 endpoints REST + Pydantic validation</li>
+          <li><strong>Module 4 :</strong> FastAPI  7 endpoints REST + Pydantic validation</li>
           <li><strong>Module 5 :</strong> Sécurité : Argon2id PIN, audit trail SHA-256, verrouillage exponentiel</li>
-          <li><strong>Module 6 :</strong> Prototype HTML — 7 écrans Material Design 3</li>
+          <li><strong>Module 6 :</strong> Prototype HTML  7 écrans Material Design 3</li>
           <li><strong>Modules 7-9 :</strong> Tests unitaires (134 tests, 85% couverture)</li>
         </ul>
       </div>
@@ -245,7 +245,7 @@
     <div class="dt-step">
       <div class="dt-number">7</div>
       <div class="dt-content">
-        <h3>Scale — Déploiement et passage à l'échelle</h3>
+        <h3>Scale  Déploiement et passage à l'échelle</h3>
         <p>Feuille de route pour le déploiement pilote dans 5 CSI du district de Ngaoundéré (Q2 2025).</p>
         <ul>
           <li><strong>Phase pilote (3 mois) :</strong> 20 ASC, 5 CSI, avec supervision médecin district</li>
@@ -261,12 +261,12 @@
 
   <!-- Clinical cases -->
   <div class="section">
-    <div class="section-title">🧪 Cas Cliniques de Simulation — 5 Scénarios</div>
+    <div class="section-title">🧪 Cas Cliniques de Simulation  5 Scénarios</div>
     <div class="section-subtitle">Validation des 5 arbres décisionnels sur des cas représentatifs des pathologies principales</div>
 
     <div class="case-grid">
       <div class="case-card">
-        <div class="case-header rouge">Cas 1 — Paludisme grave</div>
+        <div class="case-header rouge">Cas 1  Paludisme grave</div>
         <div class="case-body">
           <div class="case-row"><span class="case-key">Patient</span><span class="case-val">Garçon, 3 ans, 13 kg</span></div>
           <div class="case-row"><span class="case-key">Température</span><span class="case-val">40.1°C</span></div>
@@ -279,7 +279,7 @@
       </div>
 
       <div class="case-card">
-        <div class="case-header rouge">Cas 2 — Malnutrition MAS</div>
+        <div class="case-header rouge">Cas 2  Malnutrition MAS</div>
         <div class="case-body">
           <div class="case-row"><span class="case-key">Patient</span><span class="case-val">Fille, 18 mois</span></div>
           <div class="case-row"><span class="case-key">PB (MUAC)</span><span class="case-val">108 mm (&lt; 115 seuil)</span></div>
@@ -292,7 +292,7 @@
       </div>
 
       <div class="case-card">
-        <div class="case-header orange">Cas 3 — Paludisme simple adulte</div>
+        <div class="case-header orange">Cas 3  Paludisme simple adulte</div>
         <div class="case-body">
           <div class="case-row"><span class="case-key">Patient</span><span class="case-val">Homme, 28 ans</span></div>
           <div class="case-row"><span class="case-key">Température</span><span class="case-val">39.0°C</span></div>
@@ -304,7 +304,7 @@
       </div>
 
       <div class="case-card">
-        <div class="case-header rouge">Cas 4 — Choléra + déshydratation sévère</div>
+        <div class="case-header rouge">Cas 4  Choléra + déshydratation sévère</div>
         <div class="case-body">
           <div class="case-row"><span class="case-key">Patient</span><span class="case-val">Adulte, contexte épidémique</span></div>
           <div class="case-row"><span class="case-key">Diarrhée</span><span class="case-val">&gt; 10 selles/24h</span></div>
@@ -316,7 +316,7 @@
       </div>
 
       <div class="case-card">
-        <div class="case-header orange">Cas 5 — Tuberculose suspectée</div>
+        <div class="case-header orange">Cas 5  Tuberculose suspectée</div>
         <div class="case-body">
           <div class="case-row"><span class="case-key">Patient</span><span class="case-val">Adulte, toux > 3 semaines</span></div>
           <div class="case-row"><span class="case-key">Symptômes</span><span class="case-val">Hémoptysie + amaigrissement + sueurs nocturnes</span></div>
@@ -331,11 +331,11 @@
 
   <!-- Test results -->
   <div class="section">
-    <div class="section-title">✅ Résultats des Tests — Suite Complète</div>
+    <div class="section-title">✅ Résultats des Tests  Suite Complète</div>
 
     <div class="test-summary">
       <div class="test-summary-title">134 tests passés · 0 échec · 85% couverture de code</div>
-      <div class="test-summary-detail">Exécution : pytest tests/ --cov=src — Durée : ~14 secondes</div>
+      <div class="test-summary-detail">Exécution : pytest tests/ --cov=src  Durée : ~14 secondes</div>
     </div>
 
     <div class="coverage-bar-container">
@@ -371,7 +371,7 @@
   <!-- ML Metrics -->
   <div class="section">
     <div class="section-title">🧠 Performances du Modèle Machine Learning</div>
-    <div class="section-subtitle">XGBoost 200 estimateurs — Entraîné sur 5000 cas synthétiques — 24 features cliniques</div>
+    <div class="section-subtitle">XGBoost 200 estimateurs  Entraîné sur 5000 cas synthétiques  24 features cliniques</div>
 
     <table class="ml-table">
       <thead>
@@ -406,7 +406,7 @@
           <td>98.1%</td>
           <td>97.3%</td>
           <td>0.977</td>
-          <td>—</td>
+          <td></td>
           <td><span class="badge-na">INFO</span></td>
         </tr>
         <tr>
@@ -414,7 +414,7 @@
           <td>96.2%</td>
           <td>95.8%</td>
           <td>0.960</td>
-          <td>—</td>
+          <td></td>
           <td><span class="badge-na">INFO</span></td>
         </tr>
         <tr>
@@ -422,7 +422,7 @@
           <td>94.7%</td>
           <td>93.2%</td>
           <td>0.940</td>
-          <td>—</td>
+          <td></td>
           <td><span class="badge-na">INFO</span></td>
         </tr>
         <tr>
@@ -430,7 +430,7 @@
           <td>97.8%</td>
           <td>96.5%</td>
           <td>0.972</td>
-          <td>—</td>
+          <td></td>
           <td><span class="badge-na">INFO</span></td>
         </tr>
         <tr style="background:#E8F5E9;">
@@ -438,44 +438,44 @@
           <td><strong>97.0%</strong></td>
           <td><strong>97.0%</strong></td>
           <td><strong>0.970</strong></td>
-          <td>—</td>
+          <td></td>
           <td><span class="badge-pass">✓ PASS</span></td>
         </tr>
       </tbody>
     </table>
 
     <div style="margin-top:16px;padding:12px 16px;background:#FFF3E0;border-left:4px solid #F57C00;border-radius:0 8px 8px 0;font-size:13px;">
-      <strong>Note sur la taille du modèle :</strong> ~7.2 MB (< 8 MB requis ✓). Quantification INT8 via TFLite prévue pour production Android — réduction attendue à ~2-3 MB.
+      <strong>Note sur la taille du modèle :</strong> ~7.2 MB (< 8 MB requis ✓). Quantification INT8 via TFLite prévue pour production Android  réduction attendue à ~2-3 MB.
     </div>
   </div>
 
   <!-- Security -->
   <div class="section">
-    <div class="section-title">🔐 Architecture de Sécurité — Modèle STRIDE</div>
+    <div class="section-title">🔐 Architecture de Sécurité  Modèle STRIDE</div>
 
     <div class="security-grid">
       <div class="security-item">
-        <h4>S — Spoofing (Usurpation)</h4>
+        <h4>S  Spoofing (Usurpation)</h4>
         <p>Argon2id PIN (time=3, mem=64MB, par=4). Timeout session 5 min. Verrouillage exponentiel après 5 échecs (délai 5s → 25s → 125s → 625s).</p>
       </div>
       <div class="security-item">
-        <h4>T — Tampering (Falsification)</h4>
+        <h4>T  Tampering (Falsification)</h4>
         <p>AES-256-CBC + Encrypt-then-MAC (HMAC-SHA256). Vérification intégrité avant tout déchiffrement. Schéma BD avec contraintes d'intégrité.</p>
       </div>
       <div class="security-item">
-        <h4>R — Repudiation (Répudiation)</h4>
-        <p>Audit trail avec chaîne de hachage SHA-256 (lightweight blockchain). Chaque log contient le hash du log précédent — toute modification détectable.</p>
+        <h4>R  Repudiation (Répudiation)</h4>
+        <p>Audit trail avec chaîne de hachage SHA-256 (lightweight blockchain). Chaque log contient le hash du log précédent  toute modification détectable.</p>
       </div>
       <div class="security-item">
-        <h4>I — Information Disclosure</h4>
+        <h4>I  Information Disclosure</h4>
         <p>Toutes les données sensibles (noms, symptômes, diagnostics) chiffrées AES-256 au repos. Clé dérivée du PIN via PBKDF2-SHA256 (256 000 itérations).</p>
       </div>
       <div class="security-item">
-        <h4>D — Denial of Service</h4>
+        <h4>D  Denial of Service</h4>
         <p>Verrouillage après 5 tentatives PIN. SQLite WAL pour performance sous charge. Sync queue avec retry max 3 pour éviter boucles infinies.</p>
       </div>
       <div class="security-item">
-        <h4>E — Elevation of Privilege</h4>
+        <h4>E  Elevation of Privilege</h4>
         <p>Accès urgence limité aux consultations (non associées à un agent). Pas de rôle administrateur sur mobile. API localhost uniquement.</p>
       </div>
     </div>
@@ -483,36 +483,36 @@
 
   <!-- Prototype Screens -->
   <div class="section">
-    <div class="section-title">📱 Prototype — 7 Écrans Mobile First</div>
-    <div class="section-subtitle">Simulateur Android 720×1560px — Material Design 3 adapté — WCAG AA contraste</div>
+    <div class="section-title">📱 Prototype  7 Écrans Mobile First</div>
+    <div class="section-subtitle">Simulateur Android 720×1560px  Material Design 3 adapté  WCAG AA contraste</div>
 
     <div class="screens-gallery">
       <div class="screen-thumb">
-        <a href="../prototype/screens/e1_login.html">🔑 E1 — Connexion</a>
+        <a href="../prototype/screens/e1_login.html">🔑 E1  Connexion</a>
         <div class="screen-desc">PIN 6 chiffres, accès urgence, biométrie</div>
       </div>
       <div class="screen-thumb">
-        <a href="../prototype/screens/e2_dashboard.html">📊 E2 — Tableau de bord</a>
+        <a href="../prototype/screens/e2_dashboard.html">📊 E2  Tableau de bord</a>
         <div class="screen-desc">Stats du jour, actions rapides, alertes sync</div>
       </div>
       <div class="screen-thumb">
-        <a href="../prototype/screens/e3_consultation.html">🩺 E3 — Consultation</a>
+        <a href="../prototype/screens/e3_consultation.html">🩺 E3  Consultation</a>
         <div class="screen-desc">Saisie symptômes + constantes vitales</div>
       </div>
       <div class="screen-thumb">
-        <a href="../prototype/screens/e4_decision_tree.html">🌲 E4 — Arbre décisionnel</a>
+        <a href="../prototype/screens/e4_decision_tree.html">🌲 E4  Arbre décisionnel</a>
         <div class="screen-desc">Questions guidées avec pré-remplissage auto</div>
       </div>
       <div class="screen-thumb">
-        <a href="../prototype/screens/e5_result.html">🔴 E5 — Résultat</a>
+        <a href="../prototype/screens/e5_result.html">🔴 E5  Résultat</a>
         <div class="screen-desc">Diagnostic + traitement + contre-indications</div>
       </div>
       <div class="screen-thumb">
-        <a href="../prototype/screens/e6_patient_record.html">👤 E6 — Dossier patient</a>
+        <a href="../prototype/screens/e6_patient_record.html">👤 E6  Dossier patient</a>
         <div class="screen-desc">Recherche, historique, suivi longitudinal</div>
       </div>
       <div class="screen-thumb">
-        <a href="../prototype/screens/e7_settings.html">⚙️ E7 — Paramètres</a>
+        <a href="../prototype/screens/e7_settings.html">⚙️ E7  Paramètres</a>
         <div class="screen-desc">Sync, sécurité, modèle IA, export</div>
       </div>
     </div>
@@ -543,9 +543,9 @@
   </div>
 
   <div class="footer">
-    <strong>HealthGuard IA v1.0.0</strong> — Rapport généré le 26 janvier 2025<br>
-    Développé pour le Ministère de la Santé Publique du Cameroun — Conforme PCIME/IMCI OMS<br>
-    <em>Ce système est un outil d'aide à la décision — la responsabilité clinique reste au professionnel de santé</em>
+    <strong>HealthGuard IA v1.0.0</strong>  Rapport généré le 26 janvier 2025<br>
+    Développé pour le Ministère de la Santé Publique du Cameroun  Conforme PCIME/IMCI OMS<br>
+    <em>Ce système est un outil d'aide à la décision  la responsabilité clinique reste au professionnel de santé</em>
   </div>
 
 </div>

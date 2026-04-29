@@ -1,5 +1,5 @@
 """
-Tests supplémentaires pour augmenter la couverture — Modules sync, severity_scorer,
+Tests supplémentaires pour augmenter la couverture  Modules sync, severity_scorer,
 tree_navigator (chemins supplémentaires), pin_auth et schema.
 """
 
@@ -87,7 +87,7 @@ class TestSyncQueue:
         increment_tentative(qid, db)
         increment_tentative(qid, db)
         increment_tentative(qid, db)
-        # Maintenant 3 tentatives — filtré si max=3
+        # Maintenant 3 tentatives  filtré si max=3
         items = get_pending_sync_items(db, max_tentatives=3)
         assert len(items) == 0
 
@@ -204,7 +204,7 @@ class TestTachypnee:
 
 
 # =========================================================
-# Tests tree_navigator — chemins supplémentaires
+# Tests tree_navigator  chemins supplémentaires
 # =========================================================
 
 class TestTreeNavigatorAdditional:
@@ -272,7 +272,7 @@ class TestTreeNavigatorAdditional:
 
 
 # =========================================================
-# Tests aggregator — chemins supplémentaires
+# Tests aggregator  chemins supplémentaires
 # =========================================================
 
 class TestAggregatorAdditional:
@@ -344,7 +344,7 @@ class TestAggregatorAdditional:
 
 
 # =========================================================
-# Tests schema.py — chemins get_connection
+# Tests schema.py  chemins get_connection
 # =========================================================
 
 class TestSchemaAdditional:
@@ -385,7 +385,7 @@ class TestSchemaAdditional:
 
 
 # =========================================================
-# Tests pin_auth — chemins supplémentaires
+# Tests pin_auth  chemins supplémentaires
 # =========================================================
 
 class TestPinAuthAdditional:
@@ -433,7 +433,7 @@ class TestPinAuthAdditional:
 
 
 # =========================================================
-# Tests tree_navigator — _symptomes_to_reponses global
+# Tests tree_navigator  _symptomes_to_reponses global
 # =========================================================
 
 class TestSymptomesToReponses:
@@ -496,7 +496,7 @@ class TestSymptomesToReponses:
 
 
 # =========================================================
-# Tests schema.py — get_connection et initialize_database
+# Tests schema.py  get_connection et initialize_database
 # =========================================================
 
 class TestSchemaConnection:

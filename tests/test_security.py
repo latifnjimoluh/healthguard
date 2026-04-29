@@ -1,5 +1,5 @@
 """
-Tests unitaires — Module Sécurité HealthGuard IA.
+Tests unitaires  Module Sécurité HealthGuard IA.
 Couvre : PIN auth, chiffrement AES, audit trail, verrouillage.
 """
 
@@ -105,7 +105,7 @@ class TestAESCipher:
         salt = generate_salt()
         key = generate_key("246810", salt)
         cipher = AESCipher(key)
-        original = "Données médicales confidentielles — HealthGuard IA"
+        original = "Données médicales confidentielles  HealthGuard IA"
         encrypted = cipher.encrypt(original)
         decrypted = cipher.decrypt(encrypted)
         assert decrypted == original
@@ -155,14 +155,14 @@ class TestPBKDF2Timing:
     """Tests de résistance brute force (timing)."""
 
     def test_key_derivation_time(self):
-        """Derivation cle PBKDF2 > 50ms (resistance brute force — 256000 iterations)."""
+        """Derivation cle PBKDF2 > 50ms (resistance brute force  256000 iterations)."""
         salt = generate_salt()
         start = time.time()
         generate_key("246810", salt)
         elapsed_ms = (time.time() - start) * 1000
         # Seuil 50ms : suffisant pour la resistance brute force avec 256000 iterations
-        # (la valeur depend du CPU — un serveur rapide peut aller plus vite)
-        assert elapsed_ms > 50, f"Derivation trop rapide : {elapsed_ms:.1f}ms — verifier iterations PBKDF2"
+        # (la valeur depend du CPU  un serveur rapide peut aller plus vite)
+        assert elapsed_ms > 50, f"Derivation trop rapide : {elapsed_ms:.1f}ms  verifier iterations PBKDF2"
 
 
 class TestAuditChainSecurity:

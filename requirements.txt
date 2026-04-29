@@ -1,5 +1,5 @@
-# HealthGuard IA — Dépendances Python
-# Généré le 2025-01-26 — Python 3.13+
+# HealthGuard IA  Dépendances Python
+# Généré le 2025-01-26  Python 3.13+
 
 # === API & Web ===
 fastapi==0.136.1
@@ -34,7 +34,7 @@ httpx==0.28.1  # Pour TestClient FastAPI
 # === Utilitaires ===
 python-dotenv>=1.0.0
 
-# === TFLite (optionnel — pour conversion modèle) ===
+# === TFLite (optionnel  pour conversion modèle) ===
 # tensorflow>=2.16.0  # Décommenter pour conversion TFLite
 # tflite-support>=0.4.4  # Décommenter pour inférence TFLite sur Android
 

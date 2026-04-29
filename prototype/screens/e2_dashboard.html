@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <link rel="manifest" href="/app/manifest.json">
+  <link rel="icon" type="image/png" href="/app/assets/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>HealthGuard IA — Tableau de Bord</title>
+  <title>HealthGuard IA  Tableau de Bord</title>
   <link rel="stylesheet" href="../css/healthguard.css">
 </head>
 <body>
@@ -15,6 +16,7 @@
   </div>
 
   <div class="screen-header">
+    <img src="../assets/logo.png" alt="Logo HealthGuard IA" style="width:38px;height:38px;border-radius:10px;object-fit:cover;background:#ffffff;padding:4px;">
     <div style="flex:1">
       <div style="font-size:18px;font-weight:700;">HealthGuard IA</div>
       <div style="font-size:12px;opacity:0.8;" id="agent-name">Aminatou Wali</div>
@@ -24,7 +26,7 @@
 
   <!-- Alerte sync si retard -->
   <div class="sync-alert" id="sync-alert" style="display:none;">
-    ⚠️ Synchronisation en retard de plus de 48h — <strong>12 consultations</strong> en attente
+    ⚠️ Synchronisation en retard de plus de 48h  <strong>12 consultations</strong> en attente
   </div>
 
   <!-- Statistiques du jour -->
@@ -148,7 +150,7 @@
           <div class="consultation-dot ${cls}"></div>
           <div class="consultation-info">
             <div class="consultation-diag">${diag}</div>
-            <div class="consultation-date">${dateStr} — ${nom}</div>
+            <div class="consultation-date">${dateStr}  ${nom}</div>
           </div>
           <span style="color:var(--color-text-secondary);">›</span>
         </div>`;
@@ -165,8 +167,7 @@
     document.getElementById('stat-consultations').textContent = todayLocal.length;
     document.getElementById('stat-urgences').textContent =
       todayLocal.filter(c => c.gravite === 3 || c.couleur === 'ROUGE').length;
-    document.getElementById('stat-attente').textContent =
-      localData.filter(c => !c.synced).length;
+    document.getElementById('stat-attente').textContent = localData.filter(c => !c.synced).length;
 
     // Alerte sync si plus de 48h
     const lastSync = localStorage.getItem('hg_last_sync');
@@ -187,6 +188,16 @@
       document.getElementById('agent-name').textContent = 'Urgence (anonyme)';
     }
 
+    try {
+      const s = await fetch(`${API}/api/v1/sync/status`, { signal: AbortSignal.timeout(2500) });
+      if (s.ok) {
+        const status = await s.json();
+        if (typeof status.pending_sync_count === 'number') {
+          document.getElementById('stat-attente').textContent = status.pending_sync_count;
+        }
+      }
+    } catch (e) { /* fallback local */ }
+
     // Tentative de chargement depuis l'API PostgreSQL
     try {
       const controller = new AbortController();
@@ -200,7 +211,7 @@
           return;
         }
       }
-    } catch (e) { /* API indisponible — on utilise localStorage */ }
+    } catch (e) { /* API indisponible  on utilise localStorage */ }
 
     // Fallback localStorage
     renderConsultations(localData, 'local');

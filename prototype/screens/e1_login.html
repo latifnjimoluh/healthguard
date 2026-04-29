@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <link rel="manifest" href="/app/manifest.json">
+  <link rel="icon" type="image/png" href="/app/assets/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>HealthGuard IA — Connexion</title>
+  <title>HealthGuard IA - Connexion</title>
   <link rel="stylesheet" href="../css/healthguard.css">
   <style>
     .agent-list { padding: 0 16px; }
@@ -68,27 +69,22 @@
 </head>
 <body>
 <div class="app-container">
-  <!-- Barre de statut -->
   <div class="status-bar">
     <span class="time" id="current-time">08:24</span>
     <span class="offline-badge" id="network-badge">● HORS LIGNE</span>
   </div>
 
-  <!-- Logo -->
   <div class="logo-container">
-    <div class="logo-icon">🏥</div>
+    <div class="logo-icon"><img src="../assets/logo.png" alt="Logo HealthGuard IA" class="logo-image"></div>
     <div class="logo-title">HealthGuard IA</div>
-    <div class="logo-subtitle" id="etablissement-name">Centre de Santé de Ngaoundéré Rural</div>
+    <div class="logo-subtitle" id="etablissement-name">Centre de Sante de Ngaoundere Rural</div>
   </div>
 
-  <!-- Étape 1 : Sélection de l'agent -->
   <div class="step active" id="step-select">
     <p style="text-align:center;color:var(--color-text-secondary);font-size:14px;padding:4px 16px 12px;">
-      Sélectionnez votre compte
+      Selectionnez votre compte
     </p>
-    <div class="agent-list" id="agent-list">
-      <!-- Rempli dynamiquement -->
-    </div>
+    <div class="agent-list" id="agent-list"></div>
     <div style="padding:0 16px;">
       <button class="add-agent-btn" onclick="openAddAgent()">
         <span style="font-size:20px;">＋</span> Ajouter un compte
@@ -96,16 +92,15 @@
     </div>
     <div style="padding:16px;">
       <button class="btn btn-danger btn-full" onclick="urgenceAccess()" style="opacity:0.85;">
-        🚨 Accès Urgence (sans identification)
+        Acces Urgence (sans identification)
       </button>
     </div>
   </div>
 
-  <!-- Étape 2 : Saisie du PIN -->
   <div class="step" id="step-pin">
     <button class="back-btn" onclick="goBack()">← Changer de compte</button>
     <p style="text-align:center;color:var(--color-text-secondary);font-size:14px;padding:4px 16px 12px;">
-      PIN pour <strong id="selected-agent-name">—</strong>
+      PIN pour <strong id="selected-agent-name">-</strong>
     </p>
 
     <div class="pin-display" id="pin-display">
@@ -117,8 +112,7 @@
       <div class="pin-dot" id="dot-5"></div>
     </div>
 
-    <div id="error-msg" style="display:none;text-align:center;color:var(--color-rouge);
-         font-weight:600;padding:8px 16px;font-size:14px;"></div>
+    <div id="error-msg" style="display:none;text-align:center;color:var(--color-rouge);font-weight:600;padding:8px 16px;font-size:14px;"></div>
 
     <div class="pin-keyboard">
       <button class="pin-key" onclick="pressKey('1')">1</button>
@@ -130,43 +124,40 @@
       <button class="pin-key" onclick="pressKey('7')">7</button>
       <button class="pin-key" onclick="pressKey('8')">8</button>
       <button class="pin-key" onclick="pressKey('9')">9</button>
-      <button class="pin-key" style="font-size:12px;color:var(--color-text-secondary);">BIO</button>
+      <button class="pin-key" style="font-size:12px;color:var(--color-primary);font-weight:700;" onclick="loginBiometric()">BIO</button>
       <button class="pin-key" onclick="pressKey('0')">0</button>
       <button class="pin-key delete" onclick="deleteKey()">⌫</button>
     </div>
   </div>
 
-  <div class="legal-mention">Version 1.0 — Usage réservé au personnel de santé habilité</div>
+  <div class="legal-mention">Version 1.1 - Usage reserve au personnel de sante habilite</div>
 </div>
 
-<!-- Modal ajout agent -->
 <div class="modal-overlay" id="add-agent-modal">
   <div class="modal-sheet">
     <div class="modal-title">Nouveau compte agent</div>
     <div class="form-group">
       <label class="form-label">Nom complet</label>
-      <input class="form-input" id="new-agent-nom" type="text" placeholder="ex: Fatima Oumarou" />
+      <input class="form-input" id="new-agent-nom" type="text" placeholder="ex: Fatima Oumarou">
     </div>
     <div class="form-group">
-      <label class="form-label">Rôle</label>
+      <label class="form-label">Role</label>
       <select class="form-input" id="new-agent-role">
-        <option>Infirmière</option>
-        <option>Agent de santé</option>
-        <option>Médecin</option>
+        <option>Infirmiere</option>
+        <option>Agent de sante</option>
+        <option>Medecin</option>
         <option>Sage-femme</option>
       </select>
     </div>
     <div class="form-group">
       <label class="form-label">PIN (6 chiffres)</label>
-      <input class="form-input" id="new-agent-pin" type="password" inputmode="numeric"
-             maxlength="6" placeholder="••••••" />
+      <input class="form-input" id="new-agent-pin" type="password" inputmode="numeric" maxlength="6" placeholder="••••••">
     </div>
     <div id="new-agent-error" style="color:var(--color-rouge);font-size:13px;margin-bottom:8px;display:none;"></div>
     <button class="btn btn-primary btn-full" onclick="saveNewAgent()" style="margin-bottom:10px;">
-      Créer le compte
+      Creer le compte
     </button>
-    <button class="btn btn-full" onclick="closeAddAgent()"
-            style="background:transparent;border:1px solid var(--color-border);color:var(--color-text);">
+    <button class="btn btn-full" onclick="closeAddAgent()" style="background:transparent;border:1px solid var(--color-border);color:var(--color-text);">
       Annuler
     </button>
   </div>
@@ -177,47 +168,88 @@
   let pin = '';
   let selectedAgent = null;
 
-  // Agents par défaut
   const DEFAULT_AGENTS = [
-    { id: 'agent_aminatou', nom: 'Aminatou Wali', role: 'Infirmière', pin: '246810' },
-    { id: 'agent_ibrahim', nom: 'Ibrahim Hamadou', role: 'Agent de santé', pin: '135791' }
+    { id: 'agent_aminatou', nom: 'Aminatou Wali', role: 'Infirmiere', demo_pin: '246810' },
+    { id: 'agent_ibrahim', nom: 'Ibrahim Hamadou', role: 'Agent de sante', demo_pin: '135791' }
   ];
 
-  // Initialiser localStorage si vide
-  function getAgents() {
-    let agents = JSON.parse(localStorage.getItem('hg_agents') || 'null');
-    if (!agents) {
-      agents = DEFAULT_AGENTS;
-      localStorage.setItem('hg_agents', JSON.stringify(agents));
-    }
-    return agents;
-  }
+  const DEMO_IDS = new Set(DEFAULT_AGENTS.map(a => a.id));
 
-  // Initiale de l'avatar
   function initiale(nom) {
     return nom ? nom.trim()[0].toUpperCase() : '?';
   }
 
-  // Agents démo (leurs IDs) — on affiche un indice PIN pour eux
-  const DEMO_IDS = new Set(DEFAULT_AGENTS.map(a => a.id));
+  function normalizeAgent(agent) {
+    return {
+      id: agent.id,
+      nom: agent.nom,
+      role: agent.role,
+      pin_hash: agent.pin_hash || null,
+      demo_pin: agent.demo_pin || agent.pin || null
+    };
+  }
 
-  // Rendu liste des agents
+  function getAgents() {
+    let agents = JSON.parse(localStorage.getItem('hg_agents') || 'null');
+    if (!agents) {
+      agents = DEFAULT_AGENTS.map(normalizeAgent);
+      localStorage.setItem('hg_agents', JSON.stringify(agents));
+    }
+    return agents.map(normalizeAgent);
+  }
+
+  async function apiHashPin(rawPin) {
+    const response = await fetch(`${API}/api/v1/security/pin/hash`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pin: rawPin }),
+      signal: AbortSignal.timeout(3000)
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.detail || 'Hash PIN impossible');
+    }
+    const data = await response.json();
+    return data.pin_hash;
+  }
+
+  async function apiVerifyPin(rawPin, storedHash) {
+    const response = await fetch(`${API}/api/v1/security/pin/verify`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pin: rawPin, stored_hash: storedHash }),
+      signal: AbortSignal.timeout(3000)
+    });
+    if (!response.ok) return false;
+    const data = await response.json();
+    return !!data.valid;
+  }
+
+  async function ensureHashedAgents() {
+    const agents = getAgents();
+    let changed = false;
+    for (const agent of agents) {
+      if (!agent.pin_hash && agent.demo_pin) {
+        try {
+          agent.pin_hash = await apiHashPin(agent.demo_pin);
+          changed = true;
+        } catch (e) {
+          console.warn('Migration PIN differee pour', agent.id, e);
+        }
+      }
+      delete agent.pin;
+    }
+    if (changed) localStorage.setItem('hg_agents', JSON.stringify(agents));
+    return agents;
+  }
+
   function renderAgents(list) {
     const el = document.getElementById('agent-list');
     el.innerHTML = list.map(a => {
-      const pinHint = DEMO_IDS.has(a.id) && a.pin
-        ? `<span style="
-              display:inline-block;margin-top:4px;
-              font-size:11px;font-weight:600;letter-spacing:1px;
-              background:var(--color-primary-light);color:var(--color-primary-dark);
-              border-radius:6px;padding:2px 7px;">
-              PIN : ${a.pin}
-           </span>`
-        : '';
+      // Masquer les PIN de demo de l'interface (Audit Fix)
+      const pinHint = ''; 
       return `
-        <div class="agent-card" tabindex="0"
-             onclick="selectAgent('${a.id}')"
-             onkeydown="if(event.key==='Enter')selectAgent('${a.id}')">
+        <div class="agent-card" tabindex="0" onclick="selectAgent('${a.id}')" onkeydown="if(event.key==='Enter')selectAgent('${a.id}')">
           <div class="agent-avatar">${initiale(a.nom)}</div>
           <div class="agent-info">
             <div class="agent-nom">${a.nom}</div>
@@ -225,35 +257,30 @@
             ${pinHint}
           </div>
           <span class="agent-chevron">›</span>
-        </div>`;
+        </div>
+      `;
     }).join('');
   }
 
-  // Charger agents (localStorage + API si dispo)
   async function loadAgents() {
-    const local = getAgents();
-    renderAgents(local);
     try {
       const ctrl = new AbortController();
-      setTimeout(() => ctrl.abort(), 2000);
+      setTimeout(() => ctrl.abort(), 4000);
       const r = await fetch(`${API}/api/v1/agents`, { signal: ctrl.signal });
-      if (r.ok) {
-        const data = await r.json();
-        if (data.agents && data.agents.length > 0) {
-          // Fusionner : conserver PINs locaux, enrichir avec données serveur
-          const merged = data.agents.map(srv => {
-            const loc = local.find(l => l.id === srv.id);
-            return { ...srv, pin: loc ? loc.pin : '246810' };
-          });
-          // Ajouter agents locaux absents du serveur (créés hors ligne)
-          local.forEach(l => {
-            if (!merged.find(m => m.id === l.id)) merged.push(l);
-          });
-          localStorage.setItem('hg_agents', JSON.stringify(merged));
-          renderAgents(merged);
-        }
+      if (!r.ok) {
+        // Fallback local si l'API est eteinte
+        renderAgents(getAgents());
+        return;
       }
-    } catch (e) { /* API indisponible */ }
+      const data = await r.json();
+      if (data.agents) {
+        localStorage.setItem('hg_agents', JSON.stringify(data.agents));
+        renderAgents(data.agents);
+      }
+    } catch (e) {
+      console.warn('API agents indisponible', e);
+      renderAgents(getAgents());
+    }
   }
 
   function selectAgent(agentId) {
@@ -279,7 +306,7 @@
     if (pin.length >= 6) return;
     pin += digit;
     updateDots();
-    if (pin.length === 6) setTimeout(validatePin, 100);
+    if (pin.length === 6) setTimeout(() => { validatePin(); }, 100);
   }
 
   function deleteKey() {
@@ -294,28 +321,84 @@
     }
   }
 
-  function validatePin() {
+  async function validatePin() {
     if (!selectedAgent) return;
-    const storedPin = selectedAgent.pin || '246810';
-    if (pin === storedPin) {
+    let valid = false;
+    try {
+      if (selectedAgent.pin_hash) {
+        valid = await apiVerifyPin(pin, selectedAgent.pin_hash);
+      } else if (selectedAgent.demo_pin) {
+        valid = pin === selectedAgent.demo_pin;
+      }
+    } catch (e) {
+      valid = !!selectedAgent.demo_pin && pin === selectedAgent.demo_pin;
+    }
+
+    if (valid) {
       localStorage.setItem('hg_agent_id', selectedAgent.id);
       localStorage.setItem('hg_agent_nom', selectedAgent.nom);
       localStorage.setItem('hg_session_start', Date.now());
       window.location.href = 'e2_dashboard.html';
-    } else {
-      const errMsg = document.getElementById('error-msg');
-      errMsg.textContent = 'PIN incorrect — Veuillez réessayer';
-      errMsg.style.display = 'block';
-      pin = '';
-      updateDots();
-      if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+      return;
+    }
+
+    const errMsg = document.getElementById('error-msg');
+    errMsg.textContent = 'PIN incorrect - Veuillez reessayer';
+    errMsg.style.display = 'block';
+    pin = '';
+    updateDots();
+    if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+  }
+
+  async function loginBiometric() {
+    if (!selectedAgent) return;
+    
+    try {
+      // 1. Verifier si l'agent a la biometrie activee (via options)
+      const response = await fetch(`${API}/api/v1/security/biometric/login/options?agent_id=${selectedAgent.id}`);
+      if (!response.ok) {
+        hgAlert("La biométrie n'est pas configurée pour ce compte. Utilisez votre code PIN.", "Information", "Fermer");
+        return;
+      }
+      const options = await response.json();
+
+      // 2. Simulation du scan (WebAuthn navigator.credentials.get)
+      hgConfirm(
+        `Scan biométrique pour ${selectedAgent.nom}...`,
+        "Authentification",
+        async function() {
+          // Simulation succes apres delai
+          const verifyRes = await fetch(`${API}/api/v1/security/biometric/login/verify`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              agent_id: selectedAgent.id,
+              credential_id: 'fake_cred_id'
+            })
+          });
+
+          if (verifyRes.ok) {
+            localStorage.setItem('hg_agent_id', selectedAgent.id);
+            localStorage.setItem('hg_agent_nom', selectedAgent.nom);
+            localStorage.setItem('hg_session_start', Date.now());
+            window.location.href = 'e2_dashboard.html';
+          }
+        },
+        null,
+        "👆",
+        "Scanner"
+      );
+
+    } catch (e) {
+      console.error(e);
+      hgAlert("Erreur biométrique.", "Erreur", "Fermer");
     }
   }
 
   function urgenceAccess() {
     hgConfirm(
-      'Les consultations enregistrées dans ce mode ne seront pas associées à un agent identifié.',
-      'Accès Urgence',
+      'Les consultations en mode urgence ne seront pas associees a un agent identifie.',
+      'Acces Urgence',
       function () {
         localStorage.setItem('hg_agent_id', 'urgence_anonyme');
         localStorage.setItem('hg_agent_nom', 'Urgence (anonyme)');
@@ -328,11 +411,11 @@
     );
   }
 
-  // Modal ajout agent
   function openAddAgent() {
     document.getElementById('add-agent-modal').classList.add('open');
     setTimeout(() => document.getElementById('new-agent-nom').focus(), 100);
   }
+
   function closeAddAgent() {
     document.getElementById('add-agent-modal').classList.remove('open');
     document.getElementById('new-agent-nom').value = '';
@@ -346,43 +429,46 @@
     const newPin = document.getElementById('new-agent-pin').value.trim();
     const errEl = document.getElementById('new-agent-error');
 
-    if (!nom) { errEl.textContent = 'Le nom est obligatoire'; errEl.style.display = 'block'; return; }
-    if (!/^\d{6}$/.test(newPin)) { errEl.textContent = 'Le PIN doit comporter exactement 6 chiffres'; errEl.style.display = 'block'; return; }
-
-    const agentId = 'agent_' + nom.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'_');
-    const agents = getAgents();
-
-    if (agents.find(a => a.id === agentId)) {
-      errEl.textContent = 'Un compte avec ce nom existe déjà'; errEl.style.display = 'block'; return;
+    if (!nom) {
+      errEl.textContent = 'Le nom est obligatoire';
+      errEl.style.display = 'block';
+      return;
+    }
+    if (!/^\d{6}$/.test(newPin)) {
+      errEl.textContent = 'Le PIN doit comporter exactement 6 chiffres';
+      errEl.style.display = 'block';
+      return;
     }
 
-    agents.push({ id: agentId, nom, role, pin: newPin });
-    localStorage.setItem('hg_agents', JSON.stringify(agents));
-
-    // Enregistrer aussi dans PostgreSQL si disponible
     try {
-      await fetch(`${API}/api/v1/agents/new`, {
+      const response = await fetch(`${API}/api/v1/agents/new`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nom, role }),
-        signal: AbortSignal.timeout(3000)
+        body: JSON.stringify({ nom, role, pin: newPin }),
+        signal: AbortSignal.timeout(5000)
       });
-    } catch (e) { /* Sera synchro plus tard */ }
-
-    renderAgents(agents);
-    closeAddAgent();
+      
+      const res = await response.json();
+      if (!response.ok) throw new Error(res.detail || 'Erreur lors de la creation');
+      
+      // On recharge la liste depuis le serveur
+      await loadAgents();
+      closeAddAgent();
+      hgAlert(`Compte cree pour ${nom}.`, 'Succes', 'OK');
+    } catch (e) {
+      errEl.textContent = e.message || 'API locale indisponible';
+      errEl.style.display = 'block';
+    }
   }
 
-  // Horloge
   function updateClock() {
     const now = new Date();
     document.getElementById('current-time').textContent =
-      String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+      String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
   }
   updateClock();
   setInterval(updateClock, 10000);
 
-  // Statut réseau
   function updateNetworkStatus() {
     const badge = document.getElementById('network-badge');
     if (navigator.onLine) {
@@ -397,7 +483,6 @@
   window.addEventListener('online', updateNetworkStatus);
   window.addEventListener('offline', updateNetworkStatus);
 
-  // Clavier physique (step PIN uniquement)
   document.addEventListener('keydown', (e) => {
     if (document.getElementById('step-pin').classList.contains('active')) {
       if (/^[0-9]$/.test(e.key)) pressKey(e.key);
@@ -405,7 +490,6 @@
     }
   });
 
-  // Démarrage
   loadAgents();
 </script>
 <script src="../js/nav.js"></script>

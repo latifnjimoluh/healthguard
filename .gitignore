@@ -46,3 +46,4 @@ reports/*.docx
 # Système
 Thumbs.db
 desktop.ini
+.vercel
